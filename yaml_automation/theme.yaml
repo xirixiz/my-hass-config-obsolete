@@ -1,0 +1,11 @@
+- alias: "Set Night theme at startup"
+  trigger:
+  - platform: homeassistant
+    event: start
+  action:
+  - service: frontend.set_theme
+    data:
+      name: darkblue
+#  - service: notify.ios_taipan5g
+#    data_template:
+#      message: 'HASS ready!'

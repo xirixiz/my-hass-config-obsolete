@@ -1,0 +1,436 @@
+##########################################
+##### Group Views
+##########################################
+default_view:
+  icon: mdi:home
+  view: yes
+  entities:
+    - device_tracker.taipan5g
+    - device_tracker.lieke_iphone
+    - sensor.power_consumption
+    #- sensor.power_tariff
+    - group.slaapkamer_boris_camera
+    #- group.family
+    #- group.scenes_on
+    #- group.scenes_off
+    - group.scripts_on
+    - group.scripts_off
+    - group.location_control
+    - group.trash_pickup
+    - group.sensors
+    - group.media
+    - sensor.dark_sky_precip_probability
+    - sensor.dark_sky_temperature
+    - sensor.dark_sky_apparent_temperature
+    - sensor.dark_sky_humidity
+    - sensor.dark_sky_wind_speed
+
+hal_en_overlopen_view:
+  icon: mdi:security-home
+  view: yes
+  entities:
+    - group.woonkamer_nest_protect
+    - group.hal_en_overlopen_nest_protect_hal
+    - group.hal_en_overlopen_nest_protect_overlopen
+
+lights_view:
+  icon: mdi:flashlight
+  view: yes
+  entities:
+    - sensor.hal_temperature
+    - sensor.woonkamer_temperature
+    - sensor.woonkamer_battery
+    - sensor.woonkamer_motion
+    - sensor.woonkamer_lux
+    - group.woonkamer_lights
+    - group.keuken_lights
+    - group.hal_en_overlopen_lights
+    - group.buiten_lights
+    - group.slaapkamer_lights
+
+lights_all_view:
+  icon: mdi:lightbulb-on
+  view: yes
+  entities:
+    - group.all_lights
+
+energy_view:
+  icon: mdi:power-plug
+  view: yes
+  entities:
+    - group.woonkamer_nest_thermostat
+    - group.smartmeter_readings
+
+network_view:
+  icon: mdi:server-network
+  view: yes
+  entities:
+    - group.woonkamer_speedtest
+
+weather_view:
+  icon: mdi:weather-partlycloudy
+  view: yes
+  entities:
+    - group.weather
+
+##########################################
+##### Devices Groups
+##########################################
+family:
+  name: "Family Tracking"
+  control: hidden
+  entities:
+    - device_tracker.taipan5g
+    - device_tracker.lieke_iphone
+
+media:
+  name: "Media Control"
+  control: hidden
+  entities:
+    - sensor.plex_activity
+    - media_player.lg_webos_smart_tv
+#    - media_player.unnamed_device
+#    - media_player.woonkamer
+#    - media_player.spotify
+
+location_control:
+  name: "Location Control"
+  control: hidden
+  entities:
+#    - sensor.woonkamer_nest_thermostat_temperature_changed
+#    - sensor.woonkamer_nest_thermostat_temperature
+#    - sensor.living_room_thermostat_target 
+#    - input_number.woonkamer_nest_thermostat_temperature
+    - input_boolean.vacation_mode
+    - sensor.lieke_distance_to_home
+    - sensor.bram_distance_to_home
+
+trash_pickup:
+  name: "Trash Pickup"
+  control: hidden
+  entities:
+#    - sensor.afval_vandaag
+#    - sensor.afval_soort
+#    - sensor.afval_datum
+#    - sensor.keuken_hanglamp_brightness
+#    - sensor.nest_int
+    - sensor.trash_gft
+    - sensor.trash_restafval
+    - sensor.trash_papier
+    - sensor.trash_pmd
+
+smartmeter_readings:
+  name: "SmartMeter - DSMR"
+  entities:
+    - sensor.power_consumption_low
+    - sensor.power_consumption_normal
+    - sensor.power_production_low
+    - sensor.power_production_normal
+    - sensor.gas_consumption
+
+
+##########################################
+##### Woonkamer Groups
+##########################################
+
+# Lights
+scripts_on:
+  name: "Lights On"
+  control: hidden
+  entities:
+    - script.all_on
+    - script.woonkamer
+    - script.woonkamer_nightlight
+    - script.woonkamer_bright
+    - script.woonkamer_super_bright
+    - script.keuken
+    - script.keuken_bright
+    - script.keuken_super_bright
+    - script.hal_en_overlopen
+    - script.hal_en_overlopen_nightlight
+    - script.hal_en_overlopen_bright
+    - script.hal_en_overlopen_super_bright
+    - script.buiten
+    - script.buiten_bright
+    - script.buiten_super_bright
+
+scripts_off:
+  name: "Lights Off"
+  control: hidden
+  entities:
+    - script.all_off
+    - script.woonkamer_off
+    - script.keuken_off
+    - script.hal_en_overlopen_off
+    - script.buiten_off
+
+scenes_on:
+  name: "Lights On"
+  control: hidden
+  entities:
+    - scene.all_on
+    - scene.all_on_bright
+    - scene.all_on_woonkamer
+    - scene.all_on_keuken
+    - scene.all_on_hal_en_overlopen
+    - scene.all_on_buiten
+    - scene.all_on_buiten_bright
+
+scenes_off:
+  name: "Lights Off"
+  control: hidden
+  entities:
+    - scene.all_off
+    - scene.all_off_woonkamer
+    - scene.all_off_keuken
+    - scene.all_off_hal_en_overlopen
+    - scene.all_off_buiten
+
+woonkamer_lights:
+  name: "Lights Woonkamer"
+  entities:
+    - group.woonkamer_lights_spots
+    - group.woonkamer_lights_kast
+    - group.woonkamer_lights_studeerkamer
+    - group.woonkamer_lights_rails
+
+woonkamer_lights_spots:
+  name: "Lights Spots"
+  entities:
+    - light.woonkamer_spot_tuin_links_1
+    - light.woonkamer_spot_tuin_links_2
+    - light.woonkamer_spot_tuin_midden_1
+    - light.woonkamer_spot_tuin_midden_2
+    - light.woonkamer_spot_tuin_rechts_1
+    - light.woonkamer_spot_tuin_rechts_2
+
+woonkamer_lights_kast:
+  name: "Lights Kast"
+  entities:
+    - light.kastlamp_links
+    - light.kastlamp_rechts
+
+woonkamer_lights_studeerkamer:
+  name: "Lights Studeerkamer"
+  entities:
+    - light.studeerkamer_rechts
+    - light.studeerkamer_links
+
+woonkamer_lights_rails:
+  name: "Lights Rails"
+  entities:
+    - group.woonkamer_lights_rails_links
+    - group.woonkamer_lights_rails_rechts
+
+woonkamer_lights_rails_links:
+  name: "Lights Rails Links"
+  entities:
+    - light.woonkamer_rails_links
+
+woonkamer_lights_rails_rechts:
+  name: "Lights Rails Rechts"
+  entities:
+    - light.woonkamer_rails_rechts
+
+# Nest
+woonkamer_nest_thermostat:
+  name: "Nest Thermostat"
+  entities:
+    - input_number.woonkamer_nest_thermostat_temperature
+    - sensor.hal_temperature
+    - sensor.woonkamer_temperature
+    - sensor.living_room_thermostat_temperature
+    - sensor.living_room_thermostat_target
+    - sensor.living_room_thermostat_operation_mode
+    - sensor.living_room_thermostat_humidity
+
+woonkamer_nest_protect:
+  name: "Nest Protect"
+  entities:
+    - sensor.living_room_nest_protect_co_status
+    - sensor.living_room_nest_protect_smoke_status
+    - sensor.living_room_nest_protect_battery_health
+
+woonkamer_speedtest:
+  name: "Internet Speedtest"
+  entities:
+    - sensor.speedtest_download
+    - sensor.speedtest_upload
+    - sensor.speedtest_ping
+
+
+##########################################
+##### Keuken Groups
+##########################################
+
+# Lights
+keuken_lights:
+  name: "Lights Keuken"
+  entities:
+    - input_number.keuken_hanglamp_brightness
+    - group.keuken_lights_hanglamp
+    - group.keuken_lights_spots
+
+keuken_lights_hanglamp:
+  name: "Lights Hanglamp Keuken"
+  entities:
+    - light.keuken_hanglamp
+
+keuken_lights_spots:
+  name: "Lights Spots Keuken"
+  entities:
+    - light.keuken_spot_tuin_links_1
+    - light.keuken_spot_tuin_links_2
+    - light.keuken_spot_tuin_rechts_1
+    - light.keuken_spot_tuin_rechts_2
+    - light.keuken_spot_werkblad_links
+    - light.keuken_spot_werkblad_rechts
+    - light.keuken_spot_nis_links
+    - light.keuken_spot_nis_rechts
+
+
+##########################################
+##### Hal en Overlopen Groups
+##########################################
+
+# Lights
+hal_en_overlopen_lights:
+  name: "Lights Hal en Overlopen"
+  entities:
+    - group.hal_en_overlopen_lights_hal
+    - group.hal_en_overlopen_lights_overloop_1
+    - group.hal_en_overlopen_lights_overloop_2
+
+hal_en_overlopen_lights_hal:
+  name: "Lights HAL"
+  entities:
+    - light.hal_bg
+
+hal_en_overlopen_lights_overloop_1:
+  name: "Lights Overloop 1"
+  entities:
+    - light.hal_verdieping_1
+
+hal_en_overlopen_lights_overloop_2:
+  name: "Lights Overloop 2"
+  entities:
+    - light.hal_verdieping_2
+
+# Nest
+hal_en_overlopen_nest_protect_hal:
+  name: "Nest Protect Hal"
+  entities:
+    - sensor.entryway_nest_protect_co_status
+    - sensor.entryway_nest_protect_smoke_status
+    - sensor.entryway_nest_protect_battery_health
+
+hal_en_overlopen_nest_protect_overlopen:
+  name: "Nest Protect Overloop 1"
+  entities:
+    - sensor.upstairs_nest_protect_co_status
+    - sensor.upstairs_nest_protect_smoke_status
+    - sensor.upstairs_nest_protect_battery_health
+
+
+##########################################
+##### Buiten Groups
+##########################################
+
+# Lights
+buiten_lights:
+  name: "Lights Buiten"
+  entities:
+    - group.buiten_lights_voor
+    - group.buiten_lights_achter
+
+buiten_lights_voor:
+  name: "Lights Buiten Voor"
+  entities:
+    - light.buiten_voordeur
+    - light.buiten_garage
+
+buiten_lights_achter:
+  name: "Lights Buiten Achter"
+  entities:
+    - light.buiten_achter_links
+    - light.buiten_achter_rechts
+
+
+##########################################
+##### Slaapkamer Groups
+##########################################
+
+# Lights
+slaapkamer_lights:
+  name: "Lights Slaapkamer"
+  entities:
+    - group.slaapkamer_lights_master
+
+slaapkamer_lights_master:
+  name: "Lights Master Slaapkamer"
+  entities:
+    - light.slaapkamer_hanglamp
+
+# Camera
+slaapkamer_boris_camera:
+  name: "Camera Boris"
+  entities:
+    - camera.boris
+
+
+##########################################
+##### Diversen Groups
+##########################################
+
+sensors:
+  name: "Sensors"
+  entities:
+#    - sensor.plex_activity
+#    - input_boolean.woonkamer_motion
+#    - sensor.woonkamer_motion
+#    - sensor.switch_woonkamer
+#    - sensor.switch_hal_en_overlopen
+    - sensor.time
+    - sensor.date
+#    - sun.sun
+    - sensor.sunrise_time
+    - sensor.sunset_time
+    - sensor.week_of_year
+    - sensor.day_of_year
+
+#    - sensor.next_sunrise
+#    - sensor.next_sunset
+#    - sensor.solar_angle
+    - sensor.moon
+
+weather:
+  name: "Weather"
+  entities:
+#    - sensor.dark_sky_summary
+#    - sensor.dark_sky_minutely_summary
+    - sensor.dark_sky_hourly_summary
+    - sensor.dark_sky_daily_summary
+#    - sensor.dark_sky_icon
+#    - sensor.dark_sky_summary
+#    - sensor.dark_sky_precip_type
+#    - sensor.dark_sky_precip_intensity
+#    - sensor.dark_sky_precip_probability
+#    - sensor.dark_sky_temperature
+#    - sensor.dark_sky_apparent_temperature
+#    - sensor.dark_sky_dew_point
+#    - sensor.dark_sky_wind_speed
+#    - sensor.dark_sky_wind_bearing
+#    - sensor.dark_sky_cloud_cover
+#    - sensor.dark_sky_humidity
+#    - sensor.dark_sky_pressure
+#    - sensor.dark_sky_visibility
+#    - sensor.dark_sky_ozone
+#    - sensor.dark_sky_minutely_summary
+#    - sensor.dark_sky_hourly_summary
+#    - sensor.dark_sky_daily_summary
+#    - sensor.dark_sky_temperature_max
+#    - sensor.dark_sky_temperature_min
+#    - sensor.dark_sky_apparent_temperature_max
+#    - sensor.dark_sky_apparent_temperature_min
+#    - sensor.dark_sky_precip_intensity_max
+#    - sensor.dark_sky_uv_index

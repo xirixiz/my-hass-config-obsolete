@@ -1,0 +1,13 @@
+*.pyc
+.uuid
+.HA_VERSION
+*.conf
+*.log
+!*.yaml
+!*.yml
+!scenes
+!.gitignore
+www/
+tmp/
+secrets.yaml
+known_devices.yaml

@@ -1,0 +1,177 @@
+##########################################
+##### Configuration
+##########################################
+homeassistant:
+  name: Home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  elevation: !secret home_elevation
+  unit_system: metric
+  time_zone: Europe/Amsterdam
+  customize: !include yaml_includes/customize.yaml
+  #customize_glob: !include yaml_includes/customize_glob.yaml
+
+#introduction:
+frontend:
+  themes:
+    darkblue:
+      primary-color: "#396FB6"
+      light-primary-color: "#77a0d4"
+      dark-primary-color: "#3539ce"
+      text-primary-color: "#ffffff"
+      primary-background-color: "#37464f"
+      sidebar-text_-_background: "#3c4348"
+      paper-card-background-color: "#263137"
+      paper-card-header-color: "var(--text-primary-color)"
+      secondary-background-color: "var(--primary-background-color)"
+      primary-text-color: "var(--text-primary-color)"
+      secondary-text-color: "var(--primary-color)"
+      paper-listbox-background-color: "var(--sidebar-text_-_background)"
+      paper-toggle-button-checked-ink-color: "var(--light-primary-color)"
+      paper-toggle-button-checked-button-color: "var(--light-primary-color)"
+      paper-toggle-button-checked-bar-color: "var(--light-primary-color)"
+      paper-slider-knob-color: "var(--primary-color)"
+      paper-slider-knob-start-color: "var(--primary-color)"
+      paper-slider-pin-color: "var(--primary-color)"
+      paper-slider-active-color: "var(--primary-color)"
+      paper-slider-secondary-color: "var(--light-primary-color)"
+      paper-slider-container-color: "var(--sidebar-text_-_background)"
+      paper-progress-secondary-color: "var(--sidebar-text_-_background)"
+      paper-item-selected_-_background-color: "var(--primary-color)"
+      paper-item-icon_-_color: "var(--text-primary-color)"
+      paper-item-icon-color: "var(--text-primary-color)"
+      paper-item-icon-active-color: "var(--primary-color)"
+      paper-grey-50: "var(--sidebar-text_-_background)"
+      paper-grey-200: "var(--primary-background-color)"
+      label-badge-background-color: "var(--sidebar-text_-_background)"
+      label-badge-text-color: "var(--text-primary-color)"
+      label-badge-red: "var(--primary-color)"
+      label-badge-blue: "var(--light-primary-color)"
+      label-badge-green: "var(--dark-primary-color)"
+      label-badge-yellow: "var(--text-primary-color)"
+      label-badge-grey: "var(--paper-grey-500)"
+      table-row-background-color: "var(--paper-card-background-color)"
+      table-row-alternative-background-color: "var(--sidebar-text_-_background)"
+
+config:
+
+recorder:
+  purge_keep_days: 14
+  purge_interval: 1
+  db_url: !secret hass_recorder_db
+
+http:
+  api_password: !secret http_password
+#  use_x_forwarded_for: True
+#  trusted_networks:
+#    - 127.0.0.1
+#    - ::1
+#    - 192.168.1.0/24
+updater:
+  include_used_components: true
+discovery:
+conversation:
+history:
+logger:
+  default: warn # default logging level
+#  logs:
+#    custom_components.sensor.mijnafvalwijzer: info
+logbook:
+map:
+sun:
+
+##########################################
+##### Sensors and devices
+##########################################
+ios:
+notify:
+  - name: family
+    platform: group
+    services:
+      - service: ios_taipan5g
+      - service: ios_lieke_iphone
+zeroconf:
+
+hue:
+  bridges:
+    - host: !secret philips_hue_host
+    - allow_unreachable: true
+    - allow_hue_groups: true
+
+#tts:
+#  platform: google
+
+media_player:
+  - platform: webostv
+    host: !secret lgwebostv_host
+    customize:
+      sources:
+        - livetv
+        - plex
+        - xplay
+        - youtube
+        - netflix
+  - platform: plex
+    entity_namespace: 'plex'
+    include_non_clients: false
+    scan_interval: 5
+    show_all_controls: false
+    use_custom_entity_ids: false
+    use_episode_art: true
+  - platform: cast
+  #- platform: spotify
+  #  client_id: !secret spotify_username
+  #  client_secret: !secret spotify_password
+
+panel_iframe:
+  sonarr:
+      title: 'Sonarr'
+      url: !secret sonarr_url
+      icon: mdi:television
+  transmission:
+      title: 'transmission'
+      url: !secret transmission_url
+
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+climate:
+  platform: nest
+
+device_tracker:
+  - platform: asuswrt
+    host: !secret router_host
+    username: !secret router_username
+    password: !secret router_password
+    interval_seconds: 90
+    consider_home: 180
+    track_new_devices: yes
+#  - platform: owntracks
+#  - platform: icloud
+#    username: !secret apple_username
+#    password: !secret apple_password
+#    account_name: Apple
+
+camera:
+  - platform: mjpeg
+    name: Boris
+    still_image_url: !secret camera_boris_image_url
+    mjpeg_url: !secret camera_boris_mjpeg_url
+    username: !secret camera_boris_username
+    password: !secret camera_boris_password
+
+##########################################
+##### External configuration sections
+##########################################
+#binary_sensor: !include yaml_includes/binary_sensor.yaml
+input_boolean: !include yaml_includes/input_boolean.yaml
+#input_select: !include yaml_includes/input_select.yaml
+input_number: !include yaml_includes/input_number.yaml
+#media_player: !include yaml_includes/media_player.yaml
+#remote: !include yaml_includes/remote.yaml
+sensor: !include yaml_includes/sensor.yaml
+#switch: !include yaml_includes/switch.yaml
+script: !include yaml_includes/script.yaml
+#scene: !include yaml_includes/scene.yaml
+group: !include yaml_includes/group.yaml
+automation: !include_dir_merge_list yaml_automation/

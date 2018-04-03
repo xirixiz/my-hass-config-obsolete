@@ -1,0 +1,275 @@
+##########################################
+##### Customize Devices
+##########################################
+device_tracker.taipan5g:
+  hidden: false
+  friendly_name: Bram
+device_tracker.lieke_iphone:
+  hidden: false
+  friendly_name: Lieke
+
+sensor.bram_distance_to_home:
+  friendly_name: Bram - Distance to home
+  icon: mdi:car
+
+sensor.lieke_distance_to_home:
+  friendly_name: Lieke - Distance to home
+  icon: mdi:car
+
+sensor.trash_gft:
+  friendly_name: Groente, fruit & tuinafval
+sensor.trash_pmd:
+  friendly_name: Plastic
+sensor.trash_papier:
+  friendly_name: Papier
+sensor.trash_restafval:
+  friendly_name: Restafval
+sensor.trash_kerstbomen:
+  friendly_name: Kerstbomen
+
+
+##########################################
+##### Customize Scripts
+##########################################
+script.all_off:
+  hidden: false
+  friendly_name: All
+  icon: mdi:flashlight-off
+script.woonkamer_off:
+  hidden: false
+  friendly_name: Woonkamer
+  icon: mdi:flashlight-off
+script.keuken_off:
+  hidden: false
+  friendly_name: Keuken
+  icon: mdi:flashlight-off
+script.hal_en_overlopen_off:
+  hidden: false
+  friendly_name: Hal en Overlopen
+  icon: mdi:flashlight-off
+script.buiten_off:
+  hidden: false
+  friendly_name: Buiten
+  icon: mdi:flashlight-off
+
+script.all_on:
+  hidden: false
+  friendly_name: All
+  icon: mdi:flashlight
+
+script.woonkamer:
+  hidden: false
+  friendly_name: Woonkamer
+  icon: mdi:flashlight
+script.woonkamer_nightlight:
+  hidden: false
+  friendly_name: Woonkamer NL
+  icon: mdi:flashlight
+script.woonkamer_bright:
+  hidden: false
+  friendly_name: Woonkamer B
+  icon: mdi:flashlight
+script.woonkamer_super_bright:
+  hidden: false
+  friendly_name: Woonkamer SB
+  icon: mdi:flashlight
+
+script.keuken:
+  hidden: false
+  friendly_name: Keuken
+  icon: mdi:flashlight
+script.keuken_bright:
+  hidden: false
+  friendly_name: Keuken B
+  icon: mdi:flashlight
+script.keuken_super_bright:
+  hidden: false
+  friendly_name: Keuken SB
+  icon: mdi:flashlight
+
+script.hal_en_overlopen:
+  hidden: false
+  friendly_name: Hal & Overlopen
+  icon: mdi:flashlight
+script.hal_en_overlopen_nightlight:
+  hidden: false
+  friendly_name: Hal & Overlopen NL
+  icon: mdi:flashlight
+script.hal_en_overlopen_bright:
+  hidden: false
+  friendly_name: Hal & Overlopen B
+  icon: mdi:flashlight
+script.hal_en_overlopen_super_bright:
+  hidden: false
+  friendly_name: Hal & Overlopen SB
+  icon: mdi:flashlight
+
+script.buiten:
+  hidden: false
+  friendly_name: Buiten
+  icon: mdi:flashlight
+script.buiten_bright:
+  hidden: false
+  friendly_name: Buiten B
+  icon: mdi:flashlight
+script.buiten_super_bright:
+  hidden: false
+  friendly_name: Buiten SB
+  icon: mdi:flashlight
+
+
+##########################################
+##### Customize Scenes
+##########################################
+scene.all_on:
+  hidden: false
+  friendly_name: On - All
+  icon: mdi:flashlight
+scene.all_on_bright:
+  hidden: false
+  friendly_name: On - All (Bright)
+  icon: mdi:flashlight
+scene.all_on_woonkamer:
+  hidden: false
+  friendly_name: On - Woonkamer
+  icon: mdi:flashlight
+scene.all_on_keuken:
+  hidden: false
+  friendly_name: On - Keuken
+  icon: mdi:flashlight
+scene.all_on_hal_en_overlopen:
+  hidden: false
+  friendly_name: On - Hal en Overlopen
+  icon: mdi:flashlight
+scene.all_on_buiten:
+  hidden: false
+  friendly_name: On - Buiten
+  icon: mdi:flashlight
+scene.all_on_buiten_bright:
+  hidden: false
+  friendly_name: On - Buiten (Bright)
+  icon: mdi:flashlight
+
+scene.all_off:
+  hidden: false
+  friendly_name: Off - All
+  icon: mdi:flashlight-off
+scene.all_off_woonkamer:
+  hidden: false
+  friendly_name: Off - Woonkamer
+  icon: mdi:flashlight-off
+scene.all_off_keuken:
+  hidden: false
+  friendly_name: Off - Keuken
+  icon: mdi:flashlight-off
+scene.all_off_hal_en_overlopen:
+  hidden: false
+  friendly_name: Off - Hal en Overlopen
+  icon: mdi:flashlight-off
+scene.all_off_buiten:
+  hidden: false
+  friendly_name: Off - Buiten
+  icon: mdi:flashlight-off
+
+##########################################
+##### Customize Sensors
+##########################################
+sensor.living_room_thermostat_temperature:
+  friendly_name: Temperatuur
+sensor.living_room_thermostat_target:
+  friendly_name: Target Temperatuur
+sensor.living_room_thermostat_operation_mode:
+  friendly_name: Status
+sensor.living_room_thermostat_humidity:
+  friendly_name: Luchtvochtigheid
+  icon: mdi:water-percent
+
+sensor.power_consumption:
+  friendly_name: KWh
+sensor.power_tariff:
+  friendly_name: Tarief
+
+sensor.plex_activity:
+  friendly_name: Plex Activity
+
+sensor.living_room_nest_protect_co_status:
+  friendly_name: CO status
+sensor.living_room_nest_protect_smoke_status:
+  friendly_name: Smoke status
+  icon: mdi:fire
+sensor.living_room_nest_protect_battery_health:
+  friendly_name: Battery status
+  icon: mdi:battery
+
+sensor.entryway_nest_protect_co_status:
+  friendly_name: CO status
+sensor.entryway_nest_protect_smoke_status:
+  friendly_name: Smoke status
+  icon: mdi:fire
+sensor.entryway_nest_protect_battery_health:
+  friendly_name: Battery status
+  icon: mdi:battery
+
+sensor.upstairs_nest_protect_co_status:
+  friendly_name: CO status
+sensor.upstairs_nest_protect_smoke_status:
+  friendly_name: Smoke status
+  icon: mdi:fire
+sensor.upstairs_nest_protect_battery_health:
+  friendly_name: Battery status
+  icon: mdi:battery
+
+# Yr
+#sensor.yr_symbol:
+#  friendly_name: " "
+#sensor.yr_temperature:
+#  friendly_name: " "
+#sensor.yr_wind_speed:
+#  friendly_name: " "
+#  icon: mdi:weather-windy
+#sensor.yr_humidity:
+#  friendly_name: " "
+#  icon: mdi:water-percent
+#sensor.yr_fog:
+#  friendly_name: " "
+#  icon: mdi:weather-fog
+
+# DarkSky
+sensor.dark_sky_minutely_summary:
+  friendly_name: "Komende uur"
+sensor.dark_sky_hourly_summary:
+  friendly_name: "Vandaag"
+sensor.dark_sky_daily_summary:
+  friendly_name: "Komende Week"
+sensor.dark_sky_precip_probability:
+  friendly_name: "Regen"
+sensor.dark_sky_temperature:
+  friendly_name: "Temp"
+sensor.dark_sky_apparent_temperature:
+  friendly_name: "Gevoel"
+sensor.dark_sky_humidity:
+  friendly_name: "Luchtvocht"
+sensor.dark_sky_wind_speed:
+  friendly_name: "Wind"
+
+# Sun
+sun.sun:
+  friendly_name: " "
+sensor.sunrise_time:
+  icon: mdi:weather-sunset-up
+sensor.sunset_time:
+  icon: mdi:weather-sunset-down
+
+sensor.woonkamer_temperature:
+  friendly_name: "Temperatuur Woonkamer (HUE)"
+
+sensor.hal_temperature:
+  friendly_name: "Temperatuur Hal (HUE)"
+#sensor.woonkamer_battery:
+#sensor.woonkamer_motion:
+#sensor.woonkamer_lux:
+
+group.all_lights:
+  control: hidden
+  hidden: false
+

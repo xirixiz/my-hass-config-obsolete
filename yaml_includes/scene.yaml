@@ -1,0 +1,213 @@
+##########################################
+##### Scene
+##########################################
+
+# Scene - All On
+- name: all_on
+  entities:
+    group.woonkamer_lights_spots:
+      state: on
+      brightness: 80
+      kelvin: 2200
+    group.woonkamer_lights_kast:
+      state: on
+      brightness: 120
+      kelvin: 2200
+    group.woonkamer_lights_studeerkamer:
+      state: on
+      brightness: 100
+      kelvin: 2200
+    group.woonkamer_lights_rails_links:
+      state: on
+      brightness: 0
+      kelvin: 2200
+    group.woonkamer_lights_rails_rechts:
+      state: on
+      brightness: 35
+      kelvin: 2200
+    group.keuken_lights_hanglamp:
+      state: on
+      brightness: 60
+      kelvin: 2200
+    group.keuken_lights_spots:
+      state: on
+      brightness: 60
+      kelvin: 2200
+    group.hal_en_overlopen_lights_hal:
+      state: on
+      brightness: 60
+      kelvin: 2200
+    group.hal_en_overlopen_lights_overloop_1:
+      state: on
+      brightness: 35
+      kelvin: 2200
+
+# Scene - All On Bright
+- name: all_on_bright
+  entities:
+    group.woonkamer_lights_spots:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.woonkamer_lights_kast:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.woonkamer_lights_studeerkamer:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.woonkamer_lights_rails_links:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.woonkamer_lights_rails_rechts:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.keuken_lights_hanglamp:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.keuken_lights_spots:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.hal_en_overlopen_lights_hal:
+      state: on
+      brightness: 255
+      kelvin: 2200
+    group.hal_en_overlopen_lights_overloop_1:
+      state: on
+      brightness: 255
+      kelvin: 2200
+
+# Scene - All On - Woonkamer
+- name: all_on_woonkamer
+  entities:
+    group.woonkamer_lights_spots:
+      state: on
+      brightness: 80
+      kelvin: 2200
+    group.woonkamer_lights_kast:
+      state: on
+      brightness: 120
+      kelvin: 2200
+    group.woonkamer_lights_studeerkamer:
+      state: on
+      brightness: 100
+      kelvin: 2200
+    group.woonkamer_lights_rails_links:
+      state: on
+      brightness: 0
+      kelvin: 2200
+    group.woonkamer_lights_rails_rechts:
+      state: on
+      brightness: 35
+      kelvin: 2200
+
+# Scene - All On - Keuken
+- name: all_on_keuken
+  entities:
+    group.keuken_lights_hanglamp:
+      state: on
+      brightness: 60
+      kelvin: 2200
+    group.keuken_lights_spots:
+      state: on
+      brightness: 60
+      kelvin: 2200
+
+# Scene - Hanglamp On - Keuken
+- name: hanglamp_on_keuken
+  entities:
+    group.keuken_lights_hanglamp:
+      state: on
+      brightness: 60
+      kelvin: 2200
+
+# Scene - Spots On - Keuken
+- name: spots_on_keuken
+  entities:
+    group.keuken_lights_spots:
+      state: on
+      brightness: 60
+      kelvin: 2200
+
+# Scene - All On - Hal en Overlopen - Daytime
+- name: all_on_hal_en_overlopen
+  entities:
+    group.hal_en_overlopen_lights_hal:
+      state: on
+      brightness: 120
+      kelvin: 2200
+    group.hal_en_overlopen_lights_overloop_1:
+      state: on
+      brightness: 80
+      kelvin: 2200
+    group.hal_en_overlopen_lights_overloop_2:
+      state: off
+
+# Scene - All On - Hal en Overlopen - Evening
+- name: all_on_hal_en_overlopen_evening
+  entities:
+    group.hal_en_overlopen_lights_hal:
+      state: on
+      brightness: 40
+      kelvin: 2200
+    group.hal_en_overlopen_lights_overloop_1:
+      state: off
+    group.hal_en_overlopen_lights_overloop_2:
+      state: on
+      brightness: 40
+      kelvin: 2200
+
+# Scene - All On - Buiten
+- name: all_on_buiten
+  entities:
+    group.buiten_lights:
+      state: on
+      brightness: 100
+      kelvin: 2200
+
+# Scene - All On - Buiten Bright
+- name: all_on_buiten_bright
+  entities:
+    group.buiten_lights:
+      state: on
+      brightness: 255
+      kelvin: 2200
+
+# Scene - All Off
+- name: all_off
+  entities:
+    group.woonkamer_lights:
+      state: off
+    group.keuken_lights:
+      state: off
+    group.hal_en_overlopen_lights:
+      state: off
+
+# Scene - All Off - Woonkamer
+- name: all_off_woonkamer
+  entities:
+    group.woonkamer_lights:
+      state: off
+
+# Scene - All Off - Keuken
+- name: all_off_keuken
+  entities:
+    group.keuken_lights:
+      state: off
+
+# Scene - All Off - Hal en Overlopen
+- name: all_off_hal_en_overlopen
+  entities:
+    group.hal_en_overlopen_lights:
+      state: off
+
+# Scene - All Off - Buiten
+- name: all_off_buiten
+  entities:
+    group.buiten_lights:
+      state: off
