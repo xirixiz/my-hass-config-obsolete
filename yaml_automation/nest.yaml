@@ -54,6 +54,9 @@
         - wed
         - thu
         - fri
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
     - condition: or
       conditions:
       - condition: state
@@ -96,6 +99,9 @@
       - wed
       - thu
       - fri
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
     - condition: or
       conditions:
       - condition: state
@@ -127,6 +133,9 @@
       weekday:
       - sat
       - sun
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
     - condition: or
       conditions:
       - condition: state
@@ -154,6 +163,9 @@
       weekday:
       - sat
       - sun
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
     - condition: or
       conditions:
       - condition: state
@@ -183,6 +195,9 @@
     - condition: time
       before: '05:00:00'
       after: '21:00:00'
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
   action:
   - service: climate.set_temperature
     data_template:
@@ -206,6 +221,9 @@
     - condition: time
       before: '05:00:00'
       after: '21:00:00'
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
   action:
   - service: climate.set_temperature
     data_template:

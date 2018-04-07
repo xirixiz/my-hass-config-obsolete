@@ -2,6 +2,11 @@
 ##### Input Boolean
 ##########################################
 
+automation_mode:
+  name: "Automation Mode"
+  initial: off
+  icon: mdi:human-male-female
+
 vacation_mode:
   name: "Vacation Mode"
   initial: off

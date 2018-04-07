@@ -102,6 +102,7 @@ location_control:
 #    - sensor.living_room_thermostat_target 
 #    - input_number.woonkamer_nest_thermostat_temperature
     - input_boolean.vacation_mode
+    - input_boolean.automation_mode
     - sensor.lieke_distance_to_home
     - sensor.bram_distance_to_home
 

@@ -25,7 +25,7 @@
            Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. De groene bak wordt geleegd op: {{ states.sensor.trash_gft.state }}!
         {% endif %}
         {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_restafval.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
-           Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. De grijze bak wordt geleegd op: {{ states.sensor.restafval.state }}!
+           Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. De grijze bak wordt geleegd op: {{ states.sensor.trash_restafval.state }}!
         {% endif %}
         {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_pmd.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
            Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. Plastic wordt opgehaald op: {{ states.sensor.trash_pmd.state }}!

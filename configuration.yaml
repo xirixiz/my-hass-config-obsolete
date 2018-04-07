@@ -95,10 +95,10 @@ zeroconf:
 hue:
   bridges:
     - host: !secret philips_hue_host
-    - allow_unreachable: true
-    - allow_hue_groups: true
+      allow_unreachable: true
+      allow_hue_groups: true
 
-#tts:
+tts:
 #  platform: google
 
 media_player:

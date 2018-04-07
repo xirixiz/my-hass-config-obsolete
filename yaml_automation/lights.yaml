@@ -26,6 +26,25 @@
       brightness: "{{ trigger.to_state.state | int }}"
 
 
+- alias: "Automation - All - Turn off"
+  trigger:
+  - platform: state
+    entity_id: input_boolean.automation_mode
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: input_boolean.automation_mode
+    state: 'on'
+  action:
+  - service: script.turn_on
+    entity_id:
+    - script.all_off
+    - script.woonkamer_off
+    - script.keuken_off
+    - script.hal_en_overlopen_off
+    - script.buiten_off
+
+
 - alias: "Motion - Woonkamer - Morning on"
   trigger:
   - platform: state
@@ -44,6 +63,9 @@
   - condition: state
     entity_id: sensor.switch_hal
     state: 'on'
+  - condition: state
+    entity_id: input_boolean.automation_mode
+    state: 'off'
   action:
   - service: script.turn_on
     entity_id:
@@ -71,6 +93,9 @@
   - condition: state
     entity_id: sensor.switch_woonkamer
     state: 'on'
+  - condition: state
+    entity_id: input_boolean.automation_mode
+    state: 'off'
   action:
   - service: script.turn_on
     entity_id:
@@ -100,6 +125,9 @@
   - condition: state
     entity_id: sensor.switch_woonkamer
     state: 'on'
+  - condition: state
+    entity_id: input_boolean.automation_mode
+    state: 'off'
   action:
   - service: script.turn_on
     entity_id:
@@ -126,6 +154,9 @@
   - condition: state
     entity_id: media_player.lg_webos_smart_tv
     state: "off"
+  - condition: state
+    entity_id: input_boolean.automation_mode
+    state: 'off'
   action:
   - service: script.turn_on
     entity_id:
