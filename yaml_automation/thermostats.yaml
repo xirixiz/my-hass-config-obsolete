@@ -204,6 +204,7 @@
       entity_id: climate.living_room
       temperature: "21"
 
+
 - alias: "Switch - Woonkamer - Nest thermostat - When TV off"
   trigger:
   - platform: state

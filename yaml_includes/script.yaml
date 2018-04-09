@@ -20,7 +20,7 @@ all_on:
 # Vacation mode alarm
 flash_rgb_lights:
   sequence:
-  - alias: "flash rgb lights on"
+  - alias: 'flash rgb lights on'
     service: light.turn_on
     entity_id:
     - light.buiten_achter_links
@@ -35,7 +35,7 @@ flash_rgb_lights:
       brightness: 255
   - delay:
       seconds: 1
-  - alias: "flash rgb lights off"
+  - alias: 'flash rgb lights off'
     service: light.turn_off
     entity_id:
     - light.buiten_achter_links
@@ -47,40 +47,41 @@ flash_rgb_lights:
     - light.slaapkamer_hanglamp
   - delay:
       seconds: 1
-  - alias: "loop flash rgb lights"
+  - alias: 'loop flash rgb lights'
     service: script.turn_off
     entity_id: script.flash_rgb_lights
-  - alias: "loop flash rgb lights"
+  - alias: 'loop flash rgb lights'
     service: script.turn_on
     entity_id: script.flash_rgb_lights
+
 
 woonkamer:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "woonkamer"
-      scene_name: "Bram"
-
-woonkamer_nightlight:
-  sequence:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: "woonkamer"
-      scene_name: "Nightlight"
+      group_name: 'woonkamer'
+      scene_name: '1'
 
 woonkamer_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "woonkamer"
-      scene_name: "Bram Bright"
+      group_name: 'woonkamer'
+      scene_name: '2'
 
 woonkamer_super_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "woonkamer"
-      scene_name: "Bram Super Bright"
+      group_name: 'woonkamer'
+      scene_name: '3'
+
+woonkamer_nightlight:
+  sequence:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: 'woonkamer'
+      scene_name: '4'
 
 woonkamer_off:
   sequence:
@@ -93,22 +94,22 @@ keuken:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "keuken"
-      scene_name: "Bram"
+      group_name: 'keuken'
+      scene_name: '1'
 
 keuken_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "keuken"
-      scene_name: "Bram Bright"
+      group_name: 'keuken'
+      scene_name: '2'
 
 keuken_super_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "keuken"
-      scene_name: "Bram Super Bright"
+      group_name: 'keuken'
+      scene_name: '3'
 
 keuken_off:
   sequence:
@@ -120,29 +121,29 @@ hal_en_overlopen:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "hal en overlopen"
-      scene_name: "Bram"
-
-hal_en_overlopen_nightlight:
-  sequence:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: "hal en overlopen"
-      scene_name: "Nightlight"
+      group_name: 'hal en overlopen'
+      scene_name: '1'
 
 hal_en_overlopen_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "hal en overlopen"
-      scene_name: "Bram Bright"
+      group_name: 'hal en overlopen'
+      scene_name: '2'
 
 hal_en_overlopen_super_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "hal en overlopen"
-      scene_name: "Bram Super Bright"
+      group_name: 'hal en overlopen'
+      scene_name: '3'
+
+hal_en_overlopen_nightlight:
+  sequence:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: 'hal en overlopen'
+      scene_name: '4'
 
 hal_en_overlopen_off:
   sequence:
@@ -155,34 +156,34 @@ buiten:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "buitenvoor"
-      scene_name: "Bram"
+      group_name: 'buitenvoor'
+      scene_name: '1'
   - service: hue.hue_activate_scene
     data:
-      group_name: "buitenachter"
-      scene_name: "Bram"
+      group_name: 'buitenachter'
+      scene_name: '1'
 
 buiten_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "buitenvoor"
-      scene_name: "Bram Bright"
+      group_name: 'buitenvoor'
+      scene_name: '2'
   - service: hue.hue_activate_scene
     data:
-      group_name: "buitenachter"
-      scene_name: "Bram Bright"
+      group_name: 'buitenachter'
+      scene_name: '2'
 
 buiten_super_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
-      group_name: "buitenvoor"
-      scene_name: "Bram Super Bright"
+      group_name: 'buitenvoor'
+      scene_name: '3'
   - service: hue.hue_activate_scene
     data:
-      group_name: "buitenachter"
-      scene_name: "Bram Super Bright"
+      group_name: 'buitenachter'
+      scene_name: '3'
 
 buiten_off:
   sequence:

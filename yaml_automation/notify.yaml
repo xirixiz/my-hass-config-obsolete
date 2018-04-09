@@ -88,6 +88,17 @@
     data:
       message: 'Lieke is thuis!'
 
+
+- alias: name entered zone
+  trigger:
+  - platform: state
+    entity_id: device_tracker.lieke_iphone
+  action:     
+  - service: notify.ios_taipan5g
+    data_template:
+      message: "{{ trigger.to_state.name }} is in {{ trigger.to_state.state }}"
+
+
 - alias: Alert when Lieke leaves home
   trigger:
   - platform: zone
@@ -98,6 +109,7 @@
   - service: notify.ios_taipan5g
     data:
       message: 'Lieke is niet thuis!'
+
 
 - alias: Lieke is 10 minutes from home
   trigger:
