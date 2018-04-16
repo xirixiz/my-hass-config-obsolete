@@ -77,38 +77,74 @@
 
 
 ##### NOTIFY LIEKE HOME
-- alias: Alert when Lieke arrives home
-  trigger:
-  - platform: zone
-    entity_id: device_tracker.lieke_iphone
-    zone: zone.home
-    event: enter
-  action:
-  - service: notify.ios_taipan5g
-    data:
-      message: 'Lieke is thuis!'
+#- alias: Alert when Lieke arrives home
+#  trigger:
+#  - platform: zone
+#    entity_id: device_tracker.lieke_iphone
+#    zone: zone.home
+#    event: enter
+#  action:
+#  - service: notify.ios_taipan5g
+#    data:
+#      message: 'Lieke is thuis!'
 
 
-- alias: name entered zone
+#- alias: Alert when Lieke leaves work
+#  trigger:
+#  - platform: zone
+#    entity_id: device_tracker.lieke_iphone
+#    zone: zone.lieke_work
+#    event: leave
+#  action:
+#  - service: notify.ios_taipan5g
+#    data:
+#      message: 'Lieke vertrekt van het werk!'
+
+
+#- alias: Alert when Lieke leaves parents home
+#  trigger:
+#  - platform: zone
+#    entity_id: device_tracker.lieke_iphone
+#    zone: zone.lieke_parents_home
+#    event: leave
+#  action:
+#  - service: notify.ios_taipan5g
+#    data:
+#      message: 'Lieke vertrekt bij Ben!'      
+#
+#
+#- alias: Alert when Lieke leaves parents home
+#  trigger:
+#  - platform: zone
+#    entity_id: device_tracker.lieke_iphone
+#    zone: zone.lieke_daan_en_jels
+#    event: leave
+#  action:
+#  - service: notify.ios_taipan5g
+#    data:
+#      message: 'Lieke vertrekt bij Daan en Jels!'   
+
+
+#- alias: Alert when Lieke leaves home
+#  trigger:
+#  - platform: zone
+#    entity_id: device_tracker.lieke_iphone
+#    zone: zone.home
+#    event: leave
+#  action:
+#  - service: notify.ios_taipan5g
+#    data:
+#      message: 'Lieke is niet thuis!'
+
+
+- alias: Alert when Lieke arrives or arrives somewhere
   trigger:
   - platform: state
     entity_id: device_tracker.lieke_iphone
   action:     
   - service: notify.ios_taipan5g
     data_template:
-      message: "{{ trigger.to_state.name }} is in {{ trigger.to_state.state }}"
-
-
-- alias: Alert when Lieke leaves home
-  trigger:
-  - platform: zone
-    entity_id: device_tracker.lieke_iphone
-    zone: zone.home
-    event: leave
-  action:
-  - service: notify.ios_taipan5g
-    data:
-      message: 'Lieke is niet thuis!'
+      message: "{{ trigger.to_state.name }} is in {{ trigger.to_state.state }}. Lieke is in {{ states('device_tracker.lieke_iphone') }}"
 
 
 - alias: Lieke is 10 minutes from home

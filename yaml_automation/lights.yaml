@@ -133,7 +133,7 @@
     entity_id:
     - script.woonkamer
     - script.keuken
-    - script.buiten
+    - script.buiten  
 
 
 - alias: "Switch - Woonkamer - Off"
@@ -151,9 +151,9 @@
   - platform: time
     at: '00:00:00'
   condition:
-  - condition: state
-    entity_id: media_player.lg_webos_smart_tv
-    state: "off"
+  #- condition: state
+  #  entity_id: media_player.lg_webos_smart_tv
+  #  state: "off"
   - condition: state
     entity_id: input_boolean.automation_mode
     state: 'off'
@@ -177,7 +177,7 @@
   action:
   - service: script.turn_on
     entity_id:
-    - script.all_off
+    - script.all_off 
 
 
 - alias: "Motion - Hal en overlopen - Morning and evening on"

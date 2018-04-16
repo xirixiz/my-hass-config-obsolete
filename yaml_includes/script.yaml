@@ -54,34 +54,33 @@ flash_rgb_lights:
     service: script.turn_on
     entity_id: script.flash_rgb_lights
 
-
 woonkamer:
   sequence:
   - service: hue.hue_activate_scene
     data:
       group_name: 'woonkamer'
-      scene_name: '1'
-
-woonkamer_bright:
-  sequence:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: 'woonkamer'
-      scene_name: '2'
-
-woonkamer_super_bright:
-  sequence:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: 'woonkamer'
-      scene_name: '3'
+      scene_name: 'Woonkamer'
 
 woonkamer_nightlight:
   sequence:
   - service: hue.hue_activate_scene
     data:
       group_name: 'woonkamer'
-      scene_name: '4'
+      scene_name: 'Woonkamer Nightlight'
+
+woonkamer_bright:
+  sequence:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: 'woonkamer'
+      scene_name: 'Woonkamer Bright'
+
+woonkamer_super_bright:
+  sequence:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: 'woonkamer'
+      scene_name: 'Woonkamer Super Bright'
 
 woonkamer_off:
   sequence:
@@ -95,21 +94,21 @@ keuken:
   - service: hue.hue_activate_scene
     data:
       group_name: 'keuken'
-      scene_name: '1'
+      scene_name: 'Keuken'
 
 keuken_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
       group_name: 'keuken'
-      scene_name: '2'
+      scene_name: 'Keuken Bright'
 
 keuken_super_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
       group_name: 'keuken'
-      scene_name: '3'
+      scene_name: 'Keuken Super Bright'
 
 keuken_off:
   sequence:
@@ -122,28 +121,28 @@ hal_en_overlopen:
   - service: hue.hue_activate_scene
     data:
       group_name: 'hal en overlopen'
-      scene_name: '1'
-
-hal_en_overlopen_bright:
-  sequence:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: 'hal en overlopen'
-      scene_name: '2'
-
-hal_en_overlopen_super_bright:
-  sequence:
-  - service: hue.hue_activate_scene
-    data:
-      group_name: 'hal en overlopen'
-      scene_name: '3'
+      scene_name: 'Hal en Overlopen Bright'
 
 hal_en_overlopen_nightlight:
   sequence:
   - service: hue.hue_activate_scene
     data:
       group_name: 'hal en overlopen'
-      scene_name: '4'
+      scene_name: 'Hal en Overlopen Nightlight'
+
+hal_en_overlopen_bright:
+  sequence:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: 'hal en overlopen'
+      scene_name: 'Hal en Overlopen Bright'
+
+hal_en_overlopen_super_bright:
+  sequence:
+  - service: hue.hue_activate_scene
+    data:
+      group_name: 'hal en overlopen'
+      scene_name: 'Hal en Overlopen Super Bright'
 
 hal_en_overlopen_off:
   sequence:
@@ -157,33 +156,33 @@ buiten:
   - service: hue.hue_activate_scene
     data:
       group_name: 'buitenvoor'
-      scene_name: '1'
+      scene_name: 'BuitenVoor'
   - service: hue.hue_activate_scene
     data:
       group_name: 'buitenachter'
-      scene_name: '1'
+      scene_name: 'BuitenAchter'
 
 buiten_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
       group_name: 'buitenvoor'
-      scene_name: '2'
+      scene_name: 'BuitenVoor Bright'
   - service: hue.hue_activate_scene
     data:
       group_name: 'buitenachter'
-      scene_name: '2'
+      scene_name: 'BuitenAchter Bright'
 
 buiten_super_bright:
   sequence:
   - service: hue.hue_activate_scene
     data:
       group_name: 'buitenvoor'
-      scene_name: '3'
+      scene_name: 'BuitenVoor Super Bright'
   - service: hue.hue_activate_scene
     data:
       group_name: 'buitenachter'
-      scene_name: '3'
+      scene_name: 'BuitenAchter Super Bright'
 
 buiten_off:
   sequence:

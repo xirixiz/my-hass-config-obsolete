@@ -1,0 +1,17 @@
+- name: Lieke Work
+  latitude: !secret lieke_work_latitude
+  longitude: !secret lieke_work_longtitude
+  radius: 250
+  icon: mdi:briefcase
+
+- name: Lieke Parents Home
+  latitude: !secret lieke_parents_home_latitude
+  longitude: !secret lieke_parents_home_longtitude
+  radius: 150
+  icon: mdi:briefcase
+
+- name: Lieke Daan en Jels
+  latitude: !secret lieke_daan_en_jels_latitude
+  longitude: !secret lieke_daan_en_jels_longtitude
+  radius: 150
+  icon: mdi:briefcase

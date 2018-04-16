@@ -174,4 +174,5 @@ sensor: !include yaml_includes/sensor.yaml
 script: !include yaml_includes/script.yaml
 #scene: !include yaml_includes/scene.yaml
 group: !include yaml_includes/group.yaml
+zone: !include yaml_includes/zones.yaml
 automation: !include_dir_merge_list yaml_automation/

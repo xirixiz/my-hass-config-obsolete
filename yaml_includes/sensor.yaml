@@ -109,6 +109,12 @@
   origin: device_tracker.lieke_iphone
   destination: zone.home
 
+- platform: google_travel_time
+  name: Lieke Distance To Home
+  api_key: !secret google_travel_time_key_lieke
+  origin: zone.lieke_work
+  destination: zone.home
+
 # Uptime Sensor
 - platform: uptime
 
