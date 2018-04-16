@@ -50,8 +50,8 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
     json_data_next = json_obj['data']['ophaaldagenNext']['data']
     today = datetime.date.today().strftime("%Y-%m-%d")
     tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-#    today = "2018-04-18"
-#    tomorrow = "2018-04-19"
+    #today = "2018-04-18"
+    #tomorrow = "2018-04-19"
     countType = 1
     trashType = {}
     trashDays = [{1: 'today'}, {2: 'tomorrow'}]
@@ -124,12 +124,11 @@ class TrashCollectionSchedule(object):
 
         # Collect upcoming trash pickup dates
         for name in trashTotal:
-            nameDays = name.values()
             for item in json_data or json_data_next:
                 name = item["nameType"]
                 d = datetime.datetime.strptime(item['date'], "%Y-%m-%d")
                 dateConvert = d.strftime("%Y-%m-%d")
-                if name and nameDays not in trashType:
+                if name not in trashType:
                     if item['date'] >= today:
                         trash = {}
                         trashType[name] = item["nameType"]
@@ -142,12 +141,12 @@ class TrashCollectionSchedule(object):
                         trashType[name] = "today"
                         trash['name_type'] = "today"
                         trash['pickup_date'] = item['nameType']
-                        tschedule.append(trash)                                            
+                        tschedule.append(trash)
                         self.data = tschedule
                     if item['date'] == tomorrow:
                         trash = {}
                         trashType[name] = "tomorrow"
                         trash['name_type'] = "tomorrow"
                         trash['pickup_date'] = item['nameType']
-                        tschedule.append(trash)                                            
-                        self.data = tschedule                        
+                        tschedule.append(trash)                              
+                        self.data = tschedule
