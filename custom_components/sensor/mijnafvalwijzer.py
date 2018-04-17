@@ -130,7 +130,7 @@ class TrashCollectionSchedule(object):
                         trash['pickup_date'] = dateConvert
                         tschedule.append(trash)
                         self.data = tschedule
-                    elif item['date'] == today:
+                    if item['date'] == today:
                         trash = {}
                         trashType[name] = "today"
                         trash['name_type'] = "today"
