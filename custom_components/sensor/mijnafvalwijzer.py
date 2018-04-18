@@ -4,10 +4,7 @@
 @ Version     : 1.0.5
 @ Description : MijnAfvalwijzer Sensor - It queries mijnafvalwijzer.nl.
 """
-<<<<<<< HEAD
-=======
 
->>>>>>> 87cbd0f6df8cbd6068360b447af484c967e4f682
 from datetime import datetime, timedelta
 import voluptuous as vol
 import requests
@@ -158,3 +155,4 @@ class TrashCollectionSchedule(object):
                         trash['pickup_date'] = item['nameType']
                         tschedule.append(trash)
                         self.data = tschedule
+
