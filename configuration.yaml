@@ -73,7 +73,7 @@ discovery:
 conversation:
 history:
 logger:
-  default: warn # default logging level
+  default: info # default logging level
 #  logs:
 #    custom_components.sensor.mijnafvalwijzer: info
 logbook:

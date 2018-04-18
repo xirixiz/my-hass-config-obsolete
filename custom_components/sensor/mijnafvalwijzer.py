@@ -1,25 +1,19 @@
 """
 @ Authors     : Bram van Dartel
-@ Date        : 11/04/2018
-@ Version     : 1.0.1
+@ Date        : 18/04/2018
+@ Version     : 1.0.5
 @ Description : MijnAfvalwijzer Sensor - It queries mijnafvalwijzer.nl.
-@ Notes       : Copy this file and place it in your 'Home Assistant Config folder\custom_components\sensor\' folder.
 """
-import homeassistant.helpers.config_validation as cv
+from datetime import datetime, timedelta
+import voluptuous as vol
+import requests
+import asyncio
+import logging
+
 from homeassistant.helpers.entity import Entity
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import (CONF_NAME)
-from homeassistant.util import Throttle
-
-import voluptuous as vol
-from datetime import timedelta
-
-import requests
-import asyncio
-import json
-import argparse
-import datetime
-import logging
+import homeassistant.helpers.config_validation as cv
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -40,24 +34,25 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 @asyncio.coroutine
 def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
+    """Setup the sensor platform."""
     postcode = config.get(CONST_POSTCODE)
     huisnummer = config.get(CONST_HUISNUMMER)
     toevoeging = config.get(CONST_TOEVOEGING)
-    url = ("http://json.mijnafvalwijzer.nl/?method=postcodecheck&postcode={0}&street=&huisnummer={1}&toevoeging={2}&platform=phone&langs=nl&").format(postcode,huisnummer,toevoeging)
+    url = ("http://json.mijnafvalwijzer.nl/?method=postcodecheck& \
+            postcode={0}&street=&huisnummer={1}&toevoeging={2}& \
+            platform=phone&langs=nl&").format(postcode, huisnummer, toevoeging)
     response = requests.get(url)
     json_obj = response.json()
     json_data = json_obj['data']['ophaaldagen']['data']
     json_data_next = json_obj['data']['ophaaldagenNext']['data']
-    today = datetime.date.today().strftime("%Y-%m-%d")
-    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
-    #today = "2018-04-18"
-    #tomorrow = "2018-04-19"
-    countType = 1
+    today = datetime.today().strftime("%Y-%m-%d")
+    dateConvert = datetime.strptime(today, "%Y-%m-%d") + timedelta(days=1)
+    tomorrow = datetime.strftime(dateConvert, "%Y-%m-%d")
+    trashTotal = [{1: 'today'}, {2: 'tomorrow'}]
     trashType = {}
-    trashDays = [{1: 'today'}, {2: 'tomorrow'}]
-    trashTotal = []
+    countType = 3
     devices = []
-    
+
     # Collect trash items
     for item in json_data or json_data_next:
         name = item["nameType"]
@@ -65,13 +60,11 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
                 trash = {}
                 trashType[name] = item["nameType"]
                 trash[countType] = item["nameType"]
-                countType +=1
+                countType += 1
                 trashTotal.append(trash)
 
-    data = TrashCollectionSchedule(json_data, json_data_next, today, tomorrow, trashTotal)
-    
-    for item in trashDays:
-        trashTotal.append(item)
+    data = (TrashCollectionSchedule(json_data, json_data_next,
+            today, tomorrow, trashTotal))
 
     for trash_type in trashTotal:
         for t in trash_type.values():
@@ -80,24 +73,31 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
 
 
 class TrashCollectionSensor(Entity):
+    """Representation of a Sensor."""
+
     def __init__(self, name, data):
+        """Initialize the sensor."""
         self._state = None
         self._name = name
         self.data = data
 
     @property
     def name(self):
+        """Return the name of the sensor."""
         return SENSOR_PREFIX + self._name
 
     @property
     def state(self):
+        """Return the state of the sensor."""
         return self._state
 
     @property
     def icon(self):
+        """Set the default sensor icon."""
         return ICON
 
     def update(self):
+        """Fetch new state data for the sensor."""
         self.data.update()
         for d in self.data.data:
             if d['name_type'] == self._name:
@@ -105,7 +105,10 @@ class TrashCollectionSensor(Entity):
 
 
 class TrashCollectionSchedule(object):
+    """Fetch new state data for the sensor."""
+
     def __init__(self, json_data, json_data_next, today, tomorrow, trashTotal):
+        """Fetch vars."""
         self._json_data = json_data
         self._json_data_next = json_data_next
         self._today = today
@@ -114,6 +117,7 @@ class TrashCollectionSchedule(object):
         self.data = None
 
     def update(self):
+        """Fetch new state data for the sensor."""
         json_data = self._json_data
         json_data_next = self._json_data_next
         today = self._today
@@ -126,8 +130,8 @@ class TrashCollectionSchedule(object):
         for name in trashTotal:
             for item in json_data or json_data_next:
                 name = item["nameType"]
-                d = datetime.datetime.strptime(item['date'], "%Y-%m-%d")
-                dateConvert = d.strftime("%Y-%m-%d")
+                dateFormat = datetime.strptime(item['date'], "%Y-%m-%d")
+                dateConvert = dateFormat.strftime("%Y-%m-%d")
                 if name not in trashType:
                     if item['date'] >= today:
                         trash = {}
@@ -148,5 +152,5 @@ class TrashCollectionSchedule(object):
                         trashType[name] = "tomorrow"
                         trash['name_type'] = "tomorrow"
                         trash['pickup_date'] = item['nameType']
-                        tschedule.append(trash)                              
+                        tschedule.append(trash)
                         self.data = tschedule
