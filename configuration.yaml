@@ -56,12 +56,14 @@ frontend:
 config:
 
 recorder:
-  purge_keep_days: 14
+  purge_keep_days: 7
   purge_interval: 1
-  db_url: !secret hass_recorder_db
+#  db_url: !secret hass_recorder_db
 
 http:
   api_password: !secret http_password
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
 #  use_x_forwarded_for: True
 #  trusted_networks:
 #    - 127.0.0.1

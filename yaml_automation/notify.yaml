@@ -90,55 +90,55 @@
   action:
   - service: notify.ios_taipan5g
     data:
-      message: 'Lieke zone change home!'
+      message: 'Lieke zone change home - {{ trigger.to_state.state }}!'
 
 
 - alias: Alert zone change Lieke work
   trigger:
   - platform: zone
     entity_id: device_tracker.lieke_iphone
-    zone: zone.lieke_work
+    zone: zone.work_lieke
     event: enter    
   - platform: zone
     entity_id: device_tracker.lieke_iphone
-    zone: zone.lieke_work
+    zone: zone.work_lieke
     event: leave
   action:
   - service: notify.ios_taipan5g
     data:
-      message: 'Lieke zone change werk!'
+      message: 'Lieke zone change werk - {{ trigger.to_state.state }}!'
 
 
 - alias: Alert zone change Lieke parents home
   trigger:
   - platform: zone
     entity_id: device_tracker.lieke_iphone
-    zone: zone.lieke_parents_home
+    zone: zone.parents_lieke
     event: enter    
   - platform: zone
     entity_id: device_tracker.lieke_iphone
-    zone: zone.lieke_parents_home
+    zone: zone.parents_lieke
     event: leave
   action:
   - service: notify.ios_taipan5g
     data:
-      message: 'Lieke zone change parents home!'      
+      message: 'Lieke zone change parents home - {{ trigger.to_state.state }}!'      
 
 
-- alias: Alert zone change Lieke Daan en Jels
+- alias: Alert zone change Lieke zus home
   trigger:
   - platform: zone
     entity_id: device_tracker.lieke_iphone
-    zone: zone.lieke_daan_en_jels
+    zone: zone.zus_lieke
     event: enter    
   - platform: zone
     entity_id: device_tracker.lieke_iphone
-    zone: zone.lieke_daan_en_jels
+    zone: zone.zus_lieke
     event: leave
   action:
   - service: notify.ios_taipan5g
     data:
-      message: 'Lieke zone change Daan en Jels!'   
+      message: 'Lieke zone change zus home - {{ trigger.to_state.state }}!'   
 
 
 #- alias: Alert when Lieke arrives or arrives somewhere
