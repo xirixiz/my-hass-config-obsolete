@@ -16,7 +16,7 @@ homeassistant:
         homebridge_hidden: false
 
 ################################################
-## HTTP
+## Http
 ################################################
 http:
   api_password: !secret http_password

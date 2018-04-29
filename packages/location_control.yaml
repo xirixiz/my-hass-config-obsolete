@@ -50,26 +50,6 @@ homeassistant:
       icon: mdi:car
 
 ################################################
-## Group
-################################################
-group:
-  family:
-    name: "Family Tracking"
-    control: hidden
-    entities:
-      - device_tracker.taipan5g
-      - device_tracker.lieke_iphone
-
-  location_control:
-    name: "Location Control"
-    control: hidden
-    entities:
-      - input_boolean.vacation_mode
-      - input_boolean.automation_mode
-      - sensor.lieke_distance_to_home
-      - sensor.bram_distance_to_home
-
-################################################
 ## Device Tracker
 ################################################
 device_tracker:
@@ -99,6 +79,26 @@ zone:
     latitude: !secret lieke_daan_en_jels_latitude
     longitude: !secret lieke_daan_en_jels_longtitude
     radius: 150
+
+################################################
+## Group
+################################################
+group:
+  family:
+    name: "Family Tracking"
+    control: hidden
+    entities:
+      - device_tracker.taipan5g
+      - device_tracker.lieke_iphone
+
+  location_control:
+    name: "Location Control"
+    control: hidden
+    entities:
+      - input_boolean.vacation_mode
+      - input_boolean.automation_mode
+      - sensor.lieke_distance_to_home
+      - sensor.bram_distance_to_home
 
 ################################################
 ## Sensor

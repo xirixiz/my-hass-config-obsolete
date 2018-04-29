@@ -21,16 +21,6 @@ homeassistant:
 logger:
 
 ################################################
-## Logger
-################################################
-group:
- logger:
-    name: "Logger"
-    control: hidden
-    entities:
-      - input_select.log_level
-
-################################################
 ## Input Select
 ################################################
 input_select:
@@ -46,6 +36,16 @@ input_select:
       - debug
       - notset
     initial: warn
+
+################################################
+## Group
+################################################
+group:
+ logger:
+    name: "Logger"
+    control: hidden
+    entities:
+      - input_select.log_level
 
 ################################################
 ## Automation
