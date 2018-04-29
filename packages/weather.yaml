@@ -1,0 +1,117 @@
+################################################
+## Packages / Weather
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'weather'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+    sensor.dark_sky_minutely_summary:
+      <<: *customize
+      friendly_name: "Komende uur"
+    sensor.dark_sky_hourly_summary:
+      <<: *customize
+      friendly_name: "Vandaag"
+    sensor.dark_sky_daily_summary:
+      <<: *customize
+      friendly_name: "Komende Week"
+    sensor.dark_sky_precip_probability:
+      <<: *customize
+      friendly_name: "Regen"
+    sensor.dark_sky_temperature:
+      <<: *customize
+      friendly_name: "Temp"
+    sensor.dark_sky_apparent_temperature:
+      <<: *customize
+      friendly_name: "Gevoel"
+    sensor.dark_sky_humidity:
+      <<: *customize
+      friendly_name: "Luchtvocht"
+    sensor.dark_sky_wind_speed:
+      <<: *customize
+      friendly_name: "Wind"
+
+    sensor.yr_symbol:
+      <<: *customize
+      friendly_name: " "
+    sensor.yr_temperature:
+      <<: *customize
+      friendly_name: " "
+    sensor.yr_wind_speed:
+      <<: *customize
+      friendly_name: " "
+      icon: mdi:weather-windy
+    sensor.yr_humidity:
+      <<: *customize
+      friendly_name: " "
+      icon: mdi:water-percent
+    sensor.yr_fog:
+      <<: *customize
+      friendly_name: " "
+      icon: mdi:weather-fog
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: darksky
+    api_key: !secret darksky_secret
+    forecast: 7
+    update_interval: 00:15
+    monitored_conditions:
+      - icon
+      - summary
+      - precip_type
+      - precip_intensity
+      - precip_probability
+      - temperature
+      - apparent_temperature
+      - dew_point
+      - wind_speed
+      - wind_bearing
+      - cloud_cover
+      - humidity
+      - pressure
+      - visibility
+      - ozone
+      - minutely_summary
+      - hourly_summary
+      - daily_summary
+      - temperature_max
+      - temperature_min
+      - apparent_temperature_max
+      - apparent_temperature_min
+      - precip_intensity_max
+      - uv_index
+  - platform: yr
+    forecast: 48
+    monitored_conditions:
+      - temperature
+      - symbol
+      - windSpeed
+      - humidity
+      - fog
+
+################################################
+## Automation
+################################################
+automation:      
+  - alias: "Set Night theme at startup"
+    trigger:
+    - platform: homeassistant
+      event: start
+    action:
+    - service: frontend.set_theme
+      data:
+        name: darkblue
+  #  - service: notify.ios_taipan5g
+  #    data_template:
+  #      message: 'HASS ready!'

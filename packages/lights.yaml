@@ -1,0 +1,846 @@
+################################################
+## Packages / Lights
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'lights'
+      expose: &expose # This merges the keys/values from "&customize"
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    group.all_lights:
+      <<: *customize
+      control: hidden
+      hidden: false
+
+    script.all_off:
+      <<: *customize
+      hidden: false
+      friendly_name: All
+      icon: mdi:flashlight-off
+    script.woonkamer_off:
+      <<: *customize
+      hidden: false
+      friendly_name: Woonkamer
+      icon: mdi:flashlight-off
+    script.keuken_off:
+      <<: *customize
+      hidden: false
+      friendly_name: Keuken
+      icon: mdi:flashlight-off
+    script.hal_en_overlopen_off:
+      <<: *customize
+      hidden: false
+      friendly_name: Hal en Overlopen
+      icon: mdi:flashlight-off
+    script.buiten_off:
+      <<: *customize
+      hidden: false
+      friendly_name: Buiten
+      icon: mdi:flashlight-off
+
+    script.all_on:
+      <<: *customize
+      hidden: false
+      friendly_name: All
+      icon: mdi:flashlight
+
+    script.woonkamer:
+      <<: *customize
+      hidden: false
+      friendly_name: Woonkamer
+      icon: mdi:flashlight
+    script.woonkamer_nightlight:
+      <<: *customize
+      hidden: false
+      friendly_name: Woonkamer NL
+      icon: mdi:flashlight
+    script.woonkamer_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Woonkamer B
+      icon: mdi:flashlight
+    script.woonkamer_super_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Woonkamer SB
+      icon: mdi:flashlight
+
+    script.keuken:
+      <<: *customize
+      hidden: false
+      friendly_name: Keuken
+      icon: mdi:flashlight
+    script.keuken_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Keuken B
+      icon: mdi:flashlight
+    script.keuken_super_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Keuken SB
+      icon: mdi:flashlight
+
+    script.hal_en_overlopen:
+      <<: *customize
+      hidden: false
+      friendly_name: Hal & Overlopen
+      icon: mdi:flashlight
+    script.hal_en_overlopen_nightlight:
+      <<: *customize
+      hidden: false
+      friendly_name: Hal & Overlopen NL
+      icon: mdi:flashlight
+    script.hal_en_overlopen_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Hal & Overlopen B
+      icon: mdi:flashlight
+    script.hal_en_overlopen_super_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Hal & Overlopen SB
+      icon: mdi:flashlight
+
+    script.buiten:
+      <<: *customize
+      hidden: false
+      friendly_name: Buiten
+      icon: mdi:flashlight
+    script.buiten_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Buiten B
+      icon: mdi:flashlight
+    script.buiten_super_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: Buiten SB
+      icon: mdi:flashlight
+
+################################################
+## Hue
+################################################
+hue:
+  bridges:
+    - host: !secret philips_hue_host
+      allow_unreachable: true
+      allow_hue_groups: true
+
+################################################
+## Input Number
+################################################
+input_number:
+  keuken_hanglamp_brightness:
+    min: 0
+    max: 255
+    step: 1
+
+################################################
+## Group
+################################################
+group:
+  lights_view:
+    icon: mdi:flashlight
+    view: yes
+    entities:
+      - sensor.woonkamer_motion
+      - sensor.woonkamer_lux
+      - sensor.hal_motion
+      - sensor.hal_lux
+      - group.woonkamer_lights
+      - group.keuken_lights
+      - group.hal_en_overlopen_lights
+      - group.buiten_lights
+      - group.slaapkamer_lights
+
+  lights_all_view:
+    icon: mdi:lightbulb-on
+    view: yes
+    entities:
+      - group.all_lights
+  
+  # Woonkamer
+  woonkamer_lights:
+    name: "Lights Woonkamer"
+    entities:
+      - group.woonkamer_lights_spots
+      - group.woonkamer_lights_kast
+      - group.woonkamer_lights_studeerkamer
+      - group.woonkamer_lights_rails
+  
+  woonkamer_lights_spots:
+    name: "Lights Spots"
+    entities:
+      - light.woonkamer_spot_tuin_links_1
+      - light.woonkamer_spot_tuin_links_2
+      - light.woonkamer_spot_tuin_midden_1
+      - light.woonkamer_spot_tuin_midden_2
+      - light.woonkamer_spot_tuin_rechts_1
+      - light.woonkamer_spot_tuin_rechts_2
+  
+  woonkamer_lights_kast:
+    name: "Lights Kast"
+    entities:
+      - light.kastlamp_links
+      - light.kastlamp_rechts
+  
+  woonkamer_lights_studeerkamer:
+    name: "Lights Studeerkamer"
+    entities:
+      - light.studeerkamer_rechts
+      - light.studeerkamer_links
+  
+  woonkamer_lights_rails:
+    name: "Lights Rails"
+    entities:
+      - group.woonkamer_lights_rails_links
+      - group.woonkamer_lights_rails_rechts
+  
+  woonkamer_lights_rails_links:
+    name: "Lights Rails Links"
+    entities:
+      - light.woonkamer_rails_links
+  
+  woonkamer_lights_rails_rechts:
+    name: "Lights Rails Rechts"
+    entities:
+      - light.woonkamer_rails_rechts
+  
+  # Keuken
+  keuken_lights:
+    name: "Lights Keuken"
+    entities:
+      - input_number.keuken_hanglamp_brightness
+      - group.keuken_lights_hanglamp
+      - group.keuken_lights_spots
+  
+  keuken_lights_hanglamp:
+    name: "Lights Hanglamp Keuken"
+    entities:
+      - light.keuken_hanglamp
+  
+  keuken_lights_spots:
+    name: "Lights Spots Keuken"
+    entities:
+      - light.keuken_spot_tuin_links_1
+      - light.keuken_spot_tuin_links_2
+      - light.keuken_spot_tuin_rechts_1
+      - light.keuken_spot_tuin_rechts_2
+      - light.keuken_spot_werkblad_links
+      - light.keuken_spot_werkblad_rechts
+      - light.keuken_spot_nis_links
+      - light.keuken_spot_nis_rechts
+  
+  # Hal en Overlopen
+  hal_en_overlopen_lights:
+    name: "Lights Hal en Overlopen"
+    entities:
+      - group.hal_en_overlopen_lights_hal
+      - group.hal_en_overlopen_lights_overloop_1
+      - group.hal_en_overlopen_lights_overloop_2
+  
+  hal_en_overlopen_lights_hal:
+    name: "Lights HAL"
+    entities:
+      - light.hal_bg
+
+  hal_en_overlopen_lights_overloop_1:
+    name: "Lights Overloop 1"
+    entities:
+      - light.hal_verdieping_1
+  
+  hal_en_overlopen_lights_overloop_2:
+    name: "Lights Overloop 2"
+    entities:
+      - light.hal_verdieping_2
+  
+  # Buiten
+  buiten_lights:
+    name: "Lights Buiten"
+    entities:
+      - group.buiten_lights_voor
+      - group.buiten_lights_achter
+  
+  buiten_lights_voor:
+    name: "Lights Buiten Voor"
+    entities:
+      - light.buiten_voordeur
+      - light.buiten_garage
+  
+  buiten_lights_achter:
+    name: "Lights Buiten Achter"
+    entities:
+      - light.buiten_achter_links
+      - light.buiten_achter_rechts
+  
+  # Slaapkamer
+  slaapkamer_lights:
+    name: "Lights Slaapkamer"
+    entities:
+      - group.slaapkamer_lights_master
+  
+  slaapkamer_lights_master:
+    name: "Lights Master Slaapkamer"
+    entities:
+      - light.slaapkamer_hanglamp
+
+  scripts_on:
+    name: "Lights On"
+    control: hidden
+    entities:
+      - script.all_on
+      - script.woonkamer
+      - script.woonkamer_nightlight
+      - script.woonkamer_bright
+      - script.woonkamer_super_bright
+      - script.keuken
+      - script.keuken_bright
+      - script.keuken_super_bright
+      - script.hal_en_overlopen
+      - script.hal_en_overlopen_nightlight
+      - script.hal_en_overlopen_bright
+      - script.hal_en_overlopen_super_bright
+      - script.buiten
+      - script.buiten_bright
+      - script.buiten_super_bright
+
+  scripts_off:
+    name: "Lights Off"
+    control: hidden
+    entities:
+      - script.all_off
+      - script.woonkamer_off
+      - script.keuken_off
+      - script.hal_en_overlopen_off
+      - script.buiten_off
+
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: rest
+    resource: !secret hue_woonkamer_motion_sensor
+    value_template: '{{ value_json.state.presence }}'
+    scan_interval: 1
+    name: 'woonkamer_motion'
+  - platform: rest
+    resource: !secret hue_woonkamer_lux_sensor
+  #  value_template: '{{(10 ** (float (value_json.state.lightlevel) / 10000) -1) | round (1)}}'
+    value_template: '{{ value_json.state.lightlevel }}'
+    scan_interval: 30
+    unit_of_measurement: 'Lux'
+    name: 'woonkamer_lux'
+
+  # Philips HUE - Sensors - Hal en Overlopen
+  - platform: rest
+    resource: !secret hue_hal_motion_sensor
+    value_template: '{{ value_json.state.presence }}'
+    scan_interval: 1
+    name: 'hal_motion'
+  - platform: rest
+    resource: !secret hue_hal_lux_sensor
+    value_template: '{{ value_json.state.lightlevel }}'
+    scan_interval: 30
+    unit_of_measurement: 'Lux'
+    name: 'hal_lux'
+
+  - platform: template
+    sensors:
+      keuken_hanglamp_brightness:
+        value_template: >-
+          {%- if is_state('light.keuken_hanglamp', 'on') -%}
+            {{ states.light.keuken_hanglamp.attributes.brightness | int }}
+          {%- else -%}
+            127
+          {%- endif -%}
+      switch_hal:
+        value_template: >-
+          {%- if states('sensor.hal_lux') | int < 20000 -%}
+            on
+          {%- else -%}
+            off
+          {%- endif -%}
+      switch_woonkamer:
+        value_template: >-
+          {%- if states('sensor.woonkamer_lux') | int < 14000 -%}
+            on
+          {%- else -%}
+            off
+          {%- endif -%}
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: 'Woonkamer Motion - True'
+    trigger:
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
+    condition:
+    - condition: time
+      after: '00:00:00'
+      before: '05:00:00'
+    action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.woonkamer_motion
+
+  - alias: 'Woonkamer Motion - False'
+    trigger:
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'False'
+      for:
+        minutes: 30
+    condition:
+    - condition: time
+      after: '00:00:00'
+      before: '05:00:00'
+    action:
+    - service: homeassistant.turn_off
+      entity_id: input_boolean.woonkamer_motion
+
+  - alias: 'Hal Motion - True'
+    trigger:
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    condition:
+    - condition: time
+      after: '00:00:00'
+      before: '05:00:00'
+    action:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.hal_motion
+
+  - alias: 'Hal Motion - False'
+    trigger:
+      - platform: state
+        entity_id: sensor.hal_motion
+        to: 'False'
+        for:
+          minutes: 30
+    condition:
+      - condition: time
+        after: '00:00:00'
+        before: '05:00:00'
+    action:
+      - service: homeassistant.turn_off
+        entity_id: input_boolean.hal_motion
+
+  - alias: "Slider - Keuken - Hanglamp - Set value"
+    initial_state: on
+    trigger:
+    - platform: state
+      entity_id: sensor.keuken_hanglamp_brightness
+    - platform: state
+      entity_id: light.keuken_hanglamp
+      from: 'off'
+      to: 'on'
+    - platform: homeassistant
+      event: start
+    action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.keuken_hanglamp_brightness
+        value: "{{ states.light.keuken_hanglamp.attributes.brightness | int }}"
+  
+  - alias: "Switch - Keuken - Hanglamp - On"
+    trigger:
+    - platform: state
+      entity_id: input_number.keuken_hanglamp_brightness
+    action:
+    - service: light.turn_on
+      data_template:
+        entity_id: light.keuken_hanglamp
+        brightness: "{{ trigger.to_state.state | int }}"
+  
+  
+  - alias: "Automation - All - Turn off"
+    trigger:
+    - platform: state
+      entity_id: input_boolean.automation_mode
+      to: 'on'
+    condition:
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'on'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.all_off
+      - script.woonkamer_off
+      - script.keuken_off
+      - script.hal_en_overlopen_off
+      - script.buiten_off
+  
+  
+  - alias: "Motion - Woonkamer - Morning on"
+    trigger:
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    condition:
+    - condition: time
+      before: '10:00:00'
+      after: '5:00:00'
+    - condition: state
+      entity_id: sensor.switch_woonkamer
+      state: 'on'
+    - condition: state
+      entity_id: sensor.switch_hal
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: script.turn_on
+      entity_id:
+        - script.woonkamer_bright
+        - script.keuken_bright
+        - script.buiten_bright
+  
+  
+  - alias: "Switch - Woonkamer - Daytime on"
+    trigger:
+    - platform: state
+      entity_id: sensor.switch_woonkamer
+      from: 'off'
+      to: 'on'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: input_boolean.woonkamer_motion
+      from: 'off'
+      to: 'on'
+    condition:
+    - condition: time
+      before: '20:00:00'
+      after: '5:00:00'
+    - condition: state
+      entity_id: sensor.switch_woonkamer
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.woonkamer_bright
+      - script.keuken_bright
+      - script.buiten_bright
+  
+  
+  - alias: "Switch - Woonkamer - Evening on"
+    trigger:
+    - platform: state
+      entity_id: sensor.switch_woonkamer
+      from: 'off'
+      to: 'on'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: input_boolean.woonkamer_motion
+      from: 'off'
+      to: 'on'
+    - platform: time
+      at: '20:00:00'
+    condition:
+    - condition: time
+      before: '05:00:00'
+      after: '20:00:00'
+    - condition: state
+      entity_id: sensor.switch_woonkamer
+      state: 'on'
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.woonkamer
+      - script.keuken
+      - script.buiten  
+  
+  
+  - alias: "Switch - Woonkamer - Off"
+    trigger:
+    - platform: state
+      entity_id: sensor.switch_woonkamer
+      from: 'on'
+      to: 'off'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: input_boolean.woonkamer_motion
+      from: 'on'
+      to: 'off'
+    - platform: time
+      at: '00:00:00'
+    condition:
+    #- condition: state
+    #  entity_id: media_player.lg_webos_smart_tv
+    #  state: "off"
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.all_off
+  
+  
+  - alias: "Switch - Woonkamer - When TV off"
+    trigger:
+    - platform: state
+      entity_id: media_player.lg_webos_smart_tv
+      to: "off"
+      for:
+        minutes: 5
+    condition:
+    - condition: time
+      before: '05:00:00'
+      after: '21:00:00'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.all_off 
+  
+  
+  - alias: "Motion - Hal en overlopen - Morning and evening on"
+    trigger:
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    condition:
+    - condition: or
+      conditions:
+      - condition: time
+        before: '22:00:00'
+        after: '20:00:00'
+      - condition: time
+        before: '08:00:00'
+        after: '05:00:00'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.hal_en_overlopen
+  
+  
+  - alias: "Motion - Hal en overlopen - Daytime on"
+    trigger:
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        before: '20:00:00'
+        after: '08:00:00'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.hal_en_overlopen_bright
+  
+  
+  - alias: "Motion - Hal en overlopen - Night on"
+    trigger:
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        before: '05:00:00'
+        after: '22:00:00'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.hal_en_overlopen_nightlight
+  
+  
+  - alias: "Motion - Hal en overlopen - Off"
+    trigger:
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'False'
+      for:
+        minutes: 10
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.hal_en_overlopen_off
+
+
+################################################
+## Script
+################################################
+script:
+  all_off:
+    sequence:
+    - service: light.turn_off
+      entity_id:
+      - light.woonkamer
+      - light.keuken
+      - light.buitenvoor
+      - light.buitenachter
+  
+  all_on:
+    sequence:
+    - service: light.turn_on
+      entity_id:
+      - light.woonkamer
+      - light.keuken
+      - light.buitenvoor
+      - light.buitenachter
+  
+
+  woonkamer:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'woonkamer'
+        scene_name: 'Woonkamer'
+  
+  woonkamer_nightlight:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'woonkamer'
+        scene_name: 'Woonkamer Nightlight'
+  
+  woonkamer_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'woonkamer'
+        scene_name: 'Woonkamer Bright'
+  
+  woonkamer_super_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'woonkamer'
+        scene_name: 'Woonkamer Super Bright'
+  
+  woonkamer_off:
+    sequence:
+    - service: light.turn_off
+      entity_id: light.woonkamer
+  
+
+  keuken:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'keuken'
+        scene_name: 'Keuken'
+  
+  keuken_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'keuken'
+        scene_name: 'Keuken Bright'
+  
+  keuken_super_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'keuken'
+        scene_name: 'Keuken Super Bright'
+  
+  keuken_off:
+    sequence:
+    - service: light.turn_off
+      entity_id: light.keuken
+  
+  
+  hal_en_overlopen:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'hal en overlopen'
+        scene_name: 'Hal en Overlopen Bright'
+  
+  hal_en_overlopen_nightlight:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'hal en overlopen'
+        scene_name: 'Hal en Overlopen Nightlight'
+  
+  hal_en_overlopen_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'hal en overlopen'
+        scene_name: 'Hal en Overlopen Bright'
+  
+  hal_en_overlopen_super_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'hal en overlopen'
+        scene_name: 'Hal en Overlopen Super Bright'
+  
+  hal_en_overlopen_off:
+    sequence:
+    - service: light.turn_off
+      entity_id: light.hal_en_overlopen
+  
+  
+  buiten:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'buitenvoor'
+        scene_name: 'BuitenVoor'
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'buitenachter'
+        scene_name: 'BuitenAchter'
+  
+  buiten_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'buitenvoor'
+        scene_name: 'BuitenVoor Bright'
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'buitenachter'
+        scene_name: 'BuitenAchter Bright'
+  
+  buiten_super_bright:
+    sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'buitenvoor'
+        scene_name: 'BuitenVoor Super Bright'
+    - service: hue.hue_activate_scene
+      data:
+        group_name: 'buitenachter'
+        scene_name: 'BuitenAchter Super Bright'
+  
+  buiten_off:
+    sequence:
+    - service: light.turn_off
+      entity_id:
+      - light.buitenvoor
+      - light.buitenachter

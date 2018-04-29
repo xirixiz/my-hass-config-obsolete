@@ -1,6 +1,6 @@
-##########################################
-##### Configuration
-##########################################
+################################################
+## General Configuration
+################################################
 homeassistant:
   name: Home
   latitude: !secret home_latitude
@@ -8,173 +8,207 @@ homeassistant:
   elevation: !secret home_elevation
   unit_system: metric
   time_zone: Europe/Amsterdam
-  customize: !include yaml_includes/customize.yaml
-  #customize_glob: !include yaml_includes/customize_glob.yaml
+  packages: !include_dir_named packages
 
-#introduction:
-frontend:
-  themes:
-    darkblue:
-      primary-color: "#396FB6"
-      light-primary-color: "#77a0d4"
-      dark-primary-color: "#3539ce"
-      text-primary-color: "#ffffff"
-      primary-background-color: "#37464f"
-      sidebar-text_-_background: "#3c4348"
-      paper-card-background-color: "#263137"
-      paper-card-header-color: "var(--text-primary-color)"
-      secondary-background-color: "var(--primary-background-color)"
-      primary-text-color: "var(--text-primary-color)"
-      secondary-text-color: "var(--primary-color)"
-      paper-listbox-background-color: "var(--sidebar-text_-_background)"
-      paper-toggle-button-checked-ink-color: "var(--light-primary-color)"
-      paper-toggle-button-checked-button-color: "var(--light-primary-color)"
-      paper-toggle-button-checked-bar-color: "var(--light-primary-color)"
-      paper-slider-knob-color: "var(--primary-color)"
-      paper-slider-knob-start-color: "var(--primary-color)"
-      paper-slider-pin-color: "var(--primary-color)"
-      paper-slider-active-color: "var(--primary-color)"
-      paper-slider-secondary-color: "var(--light-primary-color)"
-      paper-slider-container-color: "var(--sidebar-text_-_background)"
-      paper-progress-secondary-color: "var(--sidebar-text_-_background)"
-      paper-item-selected_-_background-color: "var(--primary-color)"
-      paper-item-icon_-_color: "var(--text-primary-color)"
-      paper-item-icon-color: "var(--text-primary-color)"
-      paper-item-icon-active-color: "var(--primary-color)"
-      paper-grey-50: "var(--sidebar-text_-_background)"
-      paper-grey-200: "var(--primary-background-color)"
-      label-badge-background-color: "var(--sidebar-text_-_background)"
-      label-badge-text-color: "var(--text-primary-color)"
-      label-badge-red: "var(--primary-color)"
-      label-badge-blue: "var(--light-primary-color)"
-      label-badge-green: "var(--dark-primary-color)"
-      label-badge-yellow: "var(--text-primary-color)"
-      label-badge-grey: "var(--paper-grey-500)"
-      table-row-background-color: "var(--paper-card-background-color)"
-      table-row-alternative-background-color: "var(--sidebar-text_-_background)"
+################################################
+## Customize
+################################################
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'configuration'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
 
+################################################
+## Components
+################################################
+ios:
+logbook:
 config:
-
-recorder:
-  purge_keep_days: 7
-  purge_interval: 1
-#  db_url: !secret hass_recorder_db
-
-http:
-  api_password: !secret http_password
-  ssl_certificate: !secret ssl_certificate
-  ssl_key: !secret ssl_key
-#  use_x_forwarded_for: True
-#  trusted_networks:
-#    - 127.0.0.1
-#    - ::1
-#    - 192.168.1.0/24
-updater:
-  include_used_components: true
-discovery:
 conversation:
 history:
-logger:
-  default: info # default logging level
-#  logs:
-#    custom_components.sensor.mijnafvalwijzer: info
-logbook:
 map:
-sun:
-
-##########################################
-##### Sensors and devices
-##########################################
-ios:
-notify:
-  - name: family
-    platform: group
-    services:
-      - service: ios_taipan5g
-      - service: ios_lieke_iphone
 zeroconf:
 
-hue:
-  bridges:
-    - host: !secret philips_hue_host
-      allow_unreachable: true
-      allow_hue_groups: true
-
-tts:
-#  platform: google
-
-media_player:
-  - platform: webostv
-    host: !secret lgwebostv_host
-    customize:
-      sources:
-        - livetv
-        - plex
-        - xplay
-        - youtube
-        - netflix
-  - platform: plex
-    entity_namespace: 'plex'
-    include_non_clients: false
-    scan_interval: 5
-    show_all_controls: false
-    use_custom_entity_ids: false
-    use_episode_art: true
-  - platform: cast
-  #- platform: spotify
-  #  client_id: !secret spotify_username
-  #  client_secret: !secret spotify_password
-
-panel_iframe:
-  sonarr:
-      title: 'Sonarr'
-      url: !secret sonarr_url
-      icon: mdi:television
-  transmission:
-      title: 'transmission'
-      url: !secret transmission_url
-
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
-climate:
-  platform: nest
-
-device_tracker:
-  - platform: asuswrt
-    host: !secret router_host
-    username: !secret router_username
-    password: !secret router_password
-    interval_seconds: 90
-    consider_home: 180
-    track_new_devices: yes
-#  - platform: owntracks
-#  - platform: icloud
-#    username: !secret apple_username
-#    password: !secret apple_password
-#    account_name: Apple
-
-camera:
-  - platform: mjpeg
-    name: Boris
-    still_image_url: !secret camera_boris_image_url
-    mjpeg_url: !secret camera_boris_mjpeg_url
-    username: !secret camera_boris_username
-    password: !secret camera_boris_password
+################################################
+## Input Boolean
+################################################
+input_boolean:
+  automation_mode:
+    name: "Automation Mode"
+    initial: off
+    icon: mdi:human-male-female
+  vacation_mode:
+    name: "Vacation Mode"
+    initial: off
+    icon: mdi:human-male-female
+  woonkamer_motion:
+    name: "Woonkamer Motion"
+    initial: off
+    icon: mdi:human-male-female
+  hal_motion:
+    name: "Woonkamer Motion"
+    initial: off
+    icon: mdi:human-male-female
+  tv_status_woonkamer:
+    name: "TV Status - Woonkamer"
+    initial: off
 
 ##########################################
-##### External configuration sections
+##### Group
 ##########################################
-#binary_sensor: !include yaml_includes/binary_sensor.yaml
-input_boolean: !include yaml_includes/input_boolean.yaml
-#input_select: !include yaml_includes/input_select.yaml
-input_number: !include yaml_includes/input_number.yaml
-#media_player: !include yaml_includes/media_player.yaml
-#remote: !include yaml_includes/remote.yaml
-sensor: !include yaml_includes/sensor.yaml
-#switch: !include yaml_includes/switch.yaml
-script: !include yaml_includes/script.yaml
-#scene: !include yaml_includes/scene.yaml
-group: !include yaml_includes/group.yaml
-zone: !include yaml_includes/zones.yaml
-automation: !include_dir_merge_list yaml_automation/
+group:
+  default_view:
+    icon: mdi:home
+    view: yes
+    entities:
+      - device_tracker.taipan5g
+      - device_tracker.lieke_iphone
+      - sensor.power_consumption
+      - group.slaapkamer_boris_camera
+      - group.scripts_on
+      - group.scripts_off
+      - group.location_control
+      - group.trash_pickup
+      - group.sensors
+      - group.media
+      - group.logger
+      - sensor.dark_sky_precip_probability
+      - sensor.dark_sky_temperature
+      - sensor.dark_sky_apparent_temperature
+      - sensor.dark_sky_humidity
+      - sensor.dark_sky_wind_speed
+
+  network_view:
+    icon: mdi:server-network
+    view: yes
+    entities:
+      - group.woonkamer_speedtest
+
+  woonkamer_speedtest:
+    name: "Internet Speedtest"
+    entities:
+      - sensor.speedtest_download
+      - sensor.speedtest_upload
+      - sensor.speedtest_ping
+
+  sensors:
+    name: "Sensors"
+    entities:
+  #    - sensor.plex_activity
+  #    - input_boolean.woonkamer_motion
+  #    - sensor.woonkamer_motion
+  #    - sensor.switch_woonkamer
+  #    - sensor.switch_hal_en_overlopen
+      - sensor.time
+      - sensor.date
+  #    - sun.sun
+      - sensor.sunrise_time
+      - sensor.sunset_time
+      - sensor.week_of_year
+      - sensor.day_of_year
+  #    - sensor.next_sunrise
+  #    - sensor.next_sunset
+  #    - sensor.solar_angle
+      - sensor.moon
+
+  #weather:
+  #  name: "Weather"
+  #  entities:
+  #    - sensor.dark_sky_summary
+  #    - sensor.dark_sky_minutely_summary
+  #    - sensor.dark_sky_hourly_summary
+  #    - sensor.dark_sky_daily_summary
+  #    - sensor.dark_sky_icon
+  #    - sensor.dark_sky_summary
+  #    - sensor.dark_sky_precip_type
+  #    - sensor.dark_sky_precip_intensity
+  #    - sensor.dark_sky_precip_probability
+  #    - sensor.dark_sky_temperature
+  #    - sensor.dark_sky_apparent_temperature
+  #    - sensor.dark_sky_dew_point
+  #    - sensor.dark_sky_wind_speed
+  #    - sensor.dark_sky_wind_bearing
+  #    - sensor.dark_sky_cloud_cover
+  #    - sensor.dark_sky_humidity
+  #    - sensor.dark_sky_pressure
+  #    - sensor.dark_sky_visibility
+  #    - sensor.dark_sky_ozone
+  #    - sensor.dark_sky_minutely_summary
+  #    - sensor.dark_sky_hourly_summary
+  #    - sensor.dark_sky_daily_summary
+  #    - sensor.dark_sky_temperature_max
+  #    - sensor.dark_sky_temperature_min
+  #    - sensor.dark_sky_apparent_temperature_max
+  #    - sensor.dark_sky_apparent_temperature_min
+  #    - sensor.dark_sky_precip_intensity_max
+  #    - sensor.dark_sky_uv_index
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: template
+    sensors:
+      time_of_day:
+        friendly_name: 'Time of Day'
+        value_template: >-
+          {% if   now().strftime("%H:%M") < "06:00" %} night
+          {% elif now().strftime("%H:%M") < "09:00" %} early morning
+          {% elif now().strftime("%H:%M") < "11:30" %} morning
+          {% elif now().strftime("%H:%M") < "13:30" %} lunchtime
+          {% elif now().strftime("%H:%M") < "16:00" %} afternoon
+          {% elif now().strftime("%H:%M") < "19:00" %} evening
+          {% elif now().strftime("%H:%M") < "21:00" %} late evening
+          {% elif now().strftime("%H:%M") < "24:00" %} night
+          {% endif %}
+      sunset_time:
+        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%H:%M") }}'
+        friendly_name: "Sunset"
+      sunrise_time:
+        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%H:%M") }}'
+        friendly_name: "Sunrise"
+      solar_angle:
+        value_template: '{{ states.sun.sun.attributes.elevation }}'
+        friendly_name: "Solar Angle"
+        unit_of_measurement: degrees
+      next_sunrise:
+        friendly_name: "Next Sunrise"
+        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%d.%m.%Y %-H:%M") }}'
+        icon_template: mdi:weather-sunset-up
+      next_sunset:
+        friendly_name: "Next Sunset"
+        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%d.%m.%Y %-H:%M") }}'
+        icon_template: mdi:weather-sunset-down
+      day_of_year:
+        friendly_name: "Day Number"
+        value_template: '{{ now().strftime("%j") }}'
+      week_of_year:
+        friendly_name: "Week Number"
+        value_template: '{{ now().strftime("%U") }}'
+
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'time_date'
+      - 'time_utc'
+      - 'beat'
+
+  - platform: moon
+
+  - platform: uptime
+
+  - platform: speedtest
+    server_id: 13218
+    minute:
+      - 0
+    monitored_conditions:
+      - ping
+      - download
+      - upload
+

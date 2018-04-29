@@ -1,0 +1,36 @@
+################################################################
+## Packages / Cameras
+################################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'cameras'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+################################################
+## Group
+################################################
+group:
+  slaapkamer_boris_camera:
+    name: "Camera Boris"
+    entities:
+      - camera.boris
+
+################################################
+## Camera
+################################################
+camera:
+  - platform: mjpeg
+    name: Boris
+    still_image_url: !secret camera_boris_image_url
+    mjpeg_url: !secret camera_boris_mjpeg_url
+    username: !secret camera_boris_username
+    password: !secret camera_boris_password

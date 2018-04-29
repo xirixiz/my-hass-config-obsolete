@@ -1,0 +1,350 @@
+################################################
+## Packages / Thermostats
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'thermostats'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    sensor.living_room_thermostat_temperature:
+      <<: *customize
+      friendly_name: Temperatuur
+    sensor.living_room_thermostat_target:
+      <<: *customize
+      friendly_name: Target Temperatuur
+    sensor.living_room_thermostat_operation_mode:
+      <<: *customize
+      friendly_name: Status
+    sensor.living_room_thermostat_humidity:
+      <<: *customize
+      friendly_name: Luchtvochtigheid
+      icon: mdi:water-percent
+
+    sensor.woonkamer_temperature:
+      <<: *customize
+      friendly_name: "Temperatuur Woonkamer (HUE)"
+    sensor.hal_temperature:
+      <<: *customize
+      friendly_name: "Temperatuur Hal (HUE)"
+
+################################################
+## Climate
+################################################
+climate:
+  platform: nest
+
+################################################
+## Input Number
+################################################
+input_numer:
+  woonkamer_nest_thermostat_temperature:
+    min: 15
+    max: 25
+    step: 0.5
+
+################################################
+## Group
+################################################
+group:
+  woonkamer_nest_thermostat:
+    name: "Nest Thermostat"
+    entities:
+      - input_number.woonkamer_nest_thermostat_temperature
+      - sensor.hal_temperature
+      - sensor.woonkamer_temperature
+      - sensor.living_room_thermostat_temperature
+      - sensor.living_room_thermostat_target
+      - sensor.living_room_thermostat_operation_mode
+      - sensor.living_room_thermostat_humidity
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: rest
+    resource: !secret hue_woonkamer_temperature_sensor
+    value_template: '{{ value_json.state.temperature | float / 100 }}'
+    scan_interval: 300
+    unit_of_measurement: '°C'
+    name: 'woonkamer_temperature'
+
+  - platform: rest
+    resource: !secret hue_hal_temperature_sensor
+    value_template: '{{ value_json.state.temperature | float / 100 }}'
+    scan_interval: 300
+    unit_of_measurement: '°C'
+    name: 'hal_temperature'
+
+  - platform: nest
+    monitored_conditions:
+      - 'temperature'
+      - 'target'
+      - 'humidity'
+      - 'mode'
+      - 'weather_condition'
+      - 'weather_temperature'
+      - 'weather_humidity'
+      - 'wind_speed'
+      - 'wind_direction'
+      - 'battery_level'
+      - 'co_status'
+      - 'smoke_status'
+
+  - platform: template
+    sensors:
+      woonkamer_nest_thermostat_temperature:
+        value_template: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
+      woonkamer_nest_thermostat_target_vs_current:
+        value_template: >-
+          {%- if states('sensor.living_room_thermostat_temperature') | float != states('sensor.living_room_thermostat_target') | float -%}
+            true
+          {%- else -%}
+            false
+          {%- endif -%}
+      woonkamer_nest_thermostat_temperature_changed:
+        value_template: >-
+          {%- if states('input_number.woonkamer_nest_thermostat_temperature') | float != states('sensor.living_room_thermostat_target') | float -%}
+            true
+          {%- else -%}
+            false
+          {%- endif -%}
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: "Slider - Woonkamer - Nest thermostat - Set value"
+    initial_state: on
+    trigger:
+    - platform: state
+      entity_id: sensor.woonkamer_nest_thermostat_temperature_changed
+      to: 'true'
+      for:
+        seconds: 60
+    - platform: homeassistant
+      event: start
+    action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.woonkamer_nest_thermostat_temperature
+        value: "{{ states('sensor.living_room_thermostat_target') | float }}"
+
+  - alias: "Switch - Woonkamer - Nest thermostat - On"
+    trigger:
+    - platform: state
+      entity_id: input_number.woonkamer_nest_thermostat_temperature
+    action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.living_room
+        temperature: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
+        operation_mode: Heat
+
+  - alias: "Swtich - Woonkamer - Nest thermostat - Weekdays on"
+    trigger:
+    - platform: state
+      entity_id: media_player.lg_webos_smart_tv
+      to: "on"
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: group.family
+      from: 'not_home'
+      to: 'home'
+      for:
+        minutes: 10
+    - platform: time
+      at: '15:00:00'
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        before: '00:00:00'
+        after: '05:00:00'
+      - condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+      - condition: state
+        entity_id: input_boolean.automation_mode
+        state: 'off'
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: 'device_tracker.taipan5g'
+          state: 'home'
+        - condition: state
+          entity_id: 'device_tracker.lieke_iphone'
+          state: 'home'
+        - condition: state
+          entity_id: 'input_boolean.vacation_mode'
+          state: 'off'
+    action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.living_room
+        temperature: "21"
+        operation_mode: Heat
+
+  - alias: "Swtich - Woonkamer - Nest thermostat - Weekdays off"
+    trigger:
+    - platform: state
+      entity_id: input_boolean.vacation_mode
+      to: 'on'
+    - platform: state
+      entity_id: group.family
+      from: 'home'
+      to: 'not_home'
+      for:
+        minutes: 30
+    - platform: time
+      at: '23:00:00'
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+      - condition: state
+        entity_id: input_boolean.automation_mode
+        state: 'off'
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: group.family
+          state: 'not_home'
+        - condition: state
+          entity_id: 'input_boolean.vacation_mode'
+          state: 'on'
+    action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.living_room
+        temperature: "17"
+
+  - alias: "Swtich - Woonkamer - Nest thermostat - Weekend on"
+    trigger:
+  #  - platform: state
+  #    entity_id: sensor.woonkamer_nest_thermostat_target_vs_current
+  #    to: 'true'
+  #    for:
+  #      minutess: 5
+    - platform: time
+      at: '5:00:00'
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        weekday:
+        - sat
+        - sun
+      - condition: state
+        entity_id: input_boolean.automation_mode
+        state: 'off'
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: 'input_boolean.vacation_mode'
+          state: 'off'
+    action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.living_room
+        temperature: "21"
+        operation_mode: Heat
+
+  - alias: "Swtich - Woonkamer - Nest thermostat - Weekend off"
+    trigger:
+    - platform: state
+      entity_id: input_boolean.vacation_mode
+      to: 'on'
+    - platform: time
+      at: '00:00:00'
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        weekday:
+        - sat
+        - sun
+      - condition: state
+        entity_id: input_boolean.automation_mode
+        state: 'off'
+      - condition: or
+        conditions:
+        - condition: state
+          entity_id: 'input_boolean.vacation_mode'
+          state: 'on'
+    action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.living_room
+        temperature: "17"
+
+  - alias: "Switch - Woonkamer - Nest thermostat - When TV on"
+    trigger:
+    - platform: state
+      entity_id: media_player.lg_webos_smart_tv
+      to: "on"
+      for:
+        minutes: 5
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        weekday:
+        - sat
+        - sun
+      - condition: time
+        before: '05:00:00'
+        after: '21:00:00'
+      - condition: state
+        entity_id: input_boolean.automation_mode
+        state: 'off'
+    action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.living_room
+        temperature: "21"
+
+  - alias: "Switch - Woonkamer - Nest thermostat - When TV off"
+    trigger:
+    - platform: state
+      entity_id: media_player.lg_webos_smart_tv
+      to: "off"
+      for:
+        minutes: 5
+    condition:
+    - condition: and
+      conditions:
+      - condition: time
+        weekday:
+        - sat
+        - sun
+      - condition: time
+        before: '05:00:00'
+        after: '21:00:00'
+      - condition: state
+        entity_id: input_boolean.automation_mode
+        state: 'off'
+    action:
+    - service: climate.set_temperature
+      data_template:
+        entity_id: climate.living_room
+        temperature: "17"

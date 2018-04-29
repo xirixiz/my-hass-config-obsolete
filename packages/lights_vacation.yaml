@@ -1,0 +1,141 @@
+################################################
+## Packages / Lights Vacation
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'lights_vacation'
+      expose: &expose # This merges the keys/values from "&customize"
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: template
+    sensors:
+      vacation_mode:
+        value_template: >-
+          {%- if is_state('input_boolean.vacation_mode', 'on') -%}
+            enabled
+          {%- else -%}
+            disabled
+          {%- endif -%}
+
+################################################
+## Script
+################################################
+script:
+  flash_rgb_lights:
+    sequence:
+    - alias: 'flash rgb lights on'
+      service: light.turn_on
+      entity_id:
+      - light.buiten_achter_links
+      - light.buiten_achter_rechts
+      - light.buiten_voordeur
+      - light.buiten_garage
+      - light.keuken_hanglamp
+      - light.hal_bg
+      - light.slaapkamer_hanglamp
+      data:
+        rgb_color: [98,19,0]
+        brightness: 255
+    - delay:
+        seconds: 1
+    - alias: 'flash rgb lights off'
+      service: light.turn_off
+      entity_id:
+      - light.buiten_achter_links
+      - light.buiten_achter_rechts
+      - light.buiten_voordeur
+      - light.buiten_garage
+      - light.keuken_hanglamp
+      - light.hal_bg
+      - light.slaapkamer_hanglamp
+    - delay:
+        seconds: 1
+    - alias: 'loop flash rgb lights'
+      service: script.turn_off
+      entity_id: script.flash_rgb_lights
+    - alias: 'loop flash rgb lights'
+      service: script.turn_on
+      entity_id: script.flash_rgb_lights
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: 'Notify Vacation Mode'
+    trigger:
+    - platform: state
+      entity_id: input_boolean.vacation_mode
+      from: 'off'
+      to: 'on'
+    action:
+    - service: notify.ios_taipan5g
+      data:
+        message: "Vacation Mode is now {{ states('input_boolean.vacation_mode') }}!"
+
+  - alias: 'Turn Vacation Mode Off'
+    trigger:
+    - platform: state
+      entity_id: input_boolean.vacation_mode
+      from: 'on'
+      to: 'off'
+    action:
+    - service: notify.ios_taipan5g
+      data:
+        message: "Vacation Mode is now {{ states('input_boolean.vacation_mode') }}!"
+    - service: script.turn_off
+      entity_id: script.flash_rgb_lights
+
+  - alias: 'Motion Detection - Alert Start'
+    trigger:
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    condition:
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state: 'on'
+    action:
+    - service: notify.ios_taipan5g
+      data:
+        message: 'Motion just detected at home!'
+    - service: script.turn_on
+      entity_id: script.flash_rgb_lights
+
+  
+  - alias: 'Motion Detection - Alert Stop'
+    trigger:
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'False'
+      for:
+        minutes: 1
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'False'
+      for:
+        minutes: 1
+    condition:
+    - condition: state
+      entity_id: input_boolean.vacation_mode
+      state: 'on'
+    action:
+    - service: notify.ios_taipan5g
+      data:
+        message: 'Motion stopped at home!'
+    - service: script.turn_off
+      entity_id: script.flash_rgb_lights

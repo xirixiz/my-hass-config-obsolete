@@ -1,0 +1,65 @@
+################################################
+## Packages / Logger
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'logger'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+################################################
+## Logger
+################################################
+logger:
+
+################################################
+## Logger
+################################################
+group:
+ logger:
+    name: "Logger"
+    control: hidden
+    entities:
+      - input_select.log_level
+
+################################################
+## Input Select
+################################################
+input_select:
+  log_level:
+    name: Log Level
+    options:
+      - critical
+      - fatal
+      - error
+      - warning
+      - warn
+      - info
+      - debug
+      - notset
+    initial: warn
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: Log Level
+    trigger:
+      platform: state
+      entity_id:
+        - input_select.log_level
+    action:
+      - service: logger.set_level
+        data_template:
+          homeassistant.components: "{{ states.input_select.log_level.state }}"
+      - service: notify.ios_taipan5g
+        data_template:
+          message: "Home Assistant logging level has been set to {{ states.input_select.log_level.state }}"

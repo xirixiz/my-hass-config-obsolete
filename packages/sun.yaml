@@ -1,0 +1,51 @@
+################################################
+## Packages / Sun
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'sun'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    sun.sun:
+      <<: *customize
+      friendly_name: " "
+    sensor.sunrise_time:
+      <<: *customize
+      icon: mdi:weather-sunset-up
+    sensor.sunset_time:
+      <<: *customize
+      icon: mdi:weather-sunset-down
+
+################################################
+## Sun
+################################################
+sun:
+  elevation: !secret home_elevation
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: 'Notify - Full Moon'
+    trigger:
+    - platform: sun
+      event: sunset
+      offset: "01:00:00"
+    condition:
+    - condition: state
+      entity_id: sensor.moon
+      state: 'Full moon'
+    action:
+    - service: notify.ios_taipan5g
+      data:
+        title: "Hail Satan"
+        message: "Rejoice, the full moon is upon us."

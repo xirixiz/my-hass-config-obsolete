@@ -1,0 +1,132 @@
+################################################
+## Packages / Protection
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'protection'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    sensor.living_room_nest_protect_co_status:
+      <<: *customize
+      friendly_name: CO status
+    sensor.living_room_nest_protect_smoke_status:
+      <<: *customize
+      friendly_name: Smoke status
+      icon: mdi:fire
+    sensor.living_room_nest_protect_battery_health:
+      <<: *customize
+      friendly_name: Battery status
+      icon: mdi:battery
+
+    sensor.entryway_nest_protect_co_status:
+      <<: *customize
+      friendly_name: CO status
+    sensor.entryway_nest_protect_smoke_status:
+      <<: *customize
+      friendly_name: Smoke status
+      icon: mdi:fire
+    sensor.entryway_nest_protect_battery_health:
+      <<: *customize
+      friendly_name: Battery status
+      icon: mdi:battery
+
+    sensor.upstairs_nest_protect_co_status:
+      <<: *customize
+      friendly_name: CO status
+    sensor.upstairs_nest_protect_smoke_status:
+      <<: *customize
+      friendly_name: Smoke status
+      icon: mdi:fire
+    sensor.upstairs_nest_protect_battery_health:
+      <<: *customize
+      friendly_name: Battery status
+      icon: mdi:battery
+
+################################################
+## Nest
+################################################
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+
+################################################
+## Group
+################################################
+group:
+  hal_en_overlopen_view:
+    icon: mdi:security-home
+    view: yes
+    entities:
+      - group.woonkamer_nest_protect
+      - group.hal_en_overlopen_nest_protect_hal
+      - group.hal_en_overlopen_nest_protect_overlopen
+
+  woonkamer_nest_protect:
+    name: "Nest Protect"
+    entities:
+      - sensor.living_room_nest_protect_co_status
+      - sensor.living_room_nest_protect_smoke_status
+      - sensor.living_room_nest_protect_battery_health
+  
+  hal_en_overlopen_nest_protect_hal:
+    name: "Nest Protect Hal"
+    entities:
+      - sensor.entryway_nest_protect_co_status
+      - sensor.entryway_nest_protect_smoke_status
+      - sensor.entryway_nest_protect_battery_health
+  
+  hal_en_overlopen_nest_protect_overlopen:
+    name: "Nest Protect Overloop 1"
+    entities:
+      - sensor.upstairs_nest_protect_co_status
+      - sensor.upstairs_nest_protect_smoke_status
+      - sensor.upstairs_nest_protect_battery_health
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: rest
+    resource: !secret hue_woonkamer_battery_sensor
+    value_template: '{{ value_json.config.battery }}'
+    scan_interval: 7200
+    unit_of_measurement: '%'
+    name: 'woonkamer_battery'
+  - platform: rest
+    resource: !secret hue_hal_battery_sensor
+    value_template: '{{ value_json.config.battery }}'
+    scan_interval: 7200
+    unit_of_measurement: '%'
+    name: 'hal_battery'
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: 'notify if nest protect is not ok'
+    trigger:
+    - platform: state
+      entity_id: sensor.living_room_nest_protect_co_status,sensor.living_room_nest_protect_smoke_status
+      to: 'emergency'
+    - platform: state
+      entity_id: sensor.entryway_nest_protect_co_status,sensor.entryway_nest_protect_smoke_status
+      to: 'emergency'
+    - platform: state
+      entity_id: sensor.upstairs_nest_protect_co_status,sensor.upstairs_nest_protect_smoke_status
+      to: 'emergency'
+    action:
+    - service: notify.ios_taipan5g
+      data:
+        message: 'Nest has detected Smoke or CO!!!'
+    - service: notify.ios_lieke_iphone
+      data:
+        message: 'Nest has detected Smoke or CO!!'

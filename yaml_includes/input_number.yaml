@@ -1,9 +1,0 @@
-keuken_hanglamp_brightness:
-  min: 0
-  max: 255
-  step: 1
-
-woonkamer_nest_thermostat_temperature:
-  min: 15
-  max: 25
-  step: 0.5

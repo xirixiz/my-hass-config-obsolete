@@ -1,0 +1,48 @@
+################################################
+## Packages / Dsmr
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'dsmr'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    sensor.power_consumption:
+      <<: *customize
+      friendly_name: KWh
+    sensor.power_tariff:
+      <<: *customize
+      friendly_name: Tarief
+
+group:
+  energy_view:
+    icon: mdi:power-plug
+    view: yes
+    entities:
+      - group.woonkamer_nest_thermostat
+      - group.smartmeter_readings
+
+  smartmeter_readings:
+    name: "SmartMeter - DSMR"
+    entities:
+      - sensor.power_consumption_low
+      - sensor.power_consumption_normal
+      - sensor.power_production_low
+      - sensor.power_production_normal
+      - sensor.gas_consumption
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: dsmr
+    port: /dev/ttyUSB0
+    dsmr_version: 2.2

@@ -1,0 +1,195 @@
+################################################
+## Packages / Device tracker
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'location_control'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    device_tracker.taipan5g:
+      <<: *customize
+      hidden: false
+      friendly_name: Bram
+    device_tracker.lieke_iphone:
+      <<: *customize
+      hidden: false
+      friendly_name: Lieke
+
+    zone.home:
+      <<: *customize
+      friendly_name: "Home"
+    zone.work_lieke:
+      <<: *customize
+      friendly_name: "Work"
+      icon: mdi:briefcase
+    zone.parents_lieke:
+      <<: *customize
+      friendly_name: "Parents"
+      icon: mdi:cow
+    zone.zus_lieke:
+      <<: *customize
+      friendly_name: "Zus"
+      icon: mdi:cow
+
+    sensor.bram_distance_to_home:
+      <<: *customize
+      friendly_name: Bram - Distance to home
+      icon: mdi:car
+    sensor.lieke_distance_to_home:
+      <<: *customize
+      friendly_name: Lieke - Distance to home
+      icon: mdi:car
+
+################################################
+## Group
+################################################
+group:
+  family:
+    name: "Family Tracking"
+    control: hidden
+    entities:
+      - device_tracker.taipan5g
+      - device_tracker.lieke_iphone
+
+  location_control:
+    name: "Location Control"
+    control: hidden
+    entities:
+      - input_boolean.vacation_mode
+      - input_boolean.automation_mode
+      - sensor.lieke_distance_to_home
+      - sensor.bram_distance_to_home
+
+################################################
+## Device Tracker
+################################################
+device_tracker:
+  - platform: asuswrt
+    host: !secret router_host
+    protocol: ssh
+    ssh_key: !secret router_ssh_key
+    username: !secret router_username
+    #password: !secret router_password
+    track_new_devices: yes
+
+################################################
+## Zone
+################################################
+zone:
+  - name: work lieke
+    latitude: !secret lieke_work_latitude
+    longitude: !secret lieke_work_longtitude
+    radius: 250
+
+  - name: parents lieke
+    latitude: !secret lieke_parents_home_latitude
+    longitude: !secret lieke_parents_home_longtitude
+    radius: 150
+
+  - name: zus lieke
+    latitude: !secret lieke_daan_en_jels_latitude
+    longitude: !secret lieke_daan_en_jels_longtitude
+    radius: 150
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: google_travel_time
+    name: Bram Distance To Home
+    api_key: !secret google_travel_time_key_bram
+    origin: device_tracker.taipan5g
+    destination: zone.home
+
+  - platform: google_travel_time
+    name: Lieke Distance To Home
+    api_key: !secret google_travel_time_key_lieke
+    origin: device_tracker.lieke_iphone
+    destination: zone.home
+
+  - platform: google_travel_time
+    name: Lieke Distance To Home
+    api_key: !secret google_travel_time_key_lieke
+    origin: zone.work_lieke
+    destination: zone.home
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: Alert zone change - Enter
+    trigger:
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.home
+      event: enter
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.work_lieke
+      event: enter
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.parents_lieke
+      event: enter
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.zus_lieke
+      event: enter
+    action:
+    - service: notify.ios_taipan5g
+      data_template:
+        message: '{{ trigger.to_state.attributes.friendly_name }} entered {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
+
+  - alias: Alert zone change - Leave
+    trigger:
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.home
+      event: leave
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.work_lieke
+      event: leave
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.parents_lieke
+      event: leave
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.zus_lieke
+      event: leave
+    action:
+    - service: notify.ios_taipan5g
+      data_template:
+        message: '{{ trigger.to_state.attributes.friendly_name }} left {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
+
+  - alias: Lieke is 10 minutes from home
+    trigger:
+    - platform: numeric_state
+      entity_id: sensor.lieke_distance_to_home
+      value_template: '{{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}'
+      below: 600
+    condition:
+    - condition: state
+      entity_id: 'device_tracker.lieke_iphone'
+      state: 'not_home'
+    action:
+    - service: notify.ios_taipan5g
+      data:
+        message: 'Lieke is {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] }} minutes from home'
+        data:
+          push:
+            category: map
+          action_data:
+            shows_user_location: true
+            latitude: "{{ trigger.to_state.attributes.latitude }}"
+            longitude: "{{ trigger.to_state.attributes.longitude }}"
