@@ -22,6 +22,9 @@ homeassistant:
       <<: *customize
       friendly_name: Tarief
 
+################################################
+## Group
+################################################
 group:
   energy_view:
     icon: mdi:power-plug
