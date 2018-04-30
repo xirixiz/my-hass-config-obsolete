@@ -45,7 +45,7 @@ climate:
 ################################################
 ## Input Number
 ################################################
-input_numer:
+input_number:
   woonkamer_nest_thermostat_temperature:
     min: 15
     max: 25

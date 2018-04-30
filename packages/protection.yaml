@@ -112,21 +112,33 @@ sensor:
 ## Automation
 ################################################
 automation:
-  - alias: 'notify if nest protect is not ok'
+  - alias: 'Notify if Nest Protect is in an emergency state'
     trigger:
     - platform: state
-      entity_id: sensor.living_room_nest_protect_co_status,sensor.living_room_nest_protect_smoke_status
-      to: 'emergency'
-    - platform: state
-      entity_id: sensor.entryway_nest_protect_co_status,sensor.entryway_nest_protect_smoke_status
-      to: 'emergency'
-    - platform: state
-      entity_id: sensor.upstairs_nest_protect_co_status,sensor.upstairs_nest_protect_smoke_status
-      to: 'emergency'
+      entity_id:
+        - sensor.living_room_nest_protect_co_status
+        - sensor.living_room_nest_protect_smoke_status
+        - sensor.entryway_nest_protect_co_status
+        - sensor.entryway_nest_protect_smoke_status
+        - sensor.upstairs_nest_protect_co_status
+        - sensor.upstairs_nest_protect_smoke_status
+      to: 'Emergency'
     action:
-    - service: notify.ios_taipan5g
-      data:
-        message: 'Nest has detected Smoke or CO!!!'
-    - service: notify.ios_lieke_iphone
-      data:
-        message: 'Nest has detected Smoke or CO!!'
+    - service: notify.family
+      data_template:
+        title: 'Emergency'
+        message: "An emergency has been detected on {{ trigger.to_state.attributes.friendly_name }}!"
+
+  - alias: 'Notify if Nest Protect is offline'
+    trigger:
+    - platform: state
+      entity_id:
+        - binary_sensor.living_room_nest_protect_online
+        - binary_sensor.entryway_nest_protect_online
+        - binary_sensor.upstairs_nest_protect_online
+      from: 'on'
+    action:
+    - service: notify.family
+      data_template:
+        title: 'Emergency'
+        message: "The {{ trigger.to_state.attributes.friendly_name }} is now {{ (trigger.to_state.state)|replace('_', ' ') }}!"

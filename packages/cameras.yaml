@@ -16,15 +16,6 @@ homeassistant:
         homebridge_hidden: false
 
 ################################################
-## Group
-################################################
-group:
-  slaapkamer_boris_camera:
-    name: "Camera Boris"
-    entities:
-      - camera.boris
-
-################################################
 ## Camera
 ################################################
 camera:
@@ -34,3 +25,12 @@ camera:
     mjpeg_url: !secret camera_boris_mjpeg_url
     username: !secret camera_boris_username
     password: !secret camera_boris_password
+
+################################################
+## Group
+################################################
+group:
+  slaapkamer_boris_camera:
+    name: "Camera Boris"
+    entities:
+      - camera.boris

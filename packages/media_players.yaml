@@ -15,15 +15,13 @@ homeassistant:
         haaska_hidden: false
         homebridge_hidden: false
 
-    media_player.media_player.lg_webos_smart_tv:
+    media_player.lg_webos_smart_tv:
       <<: *customize
       friendly_name: "Living Room TV (Plex)"
       icon: mdi:plex
-      hidden: false
     sensor.plex_activity:
       <<: *customize
       friendly_name: "Plex Activity"
-      hidden: false
 
 ################################################
 ## Media Player

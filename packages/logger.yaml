@@ -19,6 +19,7 @@ homeassistant:
 ## Logger
 ################################################
 logger:
+  default: info
 
 ################################################
 ## Input Select
@@ -60,6 +61,6 @@ automation:
       - service: logger.set_level
         data_template:
           homeassistant.components: "{{ states.input_select.log_level.state }}"
-      - service: notify.ios_taipan5g
+      - service: notify.bram
         data_template:
           message: "Home Assistant logging level has been set to {{ states.input_select.log_level.state }}"

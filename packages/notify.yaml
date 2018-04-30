@@ -19,8 +19,13 @@ homeassistant:
 ## Notify
 ################################################
 notify:
-  - name: family
-    platform: group
+  - platform: group
+    name: family
     services:
       - service: ios_taipan5g
-      - service: ios_lieke_iphone    
+      - service: ios_lieke_iphone
+  - platform: group
+    name: bram
+    services:
+      - service: ios_taipan5g
+      - service: ios_lieke_iphone
