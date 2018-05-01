@@ -30,7 +30,7 @@ logbook:
 config:
 conversation:
 history:
-map:
+#map:
 zeroconf:
 tts:
 

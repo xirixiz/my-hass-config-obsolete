@@ -97,8 +97,8 @@ group:
     entities:
       - input_boolean.vacation_mode
       - input_boolean.automation_mode
-      - sensor.lieke_distance_to_home
-      - sensor.bram_distance_to_home
+      #- sensor.lieke_distance_to_home
+      #- sensor.bram_distance_to_home
 
 ################################################
 ## Sensor
