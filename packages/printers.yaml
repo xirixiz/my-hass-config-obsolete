@@ -1,0 +1,28 @@
+################################################
+## Packages / Printers
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'printers'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+################################################
+## Printer
+################################################
+sensor:
+- platform: syncthru
+  resource: !secret printer
+  name: Samsung Printer
+  monitored_conditions:
+    - toner_black
+    - tray_1
+    - output_tray_0
