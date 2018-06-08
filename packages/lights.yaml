@@ -655,24 +655,7 @@ automation:
     - service: script.turn_on
       entity_id:
       - script.hal_en_overlopen_bright
-  
-  
-  - alias: "Motion - Hal en overloop 2 - Night on"
-    trigger:
-    - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
-    condition:
-    - condition: and
-      conditions:
-      - condition: time
-        before: '06:00:00'
-        after: '22:00:00'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.hal_en_overloop_2_nightlight
- 
+
  
   - alias: "Motion - Hal en overlopen - Off"
     trigger:
@@ -785,13 +768,6 @@ script:
         group_name: 'hal en overlopen'
         scene_name: 'Hal en Overlopen Nightlight'
 
-  hal_en_overloop_2_nightlight:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overloop 2'
-        scene_name: 'Hal en Overloop 2 Nightlight'
-  
   hal_en_overlopen_bright:
     sequence:
     - service: hue.hue_activate_scene
