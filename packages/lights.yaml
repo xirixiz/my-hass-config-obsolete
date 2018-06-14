@@ -629,7 +629,7 @@ automation:
     - condition: or
       conditions:
       - condition: time
-        before: '22:00:00'
+        before: '00:00:00'
         after: '20:00:00'
       - condition: time
         before: '08:00:00'

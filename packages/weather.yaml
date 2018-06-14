@@ -73,6 +73,8 @@ sensor:
       - precip_intensity
       - precip_probability
       - temperature
+      - temperature_low
+      - temperature_high
       - apparent_temperature
       - dew_point
       - wind_speed
@@ -85,10 +87,6 @@ sensor:
       - minutely_summary
       - hourly_summary
       - daily_summary
-      - temperature_max
-      - temperature_min
-      - apparent_temperature_max
-      - apparent_temperature_min
       - precip_intensity_max
       - uv_index
   - platform: yr
@@ -100,18 +98,3 @@ sensor:
       - humidity
       - fog
 
-################################################
-## Automation
-################################################
-automation:      
-  - alias: "Set Night theme at startup"
-    trigger:
-    - platform: homeassistant
-      event: start
-    action:
-    - service: frontend.set_theme
-      data:
-        name: darkblue
-  #  - service: notify.ios_taipan5g
-  #    data_template:
-  #      message: 'HASS ready!'

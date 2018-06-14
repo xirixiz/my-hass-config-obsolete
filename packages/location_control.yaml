@@ -63,7 +63,7 @@ device_tracker:
 
   - platform: nmap_tracker
     hosts:
-      - !secret openwrt_tracker_boven_host
+      - !secret nmap_hosts
 
   - platform: luci
     host: !secret openwrt_tracker_boven_host
@@ -154,7 +154,7 @@ automation:
       zone: zone.zus_lieke
       event: enter
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data_template:
         message: '{{ trigger.to_state.attributes.friendly_name }} entered {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
 
@@ -177,7 +177,7 @@ automation:
       zone: zone.zus_lieke
       event: leave
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data_template:
         message: '{{ trigger.to_state.attributes.friendly_name }} left {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
 
@@ -192,7 +192,7 @@ automation:
       entity_id: 'device_tracker.lieke_iphone'
       state: 'not_home'
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data:
         message: 'Lieke is {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] }} minutes from home'
         data:

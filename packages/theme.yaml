@@ -71,6 +71,6 @@ automation:
     - service: frontend.set_theme
       data:
         name: darkblue
-  #  - service: notify.ios_taipan5g
+  #  - service: notify.bram
   #    data_template:
   #      message: 'HASS ready!'

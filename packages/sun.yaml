@@ -45,7 +45,7 @@ automation:
       entity_id: sensor.moon
       state: 'Full moon'
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data:
         title: "Hail Satan"
         message: "Rejoice, the full moon is upon us."

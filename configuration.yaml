@@ -26,6 +26,18 @@ homeassistant:
 ## Components
 ################################################
 ios:
+  push:
+    categories:
+      - name: Meds Not Taken
+        identifier: 'meds_not_taken'
+        actions:
+          - identifier: 'mark_meds_taken'
+            title: 'Mark meds as taken'
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: yes
+            behavior: 'default'
+
 logbook:
 config:
 conversation:
@@ -74,6 +86,7 @@ group:
       - group.scripts_off
       - group.location_control
       - group.trash_pickup
+      - group.meds_reminder
       - group.printer_sensors
       - group.sensors
       - group.media

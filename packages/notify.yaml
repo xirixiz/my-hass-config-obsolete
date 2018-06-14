@@ -28,4 +28,3 @@ notify:
     name: bram
     services:
       - service: ios_taipan5g
-      - service: ios_lieke_iphone

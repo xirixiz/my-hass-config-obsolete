@@ -80,7 +80,7 @@ automation:
       from: 'off'
       to: 'on'
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data:
         message: "Vacation Mode is now {{ states('input_boolean.vacation_mode') }}!"
 
@@ -91,7 +91,7 @@ automation:
       from: 'on'
       to: 'off'
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data:
         message: "Vacation Mode is now {{ states('input_boolean.vacation_mode') }}!"
     - service: script.turn_off
@@ -110,7 +110,7 @@ automation:
       entity_id: input_boolean.vacation_mode
       state: 'on'
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data:
         message: 'Motion just detected at home!'
     - service: script.turn_on
@@ -134,7 +134,7 @@ automation:
       entity_id: input_boolean.vacation_mode
       state: 'on'
     action:
-    - service: notify.ios_taipan5g
+    - service: notify.bram
       data:
         message: 'Motion stopped at home!'
     - service: script.turn_off

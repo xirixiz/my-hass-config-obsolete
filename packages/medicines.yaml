@@ -1,0 +1,93 @@
+################################################
+## Packages / Medicines
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'logger'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    group.meds_reminder:
+      <<: *customize
+      control: hidden
+      hidden: false
+
+################################################
+## Input Boolean
+################################################
+input_boolean:
+  meds_taken:
+    name: Meds have been taken
+    initial: 'off'
+    icon: mdi:pill
+  meds_reminder:
+    name: Meds reminder enabled
+    initial: 'on'
+
+################################################
+## Group
+################################################
+group:
+  meds_reminder:
+    name: "Medicatie Bram"
+    entities:
+      - input_boolean.meds_taken
+      - input_boolean.meds_reminder
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: Reset meds taken
+    trigger:
+      platform: state
+      entity_id: input_boolean.meds_taken
+      to: 'on'
+      for:
+        hours: 12
+    action:
+      service: input_boolean.turn_off
+  
+  - alias: Mark meds as taken from notification
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: 'mark_meds_taken'
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.meds_taken
+
+  - alias: Meds have not been taken
+    trigger:
+      platform: time
+      minutes: '/30'
+      seconds: 00
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.meds_taken
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.meds_reminder
+          state: 'on'
+        - condition: time
+          after: '09:00:00'
+          before: '20:00:00'
+    action:
+      - service: notify.bram
+        data:
+          title: "Meds"
+          message: "Bram's meds have not been taken!"
+          data:
+            push:
+              category: 'meds_not_taken'
