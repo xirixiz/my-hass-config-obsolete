@@ -32,6 +32,18 @@ homeassistant:
       friendly_name: Kerstbomen
 
 ################################################
+## Input Boolean
+################################################
+input_boolean:
+  trash_moved:
+    name: Trash has been moved
+    initial: 'off'
+    icon: mdi:delete-empty
+  trash_reminder:
+    name: Trash reminder enabled
+    initial: 'on'
+
+################################################
 ## Group
 ################################################
 group:
@@ -43,6 +55,8 @@ group:
       - sensor.trash_restafval
       - sensor.trash_papier
       - sensor.trash_pmd
+      - input_boolean.trash_moved
+      - input_boolean.trash_reminder
 
 ################################################
 ## Sensor
@@ -55,42 +69,73 @@ sensor:
 ################################################
 ## Automation
 ################################################
-automation:      
-  - alias: 'Trash - One day before'
+automation:
+  - alias: Reset trash notification
     trigger:
-    - platform: time
-      hours: 20
-      minutes: 0
-      seconds: 0
-    condition:
-      - condition: or
-        conditions:
-        - condition: template
-          value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_gft.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
-        - condition: template
-          value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_restafval.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
-        - condition: template
-          value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_pmd.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
-        - condition: template
-          value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_papier.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
-  #      - condition: template
-  #        value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_kerstbomen.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
+      platform: state
+      entity_id: input_boolean.trash_moved
+      to: 'on'
+      for:
+        hours: 12
     action:
-    - service: notify.family
-      data_template:
-        message: >-
-          {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_gft.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
-             Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. De groene bak wordt geleegd op: {{ states.sensor.trash_gft.state }}!
-          {% endif %}
-          {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_restafval.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
-             Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. De grijze bak wordt geleegd op: {{ states.sensor.trash_restafval.state }}!
-          {% endif %}
-          {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_pmd.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
-             Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. Plastic wordt opgehaald op: {{ states.sensor.trash_pmd.state }}!
-          {% endif %}
-          {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_papier.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
-             Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. Papier wordt opgehaald op: {{ states.sensor.trash_papier.state }}!
-          {% endif %}
-  #        {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_kerstbomen.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
-  #           Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. Kerstbomen worden opgehaald op: {{ states.sensor.trash_kerstbomen.state }}!
-  #        {% endif %}
+      service: input_boolean.turn_off
+
+  - alias: Mark trash as moved from notification
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: MARK_TRASH_MOVED
+    action:
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.trash_moved
+
+  - alias: Trash has not been moved
+    trigger:
+      platform: time
+      minutes: '/30'
+      seconds: 00
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.trash_moved
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.trash_reminder
+          state: 'on'
+        - condition: time
+          after: '18:00:00'
+          before: '23:00:00'
+        - condition: or
+          conditions:
+            - condition: template
+              value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_gft.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
+            - condition: template
+              value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_restafval.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
+            - condition: template
+              value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_pmd.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
+            - condition: template
+              value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_papier.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
+      #      - condition: template
+      #        value_template: '{{- (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_kerstbomen.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") -}}'
+    action:
+      - service: notify.family
+        data_template:
+          title: "Afval"
+          message: >-
+            {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_gft.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
+               Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. De groene bak wordt geleegd op: {{ states.sensor.trash_gft.state }}!
+            {% endif %}
+            {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_restafval.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
+               Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. De grijze bak wordt geleegd op: {{ states.sensor.trash_restafval.state }}!
+            {% endif %}
+            {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_pmd.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
+               Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. Plastic wordt opgehaald op: {{ states.sensor.trash_pmd.state }}!
+            {% endif %}
+            {% if (now().strftime("%Y-%m-%d")) == (as_timestamp(strptime(states.sensor.trash_papier.state, "%Y-%m-%d")) - (1 * 86400 )) | timestamp_custom("%Y-%m-%d") %}
+               Het is vandaag - {{ now().strftime("%Y-%m-%d") }}. Papier wordt opgehaald op: {{ states.sensor.trash_papier.state }}!
+            {% endif %}
+          data:
+            push:
+              category: 'afval'

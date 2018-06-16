@@ -34,3 +34,7 @@ group:
     name: "Camera Boris"
     entities:
       - camera.boris
+  frontdoor_camera:
+    name: "Camera Voordeur"
+    entities:
+      - camera.front_door

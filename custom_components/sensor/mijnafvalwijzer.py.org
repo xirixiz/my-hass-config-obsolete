@@ -150,3 +150,54 @@ class TrashCollectionSchedule(object):
                         trash['pickup_date'] = item['nameType']
                         tschedule.append(trash)                              
                         self.data = tschedule
+
+automation:
+  - alias: Living Room Lamps on at Bedtime
+    trigger:
+      platform: state
+      entity_id: sensor.charging_adamsiphone
+      to: 'Charging'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: switch.edimax2
+          state: 'on'
+        - condition: time
+          after: '20:00:00'
+    action:
+      - service: notify.bram
+        data:
+          message: "The Living Room Lamps are on and you are in bed"
+          data:
+            push:
+              category: 'lampen'
+
+  - alias: Lamps on bedtime notification
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: LAMPEN_UIT
+    action:
+      - service: switch.turn_off
+        entity_id: switch.edimax2
+
+ios:
+  push:
+    categories:
+      - name: Lampen
+        identifier: 'lampen'
+        actions:
+          - identifier: 'LAMPEN_UIT'
+            title: 'Lampen Uit'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: yes
+            behavior: 'default'
+          - identifier: 'NEGEREN'
+            title: 'Negeer'
+            activationMode: 'background'
+            authenticationRequired: yes
+            destructive: no
+            behavior: 'default'                        

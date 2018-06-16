@@ -28,11 +28,20 @@ homeassistant:
 ios:
   push:
     categories:
-      - name: Meds Not Taken
-        identifier: 'meds_not_taken'
+      - name: Medicijnen
+        identifier: 'medicijnen'
         actions:
-          - identifier: 'mark_meds_taken'
-            title: 'Mark meds as taken'
+          - identifier: 'MARK_MEDS_TAKEN'
+            title: 'Medicijnen Ingenomen'
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: yes
+            behavior: 'default'
+      - name: Afval
+        identifier: 'afval'
+        actions:
+          - identifier: 'MARK_TRASH_MOVED'
+            title: 'Afval verwerkt'
             activationMode: 'background'
             authenticationRequired: no
             destructive: yes
@@ -81,6 +90,7 @@ group:
       - device_tracker.taipan5g
       - device_tracker.lieke_iphone
       - sensor.power_consumption
+      - group.frontdoor_camera
       - group.slaapkamer_boris_camera
       - group.scripts_on
       - group.scripts_off

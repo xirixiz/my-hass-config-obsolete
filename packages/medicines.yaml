@@ -9,7 +9,7 @@ homeassistant:
   customize:
     package.node_anchors:
       customize: &customize
-        package: 'logger'
+        package: 'medicines'
       expose: &expose
         <<: *customize
         haaska_hidden: false
@@ -52,7 +52,7 @@ automation:
       entity_id: input_boolean.meds_taken
       to: 'on'
       for:
-        hours: 12
+        hours: 8
     action:
       service: input_boolean.turn_off
   
@@ -61,7 +61,7 @@ automation:
       platform: event
       event_type: ios.notification_action_fired
       event_data:
-        actionName: 'mark_meds_taken'
+        actionName: MARK_MEDS_TAKEN
     action:
       - service: input_boolean.turn_on
         entity_id: input_boolean.meds_taken
@@ -81,13 +81,13 @@ automation:
           entity_id: input_boolean.meds_reminder
           state: 'on'
         - condition: time
-          after: '09:00:00'
-          before: '20:00:00'
+          after: '8:00:00'
+          before: '12:00:00'
     action:
       - service: notify.bram
         data:
-          title: "Meds"
-          message: "Bram's meds have not been taken!"
+          title: "Medicijnen"
+          message: "Medicijnen innemen!"
           data:
             push:
-              category: 'meds_not_taken'
+              category: 'medicijnen'
