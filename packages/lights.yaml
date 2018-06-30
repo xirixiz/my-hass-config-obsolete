@@ -23,8 +23,9 @@ homeassistant:
     script.all_off:
       <<: *customize
       hidden: false
-      friendly_name: All
+      friendly_name: All Lights Off
       icon: mdi:flashlight-off
+
     script.woonkamer_off:
       <<: *customize
       hidden: false
@@ -49,7 +50,12 @@ homeassistant:
     script.all_on:
       <<: *customize
       hidden: false
-      friendly_name: All
+      friendly_name: All Lights On
+      icon: mdi:flashlight
+
+    input_boolean.all_lights:
+      <<: *customize
+      hidden: false
       icon: mdi:flashlight
 
     script.woonkamer:
@@ -143,6 +149,30 @@ input_number:
     min: 0
     max: 255
     step: 1
+
+input_boolean:
+  all_lights:
+    name: All Lights
+
+switch:
+  - platform: template
+    switches:
+      all_lights:
+        value_template: "{{ is_state('input_boolean.all_lights', 'on') }}"
+        turn_on:
+          - service: script.all_on
+          - service: input_boolean.turn_on
+            entity_id: input_boolean.all_lights
+        turn_off:
+          - service: script.all_off
+          - service: input_boolean.turn_off
+            entity_id: input_boolean.all_lights
+        icon_template: >-
+          {% if is_state('input_boolean.all_lights', 'on') %}
+            mdi:flashlight
+          {% else %}
+            mdi:flashlight-off
+          {% endif %}
 
 ################################################
 ## Group
@@ -617,7 +647,7 @@ automation:
     action:
     - service: script.turn_on
       entity_id:
-      - script.all_off 
+      - script.all_off
   
 
   - alias: "Motion - Hal en overlopen - Morning and evening on"
@@ -759,7 +789,7 @@ script:
     - service: hue.hue_activate_scene
       data:
         group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen Bright'
+        scene_name: 'Hal en Overlopen'
   
   hal_en_overlopen_nightlight:
     sequence:

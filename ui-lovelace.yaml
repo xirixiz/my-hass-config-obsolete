@@ -1,0 +1,236 @@
+name: Home
+views:
+  - tab_icon: mdi:home-assistant
+    # Name of the view. Will be used as the tooltip for tab icon
+    #name: Second view
+    # theme: darkorange
+    cards:
+      - type: entities
+        entities:
+          - device_tracker.taipan5g
+          - device_tracker.lieke_iphone
+#      - type: entity-filter
+#        filter:
+#          - entity_id: 'script.keuken*'
+#        card: glance
+      - type: entities
+        entities:
+          - script.all_on
+          - script.all_off
+          #- input_boolean.all_lights
+      - type: entities
+        entities:
+          - sensor.power_consumption
+          - sensor.gas_consumption
+      - type: entities
+        entities:
+          - input_boolean.meds_taken
+          - input_boolean.meds_reminder
+      - type: entities
+        entities:
+          - input_boolean.vacation_mode
+          - input_boolean.automation_mode
+      - type: camera-preview
+        entity: camera.front_door_voordeur
+      - type: camera-preview
+        entity: camera.boris
+      - type: picture-glance
+        image: https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+        title: Woonkamer
+        entities:
+          - script.woonkamer
+          - script.woonkamer_nightlight
+          - script.woonkamer_bright
+          - script.woonkamer_super_bright
+          - script.woonkamer_off
+      - type: picture-glance
+        image: https://images.pexels.com/photos/459469/pexels-photo-459469.jpeg?auto=compress&cs=tinysrgb&h=350
+        title: Keuken
+        entities:
+          - script.keuken
+          - script.keuken_bright
+          - script.keuken_super_bright
+          - script.keuken_off
+      - type: picture-glance
+        image: https://images.pexels.com/photos/573552/pexels-photo-573552.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+        title: Hal & Overlopen
+        entities:
+          - script.hal_en_overlopen
+          - script.hal_en_overlopen_nightlight
+          - script.hal_en_overlopen_bright
+          - script.hal_en_overlopen_super_bright
+          - script.hal_en_overlopen_off
+      - type: picture-glance
+        image: https://images.pexels.com/photos/803975/pexels-photo-803975.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+        title: Buiten
+        entities:
+          - script.buiten
+          - script.buiten_bright
+          - script.buiten_super_bright
+          - script.buiten_off
+#      - type: entities
+#        entities:
+#          - sensor.plex_activity
+#      - type: media-control
+#        entity: media_player.lg_webos_smart_tv
+      - type: entities
+#        title: Afval
+        entities:
+          - sensor.trash_gft
+          - sensor.trash_restafval
+          - sensor.trash_papier
+          - sensor.trash_pmd
+          - input_boolean.trash_moved
+          - input_boolean.trash_reminder
+
+#  - tab_icon: mdi:settings
+#    name: Debugging
+#    cards:
+#      - type: entity-filter
+#        filter:
+#          - entity_id: '*script.woonkamer*'
+#      - type: entity-filter
+#        filter:
+#          - entity_id: '*script.keuken*'
+
+  - tab_icon: mdi:weather-cloudy
+    name: Weather
+    cards:
+#      - type: entities
+#        title: Weather
+#        entities:
+#          - sensor.pws_weather
+#          - sensor.pws_temp_f
+#          - sensor.pws_relative_humidity
+#          - sensor.pws_wind_string
+#          - sensor.dark_sky_cloud_coverage
+#          - sensor.pollen_level
+#          - sensor.cold_flu_risk
+#          - sensor.dark_sky_hourly_summary
+#          - sensor.dark_sky_daily_summary
+      - type: entities
+        title: Thermostats
+        entities:
+          - input_number.woonkamer_nest_thermostat_temperature
+          - sensor.hal_temperature
+          - sensor.woonkamer_temperature
+          - sensor.living_room_thermostat_temperature
+          - sensor.living_room_thermostat_target
+          - sensor.living_room_thermostat_operation_mode
+          - sensor.living_room_thermostat_humidity
+      - type: entities
+        title: Forecast
+        entities:
+          - sensor.forecast_0
+          - sensor.forecast_1
+          - sensor.forecast_2
+          - sensor.forecast_3
+          - sensor.forecast_4
+          - sensor.forecast_5
+          - sensor.forecast_6
+          - sensor.forecast_7
+      - type: weather-forecast
+        entity: weather.yweather
+      - type: "custom:lovelace-iframe"
+        height: 350
+        url: https://embed.windy.com/embed2.html?rainAccu,50.912,5.067,7
+
+  - tab_icon: mdi:cctv
+    name: Cameras
+    cards:
+      - type: camera-preview
+        entity: camera.front_door_voordeur
+      - type: camera-preview
+        entity: camera.boris
+
+  - tab_icon: mdi:play-circle-outline
+    name: Media
+    cards:
+      - type: media-control
+        entity: media_player.lg_webos_smart_tv
+      - type: media-control
+        entity: media_player.lg_webos_smart_tv_2
+      - type: entities
+        title: Plex Activity
+        entities:
+          - sensor.plex_activity
+
+  - tab_icon: mdi:power-plug
+    name: Energy
+    cards:
+      - type: entities
+        title: DSMR
+        entities:
+          - sensor.power_consumption
+          - sensor.gas_consumption
+          - sensor.power_consumption_low
+          - sensor.power_consumption_normal
+          - sensor.power_production_low
+          - sensor.power_production_normal
+      - type: entity-filter
+        filter:
+          - domain: light
+            state: 'on'
+#          - domain: switch
+#            state: 'on'
+        card_config:
+          title: Huidige Energie Verbruikers
+      - type: entities
+        title: Nest Protect
+        entities:
+          - sensor.living_room_nest_protect_co_status
+          - sensor.living_room_nest_protect_smoke_status
+          - sensor.living_room_nest_protect_battery_health
+          - sensor.entryway_nest_protect_co_status
+          - sensor.entryway_nest_protect_smoke_status
+          - sensor.entryway_nest_protect_battery_health
+          - sensor.upstairs_nest_protect_co_status
+          - sensor.upstairs_nest_protect_smoke_status
+          - sensor.upstairs_nest_protect_battery_health
+      - type: history-graph
+        entity: history_graph.recent_switches
+
+
+  - tab_icon: mdi:network
+    name: Network
+    cards:
+      - type: entities
+        entities:
+          - binary_sensor.pihole
+          - switch.pihole
+          - sensor.ads_blocked_today
+          - sensor.ads_percentage_today
+          - sensor.dns_queries_today
+          - sensor.domains_being_blocked
+          - sensor.ads_blocked_today
+          - sensor.unique_domains
+          - sensor.queries_forwarded
+          - sensor.queries_cached
+          - sensor.pihole_dns
+          - sensor.pihole_blocking
+          - sensor.pi_hole_version
+#          - script.pihole_update
+      - type: entities
+        entities:
+          - sensor.speedtest_download
+          - sensor.speedtest_upload
+          - sensor.speedtest_ping
+      - type: entities
+        entities:
+          - sensor.samsung_printer
+          - sensor.samsung_printer_toner_black
+          - sensor.samsung_printer_tray_1
+          - sensor.samsung_printer_output_tray_0
+
+
+  - tab_icon: mdi:settings
+    name: Settings
+    cards:
+      - type: entities
+        entities:
+          - input_select.current_theme
+      - type: entity-filter
+        filter:
+          - domain: automation
+        card_config:
+          title: All Automations

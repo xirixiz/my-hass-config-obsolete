@@ -37,4 +37,24 @@ group:
   frontdoor_camera:
     name: "Camera Voordeur"
     entities:
-      - camera.front_door
+      - camera.front_door_voordeur
+
+################################################
+## Automation
+################################################
+#automation:
+#  - id: notify_camera_pictures
+#    alias: 'Notify camera pictures'
+#    initial_state: 'on'
+#    trigger:
+#     - platform: time
+#       minutes: '/2'
+#       seconds: 00
+#    action:
+#    - service: notify.bram
+#      data_template:
+#        message: "Check Camera."
+#        data:
+#          photo:
+#            - url: !secret camera_boris_image_url
+#              caption: "Test"

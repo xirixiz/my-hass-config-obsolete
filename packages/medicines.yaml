@@ -25,11 +25,11 @@ homeassistant:
 ################################################
 input_boolean:
   meds_taken:
-    name: Meds have been taken
+    name: Bram Medicijnen Ingenomen
     initial: 'off'
     icon: mdi:pill
   meds_reminder:
-    name: Meds reminder enabled
+    name: Bram Medicijnen Reminder
     initial: 'on'
 
 ################################################

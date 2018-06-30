@@ -54,6 +54,7 @@ history:
 #map:
 zeroconf:
 tts:
+python_script:
 
 ################################################
 ## Input Boolean
