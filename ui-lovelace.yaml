@@ -34,8 +34,10 @@ views:
         entity: camera.front_door_voordeur
       - type: camera-preview
         entity: camera.boris
+      - type: camera-preview
+        entity: camera.foscam_camera
       - type: picture-glance
-        image: https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+        image: https://images.pexels.com/photos/189333/pexels-photo-189333.jpeg?auto=compress&cs=tinysrgb&h=350
         title: Woonkamer
         entities:
           - script.woonkamer
@@ -44,15 +46,18 @@ views:
           - script.woonkamer_super_bright
           - script.woonkamer_off
       - type: picture-glance
-        image: https://images.pexels.com/photos/459469/pexels-photo-459469.jpeg?auto=compress&cs=tinysrgb&h=350
+        image: https://images.pexels.com/photos/15964/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350
         title: Keuken
         entities:
           - script.keuken
           - script.keuken_bright
           - script.keuken_super_bright
           - script.keuken_off
+      - type: entities
+        entities:
+          - input_number.keuken_hanglamp_brightness
       - type: picture-glance
-        image: https://images.pexels.com/photos/573552/pexels-photo-573552.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+        image: https://images.pexels.com/photos/573552/pexels-photo-573552.jpeg?auto=compress&cs=tinysrgb&h=350
         title: Hal & Overlopen
         entities:
           - script.hal_en_overlopen
@@ -61,7 +66,7 @@ views:
           - script.hal_en_overlopen_super_bright
           - script.hal_en_overlopen_off
       - type: picture-glance
-        image: https://images.pexels.com/photos/803975/pexels-photo-803975.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260
+        image: https://images.pexels.com/photos/547050/pexels-photo-547050.jpeg?auto=compress&cs=tinysrgb&h=350
         title: Buiten
         entities:
           - script.buiten
@@ -114,6 +119,7 @@ views:
           - input_number.woonkamer_nest_thermostat_temperature
           - sensor.hal_temperature
           - sensor.woonkamer_temperature
+          - sensor.slaapkamer_boris_temperature
           - sensor.living_room_thermostat_temperature
           - sensor.living_room_thermostat_target
           - sensor.living_room_thermostat_operation_mode
@@ -142,6 +148,8 @@ views:
         entity: camera.front_door_voordeur
       - type: camera-preview
         entity: camera.boris
+      - type: camera-preview
+        entity: camera.foscam_camera
 
   - tab_icon: mdi:play-circle-outline
     name: Media
@@ -175,6 +183,13 @@ views:
 #            state: 'on'
         card_config:
           title: Huidige Energie Verbruikers
+      - type: entities
+        title: HUE Sensors
+        entities:
+          - sensor.woonkamer_motion
+          - sensor.woonkamer_lux
+          - sensor.hal_motion
+          - sensor.hal_lux
       - type: entities
         title: Nest Protect
         entities:

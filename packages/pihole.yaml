@@ -5,80 +5,91 @@
 ################################################
 ## Customize
 ################################################
-################################################################
-## Packages / Pi-Hole
-## @norien - https://github.com/Norien/Home-Assistant-Config
-## #!secret_example
-#pi_hole_url: http://192.168.0.55/admin/api.php
-#Authorization & Token required (see WEBPASSWORD in /etc/pihole/setupVars.conf)
-#pi_hole_switch_on: /usr/bin/curl -k "localhost/admin/api.php?enable&auth=73236ca24c562ab30d34ecc0b41764c255b6c3899d64bb5c22999eb3bfdea80f"
-#pi_hole_switch_off: /usr/bin/curl -k "localhost/admin/api.php?disable=600&auth=73236ca24c562ab30d34ecc0b41764c255b6c3899d64bb5c22999eb3bfdea80f"
-# the .SH file I am using is here
-#https://github.com/Norien/Home-Assistant-Config/blob/master/shell/pihole.sh
-################################################################
 homeassistant:
   customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'pi_hole'
+      expose: &expose
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
     switch.pihole:
+      <<: *customize
       friendly_name: Pi-Hole
       entity_picture: /local/icons/pihole/pihole.png
 
     sensor.ads_percentage_today:
+      <<: *customize
       friendly_name: Percentage of Ad Traffic Blocked
       unit_of_measurement: '%'
       icon: mdi:ticket-percent
 
     sensor.domains_being_blocked:
+      <<: *customize
       friendly_name: Total Domains Blocking
       icon: mdi:do-not-disturb
 
     sensor.ads_blocked_today:
+      <<: *customize
       friendly_name: Ads Blocked Today
       icon: mdi:do-not-disturb
 
     sensor.dns_queries_today:
+      <<: *customize
       friendly_name: DNS Queries Today
       icon: mdi:note-text
 
     sensor.unique_domains:
+      <<: *customize
       friendly_name: Unique Domains
       icon: mdi:approval
 
     sensor.queries_forwarded:
+      <<: *customize
       friendly_name: Queries Forwarded
       icon: mdi:arrange-send-backward
 
     sensor.queries_cached:
+      <<: *customize
       friendly_name: Queries Cached
       icon: mdi:animation
 
     script.ad_blocker:
+      <<: *customize
       friendly_name: Ad Blocker
       emulated_hue_hidden: false
 
     script.pihole_off:
+      <<: *customize
       friendly_name: Turn Pi-Hole Off
       icon: mdi:do-not-disturb
 
     script.pihole_on:
+      <<: *customize
       friendly_name: Turn Pi-Hole On
       icon: mdi:power
 
-    script.pihole_update:
-      friendly_name: Update Pi-Hole
-      icon: mdi:package-variant
-
     sensor.pihole_dns:
+      <<: *customize
       friendly_name: DNS Service
 
     sensor.pihole_blocking:
+      <<: *customize
       friendly_name: Ad Blocking
 
     sensor.pi_hole_version:
+      <<: *customize
       friendly_name: Version
 
     sensor.pihole_status_raw:
+      <<: *customize
       hidden: true
 
+################################################
+## Group
+################################################
 group:
   Ads Blocked:
     entities:
@@ -94,11 +105,10 @@ group:
       - sensor.pihole_dns
       - sensor.pihole_blocking
       - sensor.pi_hole_version
-      - script.pihole_update
 
-###############################################################################
-#  Sensors
-###############################################################################
+################################################
+## Sensor
+################################################
 sensor:
   - platform: rest
     name: dns_queries_today
@@ -135,15 +145,14 @@ sensor:
     resource: !secret pi_hole_url
     value_template: '{{ value_json.queries_cached }}'
 
-######Custom Version sensor
   - platform: command_line
-    command: "ssh -o 'StrictHostKeyChecking no' -i /etc/ssh/id_rsa_asuswrt xirixiz@192.168.1.15 'docker exec pihole pihole -v -p -c'"
+    command: !secret pi_hole_current_version
     name: 'pihole_version_current'
     value_template: '{{ value[28:] }}'
     scan_interval: 86400
 
   - platform: command_line
-    command: "ssh -o 'StrictHostKeyChecking no' -i /etc/ssh/id_rsa_asuswrt xirixiz@192.168.1.15 'docker exec pihole pihole -v -p -l'"
+    command: !secret pi_hole_latest_version
     name: 'pihole_version_latest'
     value_template: '{{ value[27:] }}'
     scan_interval: 86400
@@ -158,9 +167,9 @@ sensor:
           {% else %}
             mdi:checkbox-blank-outline
           {% endif %}
-###### I had to provide access in sudoers file for this script to run.
+
   - platform: command_line
-    command: "ssh -o 'StrictHostKeyChecking no' -i /etc/ssh/id_rsa_asuswrt xirixiz@192.168.1.15 'docker exec pihole pihole status'"
+    command: !secret pi_hole_status_raw
     name: 'pihole_status_raw'
     scan_interval: 60
 
@@ -211,9 +220,10 @@ sensor:
           {% else %}
             False
           {% endif %}
-###############################################################################
-#  Switch
-###############################################################################
+
+################################################
+## Switch
+################################################
 switch:
   - platform: template
     switches:
@@ -225,11 +235,20 @@ switch:
         turn_off:
           service: script.turn_on
           entity_id: script.pihole_off
-###############################################################################
-#  Scripts
-###############################################################################
+
+#switch:
+#  - platform: command_line
+#    switches:
+#      pihole:
+#        #value_template: '{{ states.sensor.pihole_status.state }}'
+#        command_on: !secret pi_hole_switch_on
+#        command_off: !secret pi_hole_switch_off
+#        #command_state: !secret pi_hole_status_raw
+
+################################################
+## Script
+################################################
 script:
-  # this script is just for alexa to toggle on/off
   ad_blocker:
     sequence:
       - service: switch.toggle
@@ -240,13 +259,10 @@ script:
   pihole_off:
     sequence:
        - service: shell_command.pihole_off
-  pihole_update:
-    sequence:
-       - service: shell_command.pihole_update
-###############################################################################
-#  Shell Command
-###############################################################################
+
+################################################
+## Shell Command
+################################################
 shell_command:
   pihole_on: !secret pi_hole_switch_on
   pihole_off: !secret pi_hole_switch_off
-  pihole_update: "ssh -o 'StrictHostKeyChecking no' -i /etc/ssh/id_rsa_asuswrt xirixiz@192.168.1.15 'docker exec pihole pihole -up'"

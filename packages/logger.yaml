@@ -19,7 +19,7 @@ homeassistant:
 ## Logger
 ################################################
 logger:
-  default: info
+  default: warn
 
 ################################################
 ## Input Select

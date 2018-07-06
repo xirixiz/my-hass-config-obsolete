@@ -17,16 +17,16 @@ homeassistant:
 
     sensor.living_room_thermostat_temperature:
       <<: *customize
-      friendly_name: Temperatuur
+      friendly_name: Temperatuur Nest
     sensor.living_room_thermostat_target:
       <<: *customize
-      friendly_name: Target Temperatuur
+      friendly_name: Target Temperatuur Nest
     sensor.living_room_thermostat_operation_mode:
       <<: *customize
-      friendly_name: Status
+      friendly_name: Status Nest
     sensor.living_room_thermostat_humidity:
       <<: *customize
-      friendly_name: Luchtvochtigheid
+      friendly_name: Luchtvochtigheid Nest
       icon: mdi:water-percent
 
     sensor.woonkamer_temperature:
@@ -35,6 +35,10 @@ homeassistant:
     sensor.hal_temperature:
       <<: *customize
       friendly_name: "Temperatuur Hal (HUE)"
+
+    input_number.woonkamer_nest_thermostat_temperature:
+      <<: *customize
+      friendly_name: "Temperatuur Woonkamer Nest"
 
 ################################################
 ## Climate

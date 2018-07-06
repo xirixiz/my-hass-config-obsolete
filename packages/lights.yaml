@@ -132,6 +132,29 @@ homeassistant:
       friendly_name: Buiten SB
       icon: mdi:flashlight
 
+    sensor.woonkamer_motion:
+      <<: *customize
+      hidden: false
+      friendly_name: Woonkamer Motion
+    sensor.woonkamer_lux:
+      <<: *customize
+      hidden: false
+      friendly_name: Woonkamer Lux
+    sensor.hal_motion:
+      <<: *customize
+      hidden: false
+      friendly_name: Hal Motion
+    sensor.hal_lux:
+      <<: *customize
+      hidden: false
+      friendly_name: Hal Lux
+
+    input_number.keuken_hanglamp_brightness:
+      <<: *customize
+      hidden: false
+      friendly_name: Keuken Hanglamp
+
+
 ################################################
 ## Hue
 ################################################
@@ -395,7 +418,7 @@ sensor:
           {%- endif -%}
       switch_hal:
         value_template: >-
-          {%- if states('sensor.hal_lux') | int < 20000 -%}
+          {%- if states('sensor.hal_lux') | int < 8000 -%}
             on
           {%- else -%}
             off
@@ -564,6 +587,9 @@ automation:
       entity_id: sensor.switch_woonkamer
       state: 'on'
     - condition: state
+      entity_id: sensor.switch_hal
+      state: 'on'
+    - condition: state
       entity_id: input_boolean.automation_mode
       state: 'off'
     action:
@@ -594,6 +620,9 @@ automation:
       after: '20:00:00'
     - condition: state
       entity_id: sensor.switch_woonkamer
+      state: 'on'
+    - condition: state
+      entity_id: sensor.switch_hal
       state: 'on'
     - condition: state
       entity_id: input_boolean.automation_mode
@@ -639,7 +668,12 @@ automation:
       entity_id: media_player.lg_webos_smart_tv
       to: "off"
       for:
-        minutes: 5
+        minutes: 10
+    - platform: state
+      entity_id: media_player.lg_webos_smart_tv_2
+      to: "off"
+      for:
+        minutes: 10
     condition:
     - condition: time
       before: '05:00:00'
@@ -664,6 +698,9 @@ automation:
       - condition: time
         before: '08:00:00'
         after: '06:00:00'
+      - condition: state
+        entity_id: sensor.switch_hal
+        state: 'on'
     action:
     - service: script.turn_on
       entity_id:
@@ -681,12 +718,15 @@ automation:
       - condition: time
         before: '20:00:00'
         after: '08:00:00'
+      - condition: state
+        entity_id: sensor.switch_hal
+        state: 'on'
     action:
     - service: script.turn_on
       entity_id:
       - script.hal_en_overlopen_bright
 
- 
+
   - alias: "Motion - Hal en overlopen - Off"
     trigger:
     - platform: state

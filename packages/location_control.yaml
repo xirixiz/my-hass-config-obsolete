@@ -65,10 +65,10 @@ device_tracker:
     hosts:
       - !secret nmap_hosts
 
-  - platform: luci
-    host: !secret openwrt_tracker_boven_host
-    username: !secret openwrt_tracker_boven_username
-    password: !secret openwrt_tracker_boven_password
+#  - platform: luci
+#    host: !secret openwrt_tracker_boven_host
+#    username: !secret openwrt_tracker_boven_username
+#    password: !secret openwrt_tracker_boven_password
 
 ################################################
 ## Zone

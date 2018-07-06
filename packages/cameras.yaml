@@ -15,6 +15,10 @@ homeassistant:
         haaska_hidden: false
         homebridge_hidden: false
 
+    sensor.slaapkamer_boris_temperature:
+      <<: *customize
+      friendly_name: Temperatuur Slaapkamer Boris
+
 ################################################
 ## Camera
 ################################################
@@ -25,6 +29,17 @@ camera:
     mjpeg_url: !secret camera_boris_mjpeg_url
     username: !secret camera_boris_username
     password: !secret camera_boris_password
+  - platform: foscam
+    ip: !secret foscam_camera
+    username: !secret foscam_username
+    password: !secret foscam_password
+
+sensor:
+  - platform: command_line
+    command: !secret camera_boris_temperature
+    scan_interval: 300
+    unit_of_measurement: '°C'
+    name: 'slaapkamer_boris_temperature'
 
 ################################################
 ## Group
