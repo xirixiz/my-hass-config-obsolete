@@ -66,6 +66,20 @@ sensor:
     postcode: !secret afvalwijzer_postcode
     huisnummer: !secret afvalwijzer_huisnummer
 
+#  - platform: file
+#    file_path: /local/trash.json
+#    name: Trash Today
+#    value_template: >
+#      {% set now = as_timestamp(now()) %}
+#      {% set today = now | timestamp_custom("%d/%m/%Y") %}
+#      {% set containerType = value_json.days[ today ] %}
+#      {% if containerType | trim != "" %}
+#        {% set trash = value_json.legend[ containerType ] %}
+#        {{ trash }}
+#      {% else %}
+#        Geen
+#      {% endif %}
+
 ################################################
 ## Automation
 ################################################

@@ -156,7 +156,7 @@ automation:
   - alias: "Swtich - Woonkamer - Nest thermostat - Weekdays on"
     trigger:
     - platform: state
-      entity_id: media_player.lg_webos_smart_tv
+      entity_id: media_player.livingroom_tv
       to: "on"
       for:
         minutes: 5
@@ -304,7 +304,7 @@ automation:
   - alias: "Switch - Woonkamer - Nest thermostat - When TV on"
     trigger:
     - platform: state
-      entity_id: media_player.lg_webos_smart_tv
+      entity_id: media_player.livingroom_tv
       to: "on"
       for:
         minutes: 5
@@ -330,7 +330,7 @@ automation:
   - alias: "Switch - Woonkamer - Nest thermostat - When TV off"
     trigger:
     - platform: state
-      entity_id: media_player.lg_webos_smart_tv
+      entity_id: media_player.livingroom_tv
       to: "off"
       for:
         minutes: 5

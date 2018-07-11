@@ -15,10 +15,10 @@ homeassistant:
         haaska_hidden: false
         homebridge_hidden: false
 
-    media_player.lg_webos_smart_tv:
+    media_player.livingroom_tv:
       <<: *customize
       friendly_name: "Livingroom TV"
-    media_player.lg_webos_smart_tv_2:
+    media_player.bedroom_tv:
       <<: *customize
       friendly_name: "Bedroom TV"
     sensor.plex_activity:
@@ -30,7 +30,8 @@ homeassistant:
 ################################################
 media_player:
   - platform: webostv
-    host: !secret lgwebostv_host
+    host: !secret lgwebostv_host_1
+    name: Livingroom TV
     customize:
       sources:
         - livetv
@@ -38,9 +39,10 @@ media_player:
         - xplay
         - youtube
         - netflix
-    filename: webostv.conf
+    filename: webostv1.conf
   - platform: webostv
     host: !secret lgwebostv_host_2
+    name: Bedroom TV
     customize:
       sources:
         - livetv
@@ -49,15 +51,15 @@ media_player:
         - youtube
         - netflix
     filename: webostv2.conf
-  - platform: plex
-    entity_namespace: 'plex'
-    include_non_clients: true
-    scan_interval: 5
-    show_all_controls: true
-    use_custom_entity_ids: true
-    use_episode_art: true
-    remove_unavailable_clients: true
-    client_remove_interval: 600
+#  - platform: plex
+#    entity_namespace: 'plex'
+#    include_non_clients: true
+#    scan_interval: 5
+#    show_all_controls: true
+#    use_custom_entity_ids: true
+#    use_episode_art: true
+#    remove_unavailable_clients: true
+#    client_remove_interval: 600
 
 ################################################
 ## Group
@@ -68,8 +70,8 @@ group:
     control: hidden
     entities:
       - sensor.plex_activity
-      - media_player.lg_webos_smart_tv
-      - media_player.lg_webos_smart_tv_2
+      - media_player.livingroom_tv
+      - media_player.bedroom_tv
   #    - media_player.unnamed_device
   #    - media_player.woonkamer
   #    - media_player.spotify
@@ -93,7 +95,7 @@ automation:
   - alias: "Woonkamer TV - Off"
     trigger:
     - platform: state
-      entity_id: media_player.lg_webos_smart_tv
+      entity_id: media_player.livingroom_tv
       to: "off"
     action:
     - service: homeassistant.turn_off
@@ -102,7 +104,7 @@ automation:
   - alias: "Woonkamer TV - On"
     trigger:
     - platform: state
-      entity_id: media_player.lg_webos_smart_tv
+      entity_id: media_player.livingroom_tv
       to: "playing"
     action:
     - service: homeassistant.turn_on

@@ -128,9 +128,9 @@ views:
     title: Media
     cards:
       - type: media-control
-        entity: media_player.lg_webos_smart_tv
+        entity: media_player.livingroom_tv
       - type: media-control
-        entity: media_player.lg_webos_smart_tv_2
+        entity: media_player.bedroom_tv
       - type: entities
         title: Plex Activity
         entities:
