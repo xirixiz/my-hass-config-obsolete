@@ -1,7 +1,7 @@
 """
 @ Authors     : Bram van Dartel
 @ Date        : 10/07/2018
-@ Version     : 1.1.0
+@ Version     : 1.1.1
 @ Description : MijnAfvalwijzer Sensor - It queries mijnafvalwijzer.nl.
 """
 
