@@ -168,6 +168,7 @@ class TrashCollectionSchedule(object):
             trashToday['name_type'] = "today"
             trashToday['pickup_date'] = "None"
             tschedule.append(trashToday)
+
         if len(trashTomorrow) == 0:
             trashTomorrow = {}
             trashType[name] = "tomorrow"
