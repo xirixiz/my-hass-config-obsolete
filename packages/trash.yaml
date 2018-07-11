@@ -15,6 +15,13 @@ homeassistant:
         haaska_hidden: false
         homebridge_hidden: false
 
+    sensor.trash_today:
+      <<: *customize
+      friendly_name: Vandaag
+    sensor.trash_tomorrow:
+      <<: *customize
+      friendly_name: Morgen
+
     sensor.trash_gft:
       <<: *customize
       friendly_name: Groente, fruit & tuinafval

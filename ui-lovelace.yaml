@@ -75,6 +75,8 @@ views:
           - script.buiten_off
       - type: entities
         entities:
+          - sensor.trash_today
+          - sensor.trash_tomorrow
           - sensor.trash_gft
           - sensor.trash_restafval
           - sensor.trash_papier
