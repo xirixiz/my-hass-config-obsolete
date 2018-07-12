@@ -128,10 +128,11 @@ class TrashCollectionSchedule(object):
         today = datetime.today().strftime("%Y-%m-%d")
         dateConvert = datetime.strptime(today, "%Y-%m-%d") + timedelta(days=1)
         tomorrow = datetime.strftime(dateConvert, "%Y-%m-%d")
+        trash = {}
         trashType = {}
-        tschedule = []
-        trashTomorrow = {}
         trashToday = {}
+        trashTomorrow = {}
+        tschedule = []
 
         # Collect upcoming trash pickup dates
         for name in self._trashTotal:
