@@ -63,11 +63,11 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     for item in json_data or json_data_next:
         name = item["nameType"]
         if name not in trashType:
-                trash = {}
-                trashType[name] = item["nameType"]
-                trash[countType] = item["nameType"]
-                countType += 1
-                trashTotal.append(trash)
+            trash = {}
+            trashType[name] = item["nameType"]
+            trash[countType] = item["nameType"]
+            countType += 1
+            trashTotal.append(trash)
 
     data = (TrashCollectionSchedule(url, trashTotal))
 
