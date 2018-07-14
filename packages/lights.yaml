@@ -635,7 +635,7 @@ automation:
       - script.buiten  
   
   
-  - alias: "Switch - Woonkamer - Off"
+  - alias: "Switch - Woonkamer - Off - Lux and Motion"
     trigger:
     - platform: state
       entity_id: sensor.switch_woonkamer
@@ -647,12 +647,7 @@ automation:
       entity_id: input_boolean.woonkamer_motion
       from: 'on'
       to: 'off'
-    - platform: time
-      at: '00:00:00'
     condition:
-    #- condition: state
-    #  entity_id: media_player.lg_webos_smart_tv
-    #  state: "off"
     - condition: state
       entity_id: input_boolean.automation_mode
       state: 'off'
@@ -660,9 +655,30 @@ automation:
     - service: script.turn_on
       entity_id:
       - script.all_off
-  
-  
-  - alias: "Switch - Woonkamer - When TV off"
+
+
+  - alias: "Switch - Woonkamer - Off - Time"
+    trigger:
+    - platform: time
+      minutes: '/10'
+      seconds: 0
+    condition:
+    - condition: time
+      after: '00:00:00'
+      before: '05:00:00'
+    - condition: state
+      entity_id: media_player.lg_webos_smart_tv
+      state: "off"
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: script.turn_on
+      entity_id:
+      - script.all_off
+
+
+  - alias: "Switch - Woonkamer - Off - TV"
     trigger:
     - platform: state
       entity_id: media_player.lg_webos_smart_tv

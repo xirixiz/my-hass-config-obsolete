@@ -110,7 +110,7 @@ views:
           - sensor.forecast_6
           - sensor.forecast_7
       - type: "iframe"
-        aspect_ratio: 100%
+        aspect_ratio: 88%
         url: https://embed.windy.com/embed2.html?rainAccu,50.912,5.067,7
 
   - icon: mdi:cctv
