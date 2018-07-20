@@ -94,6 +94,7 @@ views:
           - sensor.hal_temperature
           - sensor.woonkamer_temperature
           - sensor.slaapkamer_boris_temperature
+#          - climate.living_room
           - sensor.living_room_thermostat_temperature
           - sensor.living_room_thermostat_target
           - sensor.living_room_thermostat_operation_mode

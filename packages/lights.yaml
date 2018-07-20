@@ -661,7 +661,7 @@ automation:
     trigger:
     - platform: time
       minutes: '/10'
-      seconds: 0
+      seconds: 00
     condition:
     - condition: time
       after: '00:00:00'
