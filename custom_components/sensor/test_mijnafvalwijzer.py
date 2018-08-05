@@ -110,6 +110,10 @@ for item in json_data or json_data_next:
 
 print(tschedule)
 
+
+
+print(tschedule.intersection(trashType))
+
 #list = ['350882 348521 350166\r\n']
 #id = 348522
 #if id not in [int(y) for x in list for y in x.split()]:

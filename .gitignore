@@ -8,6 +8,7 @@
 !scenes
 !.gitignore
 www/
+deps/
 tmp/
 secrets.yaml
 known_devices.yaml

@@ -621,9 +621,9 @@ automation:
     - condition: state
       entity_id: sensor.switch_woonkamer
       state: 'on'
-    - condition: state
-      entity_id: sensor.switch_hal
-      state: 'on'
+#    - condition: state
+#      entity_id: sensor.switch_hal
+#      state: 'on'
     - condition: state
       entity_id: input_boolean.automation_mode
       state: 'off'
@@ -667,8 +667,8 @@ automation:
       after: '00:00:00'
       before: '05:00:00'
     - condition: state
-      entity_id: media_player.lg_webos_smart_tv
-      state: "off"
+      entity_id: media_player.livingroom_tv
+      state: 'off'
     - condition: state
       entity_id: input_boolean.automation_mode
       state: 'off'
@@ -681,13 +681,13 @@ automation:
   - alias: "Switch - Woonkamer - Off - TV"
     trigger:
     - platform: state
-      entity_id: media_player.lg_webos_smart_tv
-      to: "off"
+      entity_id: media_player.livingroom_tv
+      to: 'off'
       for:
         minutes: 10
     - platform: state
-      entity_id: media_player.lg_webos_smart_tv_2
-      to: "off"
+      entity_id: media_player.bedroom_tv
+      to: 'off'
       for:
         minutes: 10
     condition:
