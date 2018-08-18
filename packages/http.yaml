@@ -23,5 +23,8 @@ http:
   ssl_certificate: !secret ssl_certificate
   ssl_key: !secret ssl_key
   use_x_forwarded_for: true
-  ip_ban_enabled: true
-  login_attempts_threshold: 3  
+  ip_ban_enabled: false
+  login_attempts_threshold: 5
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1 

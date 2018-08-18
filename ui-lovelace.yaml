@@ -5,7 +5,7 @@ name: Home
 views:
   - icon: mdi:home-assistant
     title: Home
-    # theme: darkorange
+    #theme: darkblue
     cards:
       - type: entities
         entities:
