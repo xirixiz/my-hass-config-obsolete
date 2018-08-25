@@ -17,8 +17,9 @@ views:
           - script.all_off
       - type: entities
         entities:
-          - sensor.power_consumption
-          - sensor.gas_consumption
+          - sensor.electricity_currently_delivered
+          - sensor.electricity1
+          - sensor.gas
       - type: entities
         entities:
           - input_boolean.meds_taken
@@ -145,12 +146,9 @@ views:
       - type: entities
         title: DSMR
         entities:
-          - sensor.power_consumption
-          - sensor.gas_consumption
-          - sensor.power_consumption_low
-          - sensor.power_consumption_normal
-          - sensor.power_production_low
-          - sensor.power_production_normal
+          - sensor.electricity_currently_delivered
+          - sensor.electricity1
+          - sensor.gas
       - type: custom:monster-card
         card:
           type: entities
@@ -180,7 +178,13 @@ views:
           - sensor.upstairs_nest_protect_co_status
           - sensor.upstairs_nest_protect_smoke_status
           - sensor.upstairs_nest_protect_battery_health
-
+      - type: entities
+        title: Nest Hello
+        entities:
+          - binary_sensor.front_door_camera_voordeur_online
+          - binary_sensor.front_door_camera_voordeur_motion_detected
+          - binary_sensor.front_door_camera_voordeur_person_detected
+          - binary_sensor.front_door_camera_voordeur_sound_detected
 
   - icon: mdi:network
     title: Network
@@ -212,7 +216,9 @@ views:
           - sensor.samsung_printer_tray_1
           - sensor.samsung_printer_output_tray_0
 
-
+          - sensor.electricity_currently_delivered
+          - sensor.electricity1
+          - sensor.gas
   - icon: mdi:settings
     title: Settings
     cards:

@@ -33,16 +33,6 @@ input_boolean:
     initial: 'on'
 
 ################################################
-## Group
-################################################
-group:
-  meds_reminder:
-    name: "Medicatie Bram"
-    entities:
-      - input_boolean.meds_taken
-      - input_boolean.meds_reminder
-
-################################################
 ## Automation
 ################################################
 automation:

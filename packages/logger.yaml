@@ -39,16 +39,6 @@ input_select:
     initial: warn 
 
 ################################################
-## Group
-################################################
-group:
- logger:
-    name: "Logger"
-    control: hidden
-    entities:
-      - input_select.log_level
-
-################################################
 ## Automation
 ################################################
 automation:

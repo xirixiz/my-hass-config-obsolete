@@ -51,30 +51,6 @@ media_player:
         - youtube
         - netflix
     filename: webostv2.conf
-#  - platform: plex
-#    entity_namespace: 'plex'
-#    include_non_clients: true
-#    scan_interval: 5
-#    show_all_controls: true
-#    use_custom_entity_ids: true
-#    use_episode_art: true
-#    remove_unavailable_clients: true
-#    client_remove_interval: 600
-
-################################################
-## Group
-################################################
-group:
-  media:
-    name: "Media Control"
-    control: hidden
-    entities:
-      - sensor.plex_activity
-      - media_player.livingroom_tv
-      - media_player.bedroom_tv
-  #    - media_player.unnamed_device
-  #    - media_player.woonkamer
-  #    - media_player.spotify
 
 ################################################
 ## Sensor

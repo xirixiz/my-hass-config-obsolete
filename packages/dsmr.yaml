@@ -2,6 +2,41 @@
 ## Packages / Dsmr
 ################################################
 
+# dsmr_current values:
+#  "timestamp": "2018-08-25T06:19:34.655802+02:00",
+#  "electricity_delivered_1": "9021.467",
+#  "electricity_returned_1": "0.000",
+#  "electricity_delivered_2": "8064.328",
+#  "electricity_returned_2": "0.002",
+#  "electricity_currently_delivered": "0.440",
+#  "electricity_currently_returned": "0.000",
+#  "phase_currently_delivered_l1": null,
+#  "phase_currently_delivered_l2": null,
+#  "phase_currently_delivered_l3": null,
+#  "extra_device_timestamp": "2018-08-25T06:00:00+02:00",
+#  "extra_device_delivered": "7476.751",
+#  "phase_currently_returned_l1": null,
+#  "phase_currently_returned_l2": null,
+#  "phase_currently_returned_l3": null
+
+# dsmr_today values:
+#  "day": "2018-08-25",
+#  "electricity1": 2.334,
+#  "electricity2": 0,
+#  "electricity1_returned": 0,
+#  "electricity2_returned": 0,
+#  "electricity1_cost": 0,
+#  "electricity2_cost": 0,
+#  "total_cost": 0,
+#  "gas": 0,
+#  "gas_cost": 0,
+#  "energy_supplier_price_electricity_delivered_1": 0,
+#  "energy_supplier_price_electricity_delivered_2": 0,
+#  "energy_supplier_price_electricity_returned_1": 0,
+#  "energy_supplier_price_electricity_returned_2": 0,
+#  "energy_supplier_price_gas": 0
+
+
 ################################################
 ## Customize
 ################################################
@@ -15,37 +50,44 @@ homeassistant:
         haaska_hidden: false
         homebridge_hidden: false
 
-    sensor.power_consumption:
+    sensor.electricity_currently_delivered:
       <<: *customize
-      friendly_name: KWh
-    sensor.power_tariff:
+      friendly_name: Huidig verbruik electriciteit
+
+    sensor.electricity1:
       <<: *customize
-      friendly_name: Tarief
+      friendly_name: Verbruik vandaag electriciteit
 
-################################################
-## Group
-################################################
-group:
-  energy_view:
-    icon: mdi:power-plug
-    view: yes
-    entities:
-      - group.woonkamer_nest_thermostat
-      - group.smartmeter_readings
-
-  smartmeter_readings:
-    name: "SmartMeter - DSMR"
-    entities:
-      - sensor.power_consumption_low
-      - sensor.power_consumption_normal
-      - sensor.power_production_low
-      - sensor.power_production_normal
-      - sensor.gas_consumption
+    sensor.gas:
+      <<: *customize
+      friendly_name: Verbruik vandaag gas
 
 ################################################
 ## Sensor
 ################################################
 sensor:
-  - platform: dsmr
-    port: /dev/ttyUSB0
-    dsmr_version: 2.2
+  - platform: rest
+    name: electricity_currently_delivered
+    resource: !secret dsmr_current
+    value_template: '{{ value_json["results"][0].electricity_currently_delivered | multiply(1000) | round(0) }}'
+    headers:
+      X-AUTHKEY: !secret dsmr_token
+
+  - platform: rest
+    name: electricity1
+    resource: !secret dsmr_today
+    value_template: '{{ value_json.electricity1 | round(0) }}'
+    headers:
+      X-AUTHKEY: !secret dsmr_token
+
+  - platform: rest
+    name: gas
+    resource: !secret dsmr_today
+    value_template: '{{ value_json.gas | round(0) }}'
+    headers:
+      X-AUTHKEY: !secret dsmr_token
+
+#sensor:
+#  - platform: dsmr
+#    port: /dev/ttyUSB0
+#    dsmr_version: 2.2

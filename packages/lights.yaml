@@ -148,6 +148,14 @@ homeassistant:
       <<: *customize
       hidden: false
       friendly_name: Hal Lux
+    sensor.switch_hal:
+      <<: *customize
+      hidden: false
+      friendly_name: Switch Hal
+    sensor.switch_woonkamer:
+      <<: *customize
+      hidden: false
+      friendly_name: Switch Woonkamer
 
     input_number.keuken_hanglamp_brightness:
       <<: *customize
@@ -196,186 +204,6 @@ switch:
           {% else %}
             mdi:flashlight-off
           {% endif %}
-
-################################################
-## Group
-################################################
-group:
-  lights_view:
-    icon: mdi:flashlight
-    view: yes
-    entities:
-      - sensor.woonkamer_motion
-      - sensor.woonkamer_lux
-      - sensor.hal_motion
-      - sensor.hal_lux
-      - group.woonkamer_lights
-      - group.keuken_lights
-      - group.hal_en_overlopen_lights
-      - group.buiten_lights
-      - group.slaapkamer_lights
-
-  lights_all_view:
-    icon: mdi:lightbulb-on
-    view: yes
-    entities:
-      - group.all_lights
-  
-  # Woonkamer
-  woonkamer_lights:
-    name: "Lights Woonkamer"
-    entities:
-      - group.woonkamer_lights_spots
-      - group.woonkamer_lights_kast
-      - group.woonkamer_lights_studeerkamer
-      - group.woonkamer_lights_rails
-  
-  woonkamer_lights_spots:
-    name: "Lights Spots"
-    entities:
-      - light.woonkamer_spot_tuin_links_1
-      - light.woonkamer_spot_tuin_links_2
-      - light.woonkamer_spot_tuin_midden_1
-      - light.woonkamer_spot_tuin_midden_2
-      - light.woonkamer_spot_tuin_rechts_1
-      - light.woonkamer_spot_tuin_rechts_2
-  
-  woonkamer_lights_kast:
-    name: "Lights Kast"
-    entities:
-      - light.kastlamp_links
-      - light.kastlamp_rechts
-  
-  woonkamer_lights_studeerkamer:
-    name: "Lights Studeerkamer"
-    entities:
-      - light.studeerkamer_rechts
-      - light.studeerkamer_links
-  
-  woonkamer_lights_rails:
-    name: "Lights Rails"
-    entities:
-      - group.woonkamer_lights_rails_links
-      - group.woonkamer_lights_rails_rechts
-  
-  woonkamer_lights_rails_links:
-    name: "Lights Rails Links"
-    entities:
-      - light.woonkamer_rails_links
-  
-  woonkamer_lights_rails_rechts:
-    name: "Lights Rails Rechts"
-    entities:
-      - light.woonkamer_rails_rechts
-  
-  # Keuken
-  keuken_lights:
-    name: "Lights Keuken"
-    entities:
-      - input_number.keuken_hanglamp_brightness
-      - group.keuken_lights_hanglamp
-      - group.keuken_lights_spots
-  
-  keuken_lights_hanglamp:
-    name: "Lights Hanglamp Keuken"
-    entities:
-      - light.keuken_hanglamp
-  
-  keuken_lights_spots:
-    name: "Lights Spots Keuken"
-    entities:
-      - light.keuken_spot_tuin_links_1
-      - light.keuken_spot_tuin_links_2
-      - light.keuken_spot_tuin_rechts_1
-      - light.keuken_spot_tuin_rechts_2
-      - light.keuken_spot_werkblad_links
-      - light.keuken_spot_werkblad_rechts
-      - light.keuken_spot_nis_links
-      - light.keuken_spot_nis_rechts
-  
-  # Hal en Overlopen
-  hal_en_overlopen_lights:
-    name: "Lights Hal en Overlopen"
-    entities:
-      - group.hal_en_overlopen_lights_hal
-      - group.hal_en_overlopen_lights_overloop_1
-      - group.hal_en_overlopen_lights_overloop_2
-  
-  hal_en_overlopen_lights_hal:
-    name: "Lights HAL"
-    entities:
-      - light.hal_bg
-
-  hal_en_overlopen_lights_overloop_1:
-    name: "Lights Overloop 1"
-    entities:
-      - light.hal_verdieping_1
-  
-  hal_en_overlopen_lights_overloop_2:
-    name: "Lights Overloop 2"
-    entities:
-      - light.hal_verdieping_2
-  
-  # Buiten
-  buiten_lights:
-    name: "Lights Buiten"
-    entities:
-      - group.buiten_lights_voor
-      - group.buiten_lights_achter
-  
-  buiten_lights_voor:
-    name: "Lights Buiten Voor"
-    entities:
-      - light.buiten_voordeur
-      - light.buiten_garage
-  
-  buiten_lights_achter:
-    name: "Lights Buiten Achter"
-    entities:
-      - light.buiten_achter_links
-      - light.buiten_achter_rechts
-  
-  # Slaapkamer
-  slaapkamer_lights:
-    name: "Lights Slaapkamer"
-    entities:
-      - group.slaapkamer_lights_master
-  
-  slaapkamer_lights_master:
-    name: "Lights Master Slaapkamer"
-    entities:
-      - light.slaapkamer_hanglamp
-
-  scripts_on:
-    name: "Lights On"
-    control: hidden
-    entities:
-      - script.all_on
-      - script.woonkamer
-      - script.woonkamer_nightlight
-      - script.woonkamer_bright
-      - script.woonkamer_super_bright
-      - script.keuken
-      - script.keuken_bright
-      - script.keuken_super_bright
-      - script.hal_en_overlopen
-      - script.hal_en_overlopen_nightlight
-      - script.hal_en_overlopen_bright
-      - script.hal_en_overlopen_super_bright
-      - script.buiten
-      - script.buiten_bright
-      - script.buiten_super_bright
-
-  scripts_off:
-    name: "Lights Off"
-    control: hidden
-    entities:
-      - script.all_off
-      - script.woonkamer_off
-      - script.keuken_off
-      - script.hal_en_overlopen_off
-      - script.buiten_off
-
 
 ################################################
 ## Sensor

@@ -56,21 +56,6 @@ input_number:
     step: 0.5
 
 ################################################
-## Group
-################################################
-group:
-  woonkamer_nest_thermostat:
-    name: "Nest Thermostat"
-    entities:
-      - input_number.woonkamer_nest_thermostat_temperature
-      - sensor.hal_temperature
-      - sensor.woonkamer_temperature
-      - sensor.living_room_thermostat_temperature
-      - sensor.living_room_thermostat_target
-      - sensor.living_room_thermostat_operation_mode
-      - sensor.living_room_thermostat_humidity
-
-################################################
 ## Sensor
 ################################################
 sensor:

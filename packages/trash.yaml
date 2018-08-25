@@ -51,21 +51,6 @@ input_boolean:
     initial: 'on'
 
 ################################################
-## Group
-################################################
-group:
-  trash_pickup:
-    name: "Trash Pickup"
-    control: hidden
-    entities:
-      - sensor.trash_gft
-      - sensor.trash_restafval
-      - sensor.trash_papier
-      - sensor.trash_pmd
-      - input_boolean.trash_moved
-      - input_boolean.trash_reminder
-
-################################################
 ## Sensor
 ################################################
 sensor:

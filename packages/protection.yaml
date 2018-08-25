@@ -59,39 +59,6 @@ nest:
   client_secret: !secret nest_client_secret
 
 ################################################
-## Group
-################################################
-group:
-  hal_en_overlopen_view:
-    icon: mdi:security-home
-    view: yes
-    entities:
-      - group.woonkamer_nest_protect
-      - group.hal_en_overlopen_nest_protect_hal
-      - group.hal_en_overlopen_nest_protect_overlopen
-
-  woonkamer_nest_protect:
-    name: "Nest Protect"
-    entities:
-      - sensor.living_room_nest_protect_co_status
-      - sensor.living_room_nest_protect_smoke_status
-      - sensor.living_room_nest_protect_battery_health
-  
-  hal_en_overlopen_nest_protect_hal:
-    name: "Nest Protect Hal"
-    entities:
-      - sensor.entryway_nest_protect_co_status
-      - sensor.entryway_nest_protect_smoke_status
-      - sensor.entryway_nest_protect_battery_health
-  
-  hal_en_overlopen_nest_protect_overlopen:
-    name: "Nest Protect Overloop 1"
-    entities:
-      - sensor.upstairs_nest_protect_co_status
-      - sensor.upstairs_nest_protect_smoke_status
-      - sensor.upstairs_nest_protect_battery_health
-
-################################################
 ## Sensor
 ################################################
 sensor:

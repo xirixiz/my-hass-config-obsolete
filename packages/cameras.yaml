@@ -19,6 +19,20 @@ homeassistant:
       <<: *customize
       friendly_name: Temperatuur Slaapkamer Boris
 
+    binary_sensor.front_door_camera_voordeur_online:
+      <<: *customize
+      friendly_name: Nest Hello Online
+    binary_sensor.front_door_camera_voordeur_motion_detected:
+      <<: *customize
+      friendly_name: Nest Hello Motion
+    binary_sensor.front_door_camera_voordeur_person_detected:
+      <<: *customize
+      friendly_name: Nest Hello Person
+    binary_sensor.front_door_camera_voordeur_sound_detected:
+      <<: *customize
+      friendly_name: Nest Hello Sound
+
+
 ################################################
 ## Camera
 ################################################
@@ -42,19 +56,6 @@ sensor:
     name: 'slaapkamer_boris_temperature'
 
 ################################################
-## Group
-################################################
-group:
-  slaapkamer_boris_camera:
-    name: "Camera Boris"
-    entities:
-      - camera.boris
-  frontdoor_camera:
-    name: "Camera Voordeur"
-    entities:
-      - camera.front_door_voordeur
-
-################################################
 ## Automation
 ################################################
 #automation:
@@ -73,3 +74,5 @@ group:
 #          photo:
 #            - url: !secret camera_boris_image_url
 #              caption: "Test"
+
+
