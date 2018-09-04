@@ -52,15 +52,15 @@ homeassistant:
 
     sensor.electricity_currently_delivered:
       <<: *customize
-      friendly_name: Huidig verbruik electriciteit
+      friendly_name: Huidig verbruik electriciteit (Watt)
 
     sensor.electricity1:
       <<: *customize
-      friendly_name: Verbruik vandaag electriciteit
+      friendly_name: Verbruik vandaag electriciteit (Watt)
 
     sensor.gas:
       <<: *customize
-      friendly_name: Verbruik vandaag gas
+      friendly_name: Verbruik vandaag gas (M3)
 
 ################################################
 ## Sensor
@@ -76,14 +76,14 @@ sensor:
   - platform: rest
     name: electricity1
     resource: !secret dsmr_today
-    value_template: '{{ value_json.electricity1 | round(0) }}'
+    value_template: '{{ value_json.electricity1 }}'
     headers:
       X-AUTHKEY: !secret dsmr_token
 
   - platform: rest
     name: gas
     resource: !secret dsmr_today
-    value_template: '{{ value_json.gas | round(0) }}'
+    value_template: '{{ value_json.gas }}'
     headers:
       X-AUTHKEY: !secret dsmr_token
 
