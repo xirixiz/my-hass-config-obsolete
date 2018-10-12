@@ -14,7 +14,10 @@ views:
       - type: entities
         entities:
           - script.all_on
+          - script.all_on_bright
+          - script.all_on_super_bright
           - script.all_off
+#          - input_select.light_scenes
       - type: entities
         entities:
           - sensor.electricity_currently_delivered
@@ -28,7 +31,7 @@ views:
         entities:
           - input_boolean.vacation_mode
           - input_boolean.automation_mode
-      - type: picture-entity 
+      - type: picture-entity
         entity: camera.front_door_voordeur
         show_info: false
       - type: picture-entity
@@ -37,43 +40,43 @@ views:
       - type: picture-entity
         entity: camera.foscam_camera
         show_info: false
-      - type: picture-glance
-        image: https://images.pexels.com/photos/189333/pexels-photo-189333.jpeg?auto=compress&cs=tinysrgb&h=350
-        title: Woonkamer
-        entities:
-          - script.woonkamer
-          - script.woonkamer_nightlight
-          - script.woonkamer_bright
-          - script.woonkamer_super_bright
-          - script.woonkamer_off
-      - type: picture-glance
-        image: https://images.pexels.com/photos/15964/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350
-        title: Keuken
-        entities:
-          - script.keuken
-          - script.keuken_bright
-          - script.keuken_super_bright
-          - script.keuken_off
-      - type: entities
-        entities:
-          - input_number.keuken_hanglamp_brightness
-      - type: picture-glance
-        image: https://images.pexels.com/photos/573552/pexels-photo-573552.jpeg?auto=compress&cs=tinysrgb&h=350
-        title: Hal & Overlopen
-        entities:
-          - script.hal_en_overlopen
-          - script.hal_en_overlopen_nightlight
-          - script.hal_en_overlopen_bright
-          - script.hal_en_overlopen_super_bright
-          - script.hal_en_overlopen_off
-      - type: picture-glance
-        image: https://images.pexels.com/photos/547050/pexels-photo-547050.jpeg?auto=compress&cs=tinysrgb&h=350
-        title: Buiten
-        entities:
-          - script.buiten
-          - script.buiten_bright
-          - script.buiten_super_bright
-          - script.buiten_off
+#      - type: picture-glance
+#        image: https://images.pexels.com/photos/189333/pexels-photo-189333.jpeg?auto=compress&cs=tinysrgb&h=350
+#        title: Woonkamer
+#        entities:
+#          - script.woonkamer
+#          - script.woonkamer_nightlight
+#          - script.woonkamer_bright
+#          - script.woonkamer_super_bright
+#          - script.woonkamer_off
+#      - type: picture-glance
+#        image: https://images.pexels.com/photos/15964/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350
+#        title: Keuken
+#        entities:
+#          - script.keuken
+#          - script.keuken_bright
+#          - script.keuken_super_bright
+#          - script.keuken_off
+#      - type: entities
+#        entities:
+#          - input_number.keuken_hanglamp_brightness
+#      - type: picture-glance
+#        image: https://images.pexels.com/photos/573552/pexels-photo-573552.jpeg?auto=compress&cs=tinysrgb&h=350
+#        title: Hal & Overlopen
+#        entities:
+#          - script.hal_en_overlopen
+#          - script.hal_en_overlopen_nightlight
+#          - script.hal_en_overlopen_bright
+#          - script.hal_en_overlopen_super_bright
+#          - script.hal_en_overlopen_off
+#      - type: picture-glance
+#        image: https://images.pexels.com/photos/547050/pexels-photo-547050.jpeg?auto=compress&cs=tinysrgb&h=350
+#        title: Buiten
+#        entities:
+#          - script.buiten
+#          - script.buiten_bright
+#          - script.buiten_super_bright
+#          - script.buiten_off
       - type: entities
         entities:
           - sensor.trash_today
@@ -191,19 +194,18 @@ views:
     cards:
       - type: entities
         entities:
-          - switch.pihole
-          - sensor.ads_blocked_today
-          - sensor.ads_percentage_today
-          - sensor.dns_queries_today
-          - sensor.domains_being_blocked
-          - sensor.ads_blocked_today
-          - sensor.unique_domains
-          - sensor.queries_forwarded
-          - sensor.queries_cached
-          - sensor.pihole_dns
-          - sensor.pihole_blocking
-          - sensor.pi_hole_version
-#          - script.pihole_update
+          - sensor.pihole_status
+          - script.enable_pihole
+          - input_select.pihole_time
+          - sensor.pihole_ads_blocked_today
+          - sensor.pihole_ads_percentage_blocked_today
+          - sensor.pihole_dns_queries_cached
+          - sensor.pihole_dns_queries_forwarded
+          - sensor.pihole_dns_queries_today
+          - sensor.pihole_dns_unique_clients
+          - sensor.pihole_dns_unique_domains
+          - sensor.pihole_domains_blocked
+          - sensor.pihole_seen_clients
       - type: entities
         entities:
           - sensor.speedtest_download
@@ -215,10 +217,6 @@ views:
           - sensor.samsung_printer_toner_black
           - sensor.samsung_printer_tray_1
           - sensor.samsung_printer_output_tray_0
-
-          - sensor.electricity_currently_delivered
-          - sensor.electricity1
-          - sensor.gas
   - icon: mdi:settings
     title: Settings
     cards:

@@ -53,6 +53,18 @@ homeassistant:
       friendly_name: All Lights On
       icon: mdi:flashlight
 
+    script.all_on_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: All Lights Bright
+      icon: mdi:flashlight
+
+    script.all_on_super_bright:
+      <<: *customize
+      hidden: false
+      friendly_name: All Lights SBright
+      icon: mdi:flashlight
+
     input_boolean.all_lights:
       <<: *customize
       hidden: false
@@ -185,6 +197,18 @@ input_boolean:
   all_lights:
     name: All Lights
 
+input_select:
+  light_scenes:
+    name: Scenes
+    options:
+      - "Select Scene"
+      - "On"
+      - "Off"
+      - "Bright"
+      - "Super Bright"
+    initial: "Select Scene"
+    icon: mdi:creation
+
 switch:
   - platform: template
     switches:
@@ -204,6 +228,7 @@ switch:
           {% else %}
             mdi:flashlight-off
           {% endif %}
+
 
 ################################################
 ## Sensor
@@ -364,7 +389,7 @@ automation:
       - script.keuken_off
       - script.hal_en_overlopen_off
       - script.buiten_off
-  
+
   
   - alias: "Motion - Woonkamer - Morning on"
     trigger:
@@ -460,7 +485,7 @@ automation:
       entity_id:
       - script.woonkamer
       - script.keuken
-      - script.buiten  
+      - script.buiten
   
   
   - alias: "Switch - Woonkamer - Off - Lux and Motion"
@@ -549,8 +574,8 @@ automation:
     - service: script.turn_on
       entity_id:
       - script.hal_en_overlopen_nightlight
-  
-  
+
+
   - alias: "Motion - Hal en overlopen - Daytime on"
     trigger:
     - platform: state
@@ -584,6 +609,39 @@ automation:
       - script.hal_en_overlopen_off
 
 
+  - alias: Lighting - Reset scene selector
+    trigger:
+      platform: state
+      entity_id: light.woonkamer
+      to: 'off'
+    condition:
+      condition: template
+      value_template: "{{ not is_state('input_select.light_scenes' , 'Select Scene') }}"
+    action:
+      service: input_select.select_option
+      data:
+        entity_id: input_select.light_scenes
+        option: "Select Scene"
+
+
+  - alias: Lighting - Trigger scene
+    trigger:
+      platform: state
+      entity_id: input_select.light_scenes
+    condition:
+      condition: template
+      value_template: "{{ not is_state('input_select.light_scenes' , 'Select') }}"
+    action:
+      service: script.turn_on
+      data_template:
+          entity_id: >
+            {% if is_state("input_select.light_scenes", "On") %} script.all_on
+            {% elif is_state("input_select.light_scenes", "Off") %} script.all_off
+            {% elif is_state("input_select.light_scenes", "Bright") %} script.all_on_bright
+            {% elif is_state("input_select.light_scenes", "Super Bright") %} script.all_on_super_bright
+            {% endif %}
+
+
 ################################################
 ## Script
 ################################################
@@ -596,16 +654,28 @@ script:
       - light.keuken
       - light.buitenvoor
       - light.buitenachter
-  
+
   all_on:
     sequence:
-    - service: light.turn_on
-      entity_id:
-      - light.woonkamer
-      - light.keuken
-      - light.buitenvoor
-      - light.buitenachter
-  
+    - service: script.woonkamer
+    - service: script.keuken
+    - service: script.hal_en_overlopen
+    - service: script.buiten
+
+  all_on_bright:
+    sequence:
+    - service: script.woonkamer_bright
+    - service: script.keuken_bright
+    - service: script.hal_en_overlopen_bright
+    - service: script.buiten_bright
+
+  all_on_super_bright:
+    sequence:
+    - service: script.woonkamer_super_bright
+    - service: script.keuken_super_bright
+    - service: script.hal_en_overlopen_super_bright
+    - service: script.buiten_super_bright
+
 
   woonkamer:
     sequence:
@@ -695,7 +765,7 @@ script:
       data:
         group_name: 'hal en overlopen'
         scene_name: 'Hal en Overlopen Super Bright'
-  
+
   hal_en_overlopen_off:
     sequence:
     - service: light.turn_off
