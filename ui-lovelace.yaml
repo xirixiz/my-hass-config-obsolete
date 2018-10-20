@@ -1,3 +1,7 @@
+custom_updater:
+component_urls:
+  - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
+
 resources:
   - url: /local/monster-card.js
     type: js
@@ -163,12 +167,20 @@ views:
       - type: entities
         title: HUE Sensors
         entities:
+          - sensor.hue_remote_1_state
+          - sensor.hue_remote_1_last_update
+          - sensor.hue_remote_1_battery
+          - sensor.hue_remote_2_state
+          - sensor.hue_remote_2_last_update
+          - sensor.hue_remote_2_battery
           - sensor.woonkamer_motion
           - sensor.switch_woonkamer
           - sensor.woonkamer_lux
+          - sensor.woonkamer_battery
           - sensor.hal_motion
           - sensor.switch_hal
           - sensor.hal_lux
+          - sensor.hal_battery
       - type: entities
         title: Nest Protect
         entities:

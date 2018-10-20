@@ -59,23 +59,6 @@ nest:
   client_secret: !secret nest_client_secret
 
 ################################################
-## Sensor
-################################################
-sensor:
-  - platform: rest
-    resource: !secret hue_woonkamer_battery_sensor
-    value_template: '{{ value_json.config.battery }}'
-    scan_interval: 7200
-    unit_of_measurement: '%'
-    name: 'woonkamer_battery'
-  - platform: rest
-    resource: !secret hue_hal_battery_sensor
-    value_template: '{{ value_json.config.battery }}'
-    scan_interval: 7200
-    unit_of_measurement: '%'
-    name: 'hal_battery'
-
-################################################
 ## Automation
 ################################################
 automation:

@@ -148,18 +148,30 @@ homeassistant:
       <<: *customize
       hidden: false
       friendly_name: Woonkamer Motion
+      icon: mdi:run-fast
     sensor.woonkamer_lux:
       <<: *customize
       hidden: false
+      icon: mdi:theme-light-dark
       friendly_name: Woonkamer Lux
+    sensor.woonkamer_battery:
+      <<: *customize
+      icon: mdi:battery
+      friendly_name: Woonkamer Battery
     sensor.hal_motion:
       <<: *customize
       hidden: false
       friendly_name: Hal Motion
+      icon: mdi:run-fast
     sensor.hal_lux:
       <<: *customize
       hidden: false
+      icon: mdi:theme-light-dark
       friendly_name: Hal Lux
+    sensor.hal_battery:
+      <<: *customize
+      icon: mdi:battery
+      friendly_name: Hal Battery
     sensor.switch_hal:
       <<: *customize
       hidden: false
@@ -168,6 +180,32 @@ homeassistant:
       <<: *customize
       hidden: false
       friendly_name: Switch Woonkamer
+    sensor.hue_remote_1_state:
+      <<: *customize
+      icon: mdi:remote
+      persistence: false
+      friendly_name: Remote 1 State
+    sensor.hue_remote_1_last_update:
+      <<: *customize
+      icon: mdi:clock
+      friendly_name: Remote 1 Last Update
+    sensor.hue_remote_1_battery:
+      <<: *customize
+      icon: mdi:battery
+      friendly_name: Remote 1 Battery
+    sensor.hue_remote_2_state:
+      <<: *customize
+      icon: mdi:remote
+      persistence: false
+      friendly_name: Remote 2 State
+    sensor.hue_remote_2_last_update:
+      <<: *customize
+      icon: mdi:clock
+      friendly_name: Remote 2 Last Update
+    sensor.hue_remote_2_battery:
+      <<: *customize
+      icon: mdi:battery
+      friendly_name: Remote 2 Battery
 
     input_number.keuken_hanglamp_brightness:
       <<: *customize
@@ -235,6 +273,12 @@ switch:
 ################################################
 sensor:
   - platform: rest
+    resource: !secret hue_woonkamer_battery_sensor
+    value_template: '{{ value_json.config.battery }}'
+    scan_interval: 1800
+    unit_of_measurement: '%'
+    name: 'woonkamer_battery'
+  - platform: rest
     resource: !secret hue_woonkamer_motion_sensor
     value_template: '{{ value_json.state.presence }}'
     scan_interval: 1
@@ -249,6 +293,12 @@ sensor:
 
   # Philips HUE - Sensors - Hal en Overlopen
   - platform: rest
+    resource: !secret hue_hal_battery_sensor
+    value_template: '{{ value_json.config.battery }}'
+    scan_interval: 1800
+    unit_of_measurement: '%'
+    name: 'hal_battery'
+  - platform: rest
     resource: !secret hue_hal_motion_sensor
     value_template: '{{ value_json.state.presence }}'
     scan_interval: 1
@@ -259,6 +309,86 @@ sensor:
     scan_interval: 30
     unit_of_measurement: 'Lux'
     name: 'hal_lux'
+
+  # Philips HUE - Remote 1
+  - platform: rest
+    resource: !secret hue_remote_1
+    value_template: '{{ value_json.config.battery }}'
+    unit_of_measurement: '%'
+    scan_interval: 1800
+    name: 'hue_remote_1_battery'
+  - platform: rest
+    resource: !secret hue_remote_1
+    value_template: '{{ value_json.state.buttonevent }}'
+    scan_interval: 1
+    name: 'hue_remote_1_state'
+  - platform: template
+    sensors:
+      hue_remote_1_state:
+        friendly_name: 'hue_remote_1_state'
+        value_template: >-
+                      {% if states('sensor.hue_remote_1_state_2')[0] == "1" %}
+                        On
+                      {% elif states('sensor.hue_remote_1_state_2')[0] == "2" %}
+                        Dim Up
+                      {% elif states('sensor.hue_remote_1_state_2')[0] == "3" %}
+                        Dim Down
+                      {% elif states('sensor.hue_remote_1_state_2')[0] == "4" %}
+                        Off
+                      {% else %}
+                        None
+                      {% endif %}
+  - platform: rest
+    resource: !secret hue_remote_1
+    value_template: '{{ value_json.state.lastupdated }}'
+    scan_interval: 10
+    name: 'hue_remote_1_last_update'
+  - platform: template
+    sensors:
+      hue_remote_1_last_update:
+        friendly_name: 'hue_remote_1_last_used'
+        value_template: >-
+          {{ as_timestamp(strptime(states('sensor.hue_remote_1_last_update_2')[:19], "%Y-%m-%dT%X"))|timestamp_custom("%a, %B %d")}}
+
+  # Philips HUE - Remote 2
+  - platform: rest
+    resource: !secret hue_remote_2
+    value_template: '{{ value_json.config.battery }}'
+    unit_of_measurement: '%'
+    scan_interval: 1800
+    name: 'hue_remote_2_battery'
+  - platform: rest
+    resource: !secret hue_remote_2
+    value_template: '{{ value_json.state.buttonevent }}'
+    scan_interval: 1
+    name: 'hue_remote_2_state'
+  - platform: template
+    sensors:
+      hue_remote_2_state:
+        friendly_name: 'hue_remote_2_state'
+        value_template: >-
+                      {% if states('sensor.hue_remote_2_state_2')[0] == "1" %}
+                        On
+                      {% elif states('sensor.hue_remote_2_state_2')[0] == "2" %}
+                        Dim Up
+                      {% elif states('sensor.hue_remote_2_state_2')[0] == "3" %}
+                        Dim Down
+                      {% elif states('sensor.hue_remote_2_state_2')[0] == "4" %}
+                        Off
+                      {% else %}
+                        None
+                      {% endif %}
+  - platform: rest
+    resource: !secret hue_remote_2
+    value_template: '{{ value_json.state.lastupdated }}'
+    scan_interval: 10
+    name: 'hue_remote_2_last_update'
+  - platform: template
+    sensors:
+      hue_remote_2_last_update:
+        friendly_name: 'hue_remote_2_last_used'
+        value_template: >-
+          {{ as_timestamp(strptime(states('sensor.hue_remote_2_last_update_2')[:19], "%Y-%m-%dT%X"))|timestamp_custom("%a, %B %d")}}
 
   - platform: template
     sensors:
@@ -390,7 +520,62 @@ automation:
       - script.hal_en_overlopen_off
       - script.buiten_off
 
-  
+  - alias: "Motion and Person - Doorbel - Turn On"
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
+      to: 'on'
+    condition:
+    - condition: state
+      entity_id: sensor.switch_woonkamer
+      state: 'on'
+    - condition: state
+      entity_id: sensor.switch_hal
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
+      state: 'on'
+    action:
+    - service: script.turn_on
+      entity_id:
+        - script.buiten_bright
+
+  - alias: "Motion and Person - Doorbel - Turn Off"
+    trigger:
+    - platform: state
+      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
+      to: 'off'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
+      to: 'off'
+      for:
+        minutes: 5
+    condition:
+    - condition: state
+      entity_id: sensor.switch_woonkamer
+      state: 'on'
+    - condition: state
+      entity_id: sensor.switch_hal
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
+      state: 'off'
+    - condition: state
+      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
+      state: 'off'
+    action:
+    - service: script.turn_on
+      entity_id:
+        - script.buiten_off
+
   - alias: "Motion - Woonkamer - Morning on"
     trigger:
     - platform: state
