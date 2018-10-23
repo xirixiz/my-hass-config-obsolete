@@ -1,7 +1,6 @@
 custom_updater:
 component_urls:
   - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
-
 resources:
   - url: /local/monster-card.js
     type: js
@@ -107,17 +106,9 @@ views:
           - sensor.living_room_thermostat_target
           - sensor.living_room_thermostat_operation_mode
           - sensor.living_room_thermostat_humidity
-      - type: entities
-        title: Forecast
-        entities:
-          - sensor.forecast_0
-          - sensor.forecast_1
-          - sensor.forecast_2
-          - sensor.forecast_3
-          - sensor.forecast_4
-          - sensor.forecast_5
-          - sensor.forecast_6
-          - sensor.forecast_7
+      - type: weather-forecast
+        title: Weather
+        entity: weather.yweather
       - type: "iframe"
         aspect_ratio: 88%
         url: https://embed.windy.com/embed2.html?rainAccu,50.912,5.067,7

@@ -418,61 +418,61 @@ sensor:
 ## Automation
 ################################################
 automation:
-  - alias: 'Woonkamer Motion - True'
-    trigger:
-    - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'True'
-    condition:
-    - condition: time
-      after: '00:00:00'
-      before: '05:00:00'
-    action:
-    - service: homeassistant.turn_on
-      entity_id: input_boolean.woonkamer_motion
-
-  - alias: 'Woonkamer Motion - False'
-    trigger:
-    - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'False'
-      for:
-        minutes: 30
-    condition:
-    - condition: time
-      after: '00:00:00'
-      before: '05:00:00'
-    action:
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.woonkamer_motion
-
-  - alias: 'Hal Motion - True'
-    trigger:
-    - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
-    condition:
-    - condition: time
-      after: '00:00:00'
-      before: '05:00:00'
-    action:
-    - service: homeassistant.turn_on
-      entity_id: input_boolean.hal_motion
-
-  - alias: 'Hal Motion - False'
-    trigger:
-      - platform: state
-        entity_id: sensor.hal_motion
-        to: 'False'
-        for:
-          minutes: 30
-    condition:
-      - condition: time
-        after: '00:00:00'
-        before: '05:00:00'
-    action:
-      - service: homeassistant.turn_off
-        entity_id: input_boolean.hal_motion
+#  - alias: 'Woonkamer Motion - True'
+#    trigger:
+#    - platform: state
+#      entity_id: sensor.woonkamer_motion
+#      to: 'True'
+#    condition:
+#    - condition: time
+#      after: '00:00:00'
+#      before: '05:00:00'
+#    action:
+#    - service: homeassistant.turn_on
+#      entity_id: input_boolean.woonkamer_motion
+#
+#  - alias: 'Woonkamer Motion - False'
+#    trigger:
+#    - platform: state
+#      entity_id: sensor.woonkamer_motion
+#      to: 'False'
+#      for:
+#        minutes: 30
+#    condition:
+#    - condition: time
+#      after: '00:00:00'
+#      before: '05:00:00'
+#    action:
+#    - service: homeassistant.turn_off
+#      entity_id: input_boolean.woonkamer_motion
+#
+#  - alias: 'Hal Motion - True'
+#    trigger:
+#    - platform: state
+#      entity_id: sensor.hal_motion
+#      to: 'True'
+#    condition:
+#    - condition: time
+#      after: '00:00:00'
+#      before: '05:00:00'
+#    action:
+#    - service: homeassistant.turn_on
+#      entity_id: input_boolean.hal_motion
+#
+#  - alias: 'Hal Motion - False'
+#    trigger:
+#      - platform: state
+#        entity_id: sensor.hal_motion
+#        to: 'False'
+#        for:
+#          minutes: 30
+#    condition:
+#      - condition: time
+#        after: '00:00:00'
+#        before: '05:00:00'
+#    action:
+#      - service: homeassistant.turn_off
+#        entity_id: input_boolean.hal_motion
 
   - alias: "Slider - Keuken - Hanglamp - Set value"
     initial_state: on
@@ -529,17 +529,11 @@ automation:
       entity_id: binary_sensor.front_door_camera_voordeur_person_detected
       to: 'on'
     condition:
-    - condition: state
-      entity_id: sensor.switch_woonkamer
-      state: 'on'
-    - condition: state
-      entity_id: sensor.switch_hal
-      state: 'on'
+    - condition: time
+      before: '05:00:00'
+      after: '00:00:00'
     - condition: state
       entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
-      state: 'on'
-    - condition: state
-      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
       state: 'on'
     action:
     - service: script.turn_on
@@ -552,24 +546,18 @@ automation:
       entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
       to: 'off'
       for:
-        minutes: 5
+        minutes: 10
     - platform: state
       entity_id: binary_sensor.front_door_camera_voordeur_person_detected
       to: 'off'
       for:
-        minutes: 5
+        minutes: 10
     condition:
-    - condition: state
-      entity_id: sensor.switch_woonkamer
-      state: 'on'
-    - condition: state
-      entity_id: sensor.switch_hal
-      state: 'on'
+    - condition: time
+      before: '5:00:00'
+      after: '00:00:00'
     - condition: state
       entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
-      state: 'off'
-    - condition: state
-      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
       state: 'off'
     action:
     - service: script.turn_on
@@ -614,9 +602,8 @@ automation:
       for:
         minutes: 5
     - platform: state
-      entity_id: input_boolean.woonkamer_motion
-      from: 'off'
-      to: 'on'
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
     condition:
     - condition: time
       before: '20:00:00'
@@ -647,9 +634,8 @@ automation:
       for:
         minutes: 5
     - platform: state
-      entity_id: input_boolean.woonkamer_motion
-      from: 'off'
-      to: 'on'
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
     - platform: time
       at: '20:00:00'
     condition:
@@ -659,9 +645,9 @@ automation:
     - condition: state
       entity_id: sensor.switch_woonkamer
       state: 'on'
-#    - condition: state
-#      entity_id: sensor.switch_hal
-#      state: 'on'
+    - condition: state
+      entity_id: sensor.switch_hal
+      state: 'on'
     - condition: state
       entity_id: input_boolean.automation_mode
       state: 'off'
@@ -682,9 +668,10 @@ automation:
       for:
         minutes: 5
     - platform: state
-      entity_id: input_boolean.woonkamer_motion
-      from: 'on'
-      to: 'off'
+      entity_id: sensor.woonkamer_motion
+      to: 'False'
+      for:
+        minutes: 30
     condition:
     - condition: state
       entity_id: input_boolean.automation_mode
@@ -749,9 +736,6 @@ automation:
       - condition: time
         before: '06:00:00'
         after: '21:00:00'
-#      - condition: time
-#        before: '08:00:00'
-#        after: '06:00:00'
       - condition: state
         entity_id: sensor.switch_hal
         state: 'on'
