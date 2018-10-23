@@ -62,7 +62,7 @@ homeassistant:
     script.all_on_super_bright:
       <<: *customize
       hidden: false
-      friendly_name: All Lights SBright
+      friendly_name: All Lights Super Bright
       icon: mdi:flashlight
 
     input_boolean.all_lights:
@@ -636,7 +636,7 @@ automation:
       - script.woonkamer_bright
       - script.keuken_bright
       - script.buiten_bright
-  
+
   
   - alias: "Switch - Woonkamer - Evening on"
     trigger:
@@ -747,11 +747,11 @@ automation:
     - condition: or
       conditions:
       - condition: time
-        before: '00:00:00'
-        after: '20:00:00'
-      - condition: time
-        before: '08:00:00'
-        after: '06:00:00'
+        before: '06:00:00'
+        after: '21:00:00'
+#      - condition: time
+#        before: '08:00:00'
+#        after: '06:00:00'
       - condition: state
         entity_id: sensor.switch_hal
         state: 'on'
@@ -770,8 +770,8 @@ automation:
     - condition: and
       conditions:
       - condition: time
-        before: '20:00:00'
-        after: '08:00:00'
+        before: '21:00:00'
+        after: '06:00:00'
       - condition: state
         entity_id: sensor.switch_hal
         state: 'on'

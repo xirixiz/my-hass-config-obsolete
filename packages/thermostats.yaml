@@ -132,146 +132,52 @@ automation:
     - platform: state
       entity_id: input_number.woonkamer_nest_thermostat_temperature
     action:
+    - service: climate.set_operation_mode
+      data:
+        entity_id: climate.living_room
+        operation_mode: heat
     - service: climate.set_temperature
       data_template:
         entity_id: climate.living_room
         temperature: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
-        operation_mode: Heat
 
   - alias: "Swtich - Woonkamer - Nest thermostat - Weekdays on"
     trigger:
-    - platform: state
-      entity_id: media_player.livingroom_tv
-      to: "on"
-      for:
-        minutes: 5
-    - platform: state
-      entity_id: group.family
-      from: 'not_home'
-      to: 'home'
-      for:
-        minutes: 10
     - platform: time
-      at: '15:00:00'
+      at: '5:00:00'
     condition:
     - condition: and
       conditions:
-      - condition: time
-        before: '00:00:00'
-        after: '05:00:00'
-      - condition: time
-        weekday:
-          - mon
-          - tue
-          - wed
-          - thu
-          - fri
       - condition: state
         entity_id: input_boolean.automation_mode
         state: 'off'
       - condition: or
         conditions:
         - condition: state
-          entity_id: 'device_tracker.taipan5g'
-          state: 'home'
-        - condition: state
-          entity_id: 'device_tracker.lieke_iphone'
-          state: 'home'
-        - condition: state
           entity_id: 'input_boolean.vacation_mode'
           state: 'off'
     action:
-    - service: climate.set_temperature
-      data_template:
+    - service: climate.set_operation_mode
+      data:
         entity_id: climate.living_room
-        temperature: "21"
-        operation_mode: Heat
+        operation_mode: heat
+    - service: climate.set_temperature
+      data:
+        entity_id: climate.living_room
+        temperature: 21
+
 
   - alias: "Swtich - Woonkamer - Nest thermostat - Weekdays off"
     trigger:
     - platform: state
       entity_id: input_boolean.vacation_mode
       to: 'on'
-    - platform: state
-      entity_id: group.family
-      from: 'home'
-      to: 'not_home'
-      for:
-        minutes: 30
-    - platform: time
-      at: '23:00:00'
-    condition:
-    - condition: and
-      conditions:
-      - condition: time
-        weekday:
-        - mon
-        - tue
-        - wed
-        - thu
-        - fri
-      - condition: state
-        entity_id: input_boolean.automation_mode
-        state: 'off'
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: group.family
-          state: 'not_home'
-        - condition: state
-          entity_id: 'input_boolean.vacation_mode'
-          state: 'on'
-    action:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.living_room
-        temperature: "17"
 
-  - alias: "Swtich - Woonkamer - Nest thermostat - Weekend on"
-    trigger:
-  #  - platform: state
-  #    entity_id: sensor.woonkamer_nest_thermostat_target_vs_current
-  #    to: 'true'
-  #    for:
-  #      minutess: 5
-    - platform: time
-      at: '5:00:00'
-    condition:
-    - condition: and
-      conditions:
-      - condition: time
-        weekday:
-        - sat
-        - sun
-      - condition: state
-        entity_id: input_boolean.automation_mode
-        state: 'off'
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: 'input_boolean.vacation_mode'
-          state: 'off'
-    action:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.living_room
-        temperature: "21"
-        operation_mode: Heat
-
-  - alias: "Swtich - Woonkamer - Nest thermostat - Weekend off"
-    trigger:
-    - platform: state
-      entity_id: input_boolean.vacation_mode
-      to: 'on'
     - platform: time
       at: '00:00:00'
     condition:
     - condition: and
       conditions:
-      - condition: time
-        weekday:
-        - sat
-        - sun
       - condition: state
         entity_id: input_boolean.automation_mode
         state: 'off'
@@ -281,59 +187,11 @@ automation:
           entity_id: 'input_boolean.vacation_mode'
           state: 'on'
     action:
-    - service: climate.set_temperature
-      data_template:
+    - service: climate.set_operation_mode
+      data:
         entity_id: climate.living_room
-        temperature: "17"
-
-  - alias: "Switch - Woonkamer - Nest thermostat - When TV on"
-    trigger:
-    - platform: state
-      entity_id: media_player.livingroom_tv
-      to: "on"
-      for:
-        minutes: 5
-    condition:
-    - condition: and
-      conditions:
-      - condition: time
-        weekday:
-        - sat
-        - sun
-      - condition: time
-        before: '05:00:00'
-        after: '21:00:00'
-      - condition: state
-        entity_id: input_boolean.automation_mode
-        state: 'off'
-    action:
+        operation_mode: eco
     - service: climate.set_temperature
-      data_template:
+      data:
         entity_id: climate.living_room
-        temperature: "21"
-
-  - alias: "Switch - Woonkamer - Nest thermostat - When TV off"
-    trigger:
-    - platform: state
-      entity_id: media_player.livingroom_tv
-      to: "off"
-      for:
-        minutes: 5
-    condition:
-    - condition: and
-      conditions:
-      - condition: time
-        weekday:
-        - sat
-        - sun
-      - condition: time
-        before: '05:00:00'
-        after: '21:00:00'
-      - condition: state
-        entity_id: input_boolean.automation_mode
-        state: 'off'
-    action:
-    - service: climate.set_temperature
-      data_template:
-        entity_id: climate.living_room
-        temperature: "17"
+        temperature: 17
