@@ -1,0 +1,230 @@
+################################################
+## Packages / Power Plugs
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    package.node_anchors:
+      customize: &customize
+        package: 'power_plugs'
+      expose: &expose # This merges the keys/values from "&customize"
+        <<: *customize
+        haaska_hidden: false
+        homebridge_hidden: false
+
+    sensor.smartplug1_amps:
+      <<: *customize
+      hidden: false
+      friendly_name: SmartPlug1 Amps
+
+################################################
+## Switch
+################################################
+switch:
+  - platform: tplink
+    host: 192.168.1.157
+  - platform: tplink
+    host: 192.168.1.182
+  - platform: tplink
+    host: 192.168.1.183
+
+group:
+  hometracking:
+    name: Household Tracking
+    view: no
+    entities:
+      - device_tracker.taipan5g
+      - device_tracker.lieke_iphone
+
+################################################
+## Inputs
+################################################
+input_select:
+  washingmachine_status:
+    name: Washingmachine Status
+    options:
+     - "Uit"
+     - "Aan"
+    initial: "Uit"
+    icon: mdi:washing-machine
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: template
+    sensors:
+      smartplug1_amps:
+        friendly_name: "Amps"
+        value_template: '{{ states.switch.smartplug1.attributes["current_a"] | replace(" A", "") | float }}'
+        unit_of_measurement: 'A'
+      smartplug1_watts:
+        friendly_name: "Watts"
+        value_template: '{{ states.switch.smartplug1.attributes["current_power_w"] | replace(" W", "") | float }}'
+        unit_of_measurement: 'W'
+      smartplug1_kw:
+        friendly_name: "Current KiloWatts"
+        value_template: '{{ states.switch.smartplug1.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug1_kw_today:
+        friendly_name: "Today's KiloWatts"
+        value_template: '{{ states.switch.smartplug1.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug1_volts:
+        friendly_name: "Current Voltage"
+        value_template: '{{ states.switch.smartplug1.attributes["voltage"] | replace(" V", "") | float }}'
+        unit_of_measurement: 'V'
+
+  - platform: template
+    sensors:
+      smartplug2_amps:
+        friendly_name: "Amps"
+        value_template: '{{ states.switch.smartplug2.attributes["current_a"] | replace(" A", "") | float }}'
+        unit_of_measurement: 'A'
+      smartplug2_watts:
+        friendly_name: "Watts"
+        value_template: '{{ states.switch.smartplug2.attributes["current_power_w"] | replace(" W", "") | float }}'
+        unit_of_measurement: 'W'
+      smartplug2_kw:
+        friendly_name: "Current KiloWatts"
+        value_template: '{{ states.switch.smartplug2.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug2_kw_today:
+        friendly_name: "Today's KiloWatts"
+        value_template: '{{ states.switch.smartplug2.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug2_volts:
+        friendly_name: "Current Voltage"
+        value_template: '{{ states.switch.smartplug2.attributes["voltage"] | replace(" V", "") | float }}'
+        unit_of_measurement: 'V'
+
+  - platform: template
+    sensors:
+      smartplug3_amps:
+        friendly_name: "Amps"
+        value_template: '{{ states.switch.smartplug3.attributes["current_a"] | replace(" A", "") | float }}'
+        unit_of_measurement: 'A'
+      smartplug3_watts:
+        friendly_name: "Watts"
+        value_template: '{{ states.switch.smartplug3.attributes["current_power_w"] | replace(" W", "") | float }}'
+        unit_of_measurement: 'W'
+      smartplug3_kw:
+        friendly_name: "Current KiloWatts"
+        value_template: '{{ states.switch.smartplug3.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug3_kw_today:
+        friendly_name: "Today's KiloWatts"
+        value_template: '{{ states.switch.smartplug3.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug3_volts:
+        friendly_name: "Current Voltage"
+        value_template: '{{ states.switch.smartplug3.attributes["voltage"] | replace(" V", "") | float }}'
+        unit_of_measurement: 'V'
+
+  - platform: template
+    sensors:
+      washingmachine_status_time:
+        friendly_name: "Wasmachine draaitijd"
+        unit_of_measurement: 'minuten'
+        value_template: >
+          {% if is_state("input_select.washingmachine_status", "Aan") -%}
+            {{ ((as_timestamp(now())-as_timestamp(states.input_select.washingmachine_status.last_changed))/60) | round | int }}
+          {% else %}
+            0
+          {% endif %}
+        entity_id: sensor.time
+      washingmachine_status_value:
+        friendly_name: "Wasmachine status"
+        value_template: '{{ states("input_select.washingmachine_status") }}'
+#        value_template: >
+#          {%- set sensors = [states.input_select.washingmachine_status] %}
+#          {% for sensor in sensors %}
+#            {% if as_timestamp(sensor.last_changed) == as_timestamp(sensors | map(attribute='last_changed') | max) %}
+#              {{ sensor.name }}
+#            {% endif %}
+#          {% endfor %}
+
+  - platform: statistics
+    name: Washing machine statistics
+    entity_id: sensor.smartplug1_watts
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: Action - Set washing machine to running
+    trigger:
+    - platform: numeric_state
+      entity_id: sensor.washing_machine_statistics_mean
+      above: 2
+      for:
+        minutes: 2
+    condition: []
+    action:
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washingmachine_status
+        option: "Aan"
+    - service: notify.family
+      data_template:
+        title: 'Wasmachine:'
+        message: "Wasprogramma gestart."
+
+  - alias: Action - Set washing machine as finished
+    trigger:
+    - platform: numeric_state
+      entity_id: sensor.washing_machine_statistics_mean
+      below: 2
+      for:
+        minutes: 2
+    condition:
+    - condition: state
+      entity_id: input_select.washingmachine_status
+      state: "Aan"
+    action:
+    - service: notify.family
+      data_template:
+        title: 'Wasmachine:'
+        message: "Wasprogramma gereed. Totaal energie verbuik: {{ sensor.washing_machine_statistics_total }}. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_select.washingmachine_status.last_changed))/60) | round | int }} minuten."
+    - service: input_select.select_option
+      data:
+        entity_id: input_select.washingmachine_status
+        option: "Uit"
+
+#  - alias: Notify - Washing machine finished
+#    trigger:
+#    - platform: state
+#      entity_id: input_select.washingmachine_status
+#      to: "Uit"
+#    condition: []
+#    action:
+#    - service: notify.family
+#      data_template:
+#        title: 'Wasmachine:'
+#        message: "The washing program is finished. Please take out the laundry."
+#    - service: input_select.select_option
+#      data:
+#        entity_id: input_select.washingmachine_status
+#        option: "Uit"
+
+#  - alias: Notify - Washing machine finished when someone arrives
+#    trigger:
+#    - platform: state
+#      entity_id: group.hometracking
+#      to: 'home'
+#    condition:
+#    - condition: state
+#      entity_id: input_select.washingmachine_status
+#      state: "Uit"
+#    action:
+#    - service: notify.family
+#      data_template:
+#        title: 'Wasmachine:'
+#        message: "The washing program has been finished for {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.washingmachine_finished.last_updated))/60)|round(0) }} minutes. Total time running was for {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.washingmachine_running.last_updated))/60)|round(0) }} minutes. Please take out the laundry."
+#    - service: input_select.select_option
+#      data:
+#        entity_id: input_select.washingmachine_status
+#        option: "Uit"

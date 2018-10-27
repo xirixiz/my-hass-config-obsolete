@@ -6,41 +6,57 @@ resources:
     type: js
 name: Home
 views:
-  - icon: mdi:home-assistant
+  - id: 0  # Automatically created id
+    icon: mdi:home-assistant
     title: Home
     #theme: darkblue
     cards:
-      - type: entities
+      - id: 634f213a3d2f480faf0e4172ae4c0e4e  # Automatically created id
+        type: entities
         entities:
           - device_tracker.taipan5g
           - device_tracker.lieke_iphone
-      - type: entities
+      - id: 831a7ae69913420388b01fa8b4b3a77f  # Automatically created id
+        type: entities
         entities:
           - script.all_on
           - script.all_on_bright
           - script.all_on_super_bright
           - script.all_off
 #          - input_select.light_scenes
-      - type: entities
+      - id: dcb17306a9af4348ac01a6969ccb5ebe  # Automatically created id
+        type: entities
         entities:
           - sensor.electricity_currently_delivered
           - sensor.electricity1
           - sensor.gas
-      - type: entities
+      - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
+        type: entities
+        entities:
+          - sensor.smartplug1_watts
+          #- sensor.washing_machine_statistics_mean
+          - sensor.washingmachine_status_time
+          - sensor.washingmachine_status_value
+      - id: 274799b9eb634da6985a9cedd0d83017  # Automatically created id
+        type: entities
         entities:
           - input_boolean.meds_taken
           - input_boolean.meds_reminder
-      - type: entities
+      - id: aedc813edd634881b238ec562b68643b  # Automatically created id
+        type: entities
         entities:
           - input_boolean.vacation_mode
           - input_boolean.automation_mode
-      - type: picture-entity
+      - id: 5ca59718cacc4a849d6584d9cda04778  # Automatically created id
+        type: picture-entity
         entity: camera.front_door_voordeur
         show_info: false
-      - type: picture-entity
+      - id: eba458b16c324dd19d8893598722c9f6  # Automatically created id
+        type: picture-entity
         entity: camera.boris
         show_info: false
-      - type: picture-entity
+      - id: ebfd7ee15b4a4dcd8077e62cbc80aaf5  # Automatically created id
+        type: picture-entity
         entity: camera.foscam_camera
         show_info: false
 #      - type: picture-glance
@@ -80,7 +96,8 @@ views:
 #          - script.buiten_bright
 #          - script.buiten_super_bright
 #          - script.buiten_off
-      - type: entities
+      - id: 294517673fc146a4971cd37ef41fcbe1  # Automatically created id
+        type: entities
         entities:
           - sensor.trash_today
           - sensor.trash_tomorrow
@@ -91,10 +108,12 @@ views:
           - input_boolean.trash_moved
           - input_boolean.trash_reminder
 
-  - icon: mdi:weather-cloudy
+  - id: 1  # Automatically created id
+    icon: mdi:weather-cloudy
     title: Weather
     cards:
-      - type: entities
+      - id: a98182cd273c467b821cc203c6b7faeb  # Automatically created id
+        type: entities
         title: Thermostats
         entities:
           - input_number.woonkamer_nest_thermostat_temperature
@@ -106,56 +125,70 @@ views:
           - sensor.living_room_thermostat_target
           - sensor.living_room_thermostat_operation_mode
           - sensor.living_room_thermostat_humidity
-      - type: weather-forecast
+      - id: 5221011e50c1439281a9312c7af145b2  # Automatically created id
+        type: weather-forecast
         title: Weather
         entity: weather.yweather
-      - type: "iframe"
+      - id: 911ad6f392ca4ff5b2b1b0c5d335f2ea  # Automatically created id
+        type: iframe
         aspect_ratio: 88%
         url: https://embed.windy.com/embed2.html?rainAccu,50.912,5.067,7
 
-  - icon: mdi:cctv
+  - id: 2  # Automatically created id
+    icon: mdi:cctv
     title: Cameras
     cards:
-      - type: picture-entity 
+      - id: d8ccc6c98f794edab22d64dff6c78522  # Automatically created id
+        type: picture-entity
         entity: camera.front_door_voordeur
         show_info: false
-      - type: picture-entity
+      - id: fb7710eeba984a5b8d026b8e2347ef83  # Automatically created id
+        type: picture-entity
         entity: camera.boris
         show_info: false
-      - type: picture-entity
+      - id: f57bc50ad329439790f9ff6550f9a298  # Automatically created id
+        type: picture-entity
         entity: camera.foscam_camera
         show_info: false
 
-  - icon: mdi:play-circle-outline
+  - id: 3  # Automatically created id
+    icon: mdi:play-circle-outline
     title: Media
     cards:
-      - type: media-control
+      - id: dc8acb366fa24c06914feb5d1018e7b5  # Automatically created id
+        type: media-control
         entity: media_player.livingroom_tv
-      - type: media-control
+      - id: e3df08f0e7dd44d3b2df12172ee60305  # Automatically created id
+        type: media-control
         entity: media_player.bedroom_tv
-      - type: entities
+      - id: 181bd7fa7ff4473db8188d295eea08a7  # Automatically created id
+        type: entities
         title: Plex Activity
         entities:
           - sensor.plex_activity
 
-  - icon: mdi:power-plug
+  - id: 4  # Automatically created id
+    icon: mdi:power-plug
     title: Energy
     cards:
-      - type: entities
+      - id: 4a19f8d22d954b5c8e1cbbc19dc2d441  # Automatically created id
+        type: entities
         title: DSMR
         entities:
           - sensor.electricity_currently_delivered
           - sensor.electricity1
           - sensor.gas
-      - type: custom:monster-card
+      - id: c941976202ab41f8a9d3772ca5008dc7  # Automatically created id
+        type: custom:monster-card
         card:
           type: entities
           title: Huidige Energie Verbruikers
         filter:
-          include: 
+          include:
             - domain: light
-              state: 'on'
-      - type: entities
+              state: on
+      - id: 52332e8847ee451e82d59429353094df  # Automatically created id
+        type: entities
         title: HUE Sensors
         entities:
           - sensor.hue_remote_1_state
@@ -172,7 +205,8 @@ views:
           - sensor.switch_hal
           - sensor.hal_lux
           - sensor.hal_battery
-      - type: entities
+      - id: 8fc7f03aadb4410c9fbcf1ce1baec60f  # Automatically created id
+        type: entities
         title: Nest Protect
         entities:
           - sensor.living_room_nest_protect_co_status
@@ -184,7 +218,8 @@ views:
           - sensor.upstairs_nest_protect_co_status
           - sensor.upstairs_nest_protect_smoke_status
           - sensor.upstairs_nest_protect_battery_health
-      - type: entities
+      - id: 2f8e283fb9fc445cb3f5deaf3e33cf59  # Automatically created id
+        type: entities
         title: Nest Hello
         entities:
           - binary_sensor.front_door_camera_voordeur_online
@@ -192,10 +227,12 @@ views:
           - binary_sensor.front_door_camera_voordeur_person_detected
           - binary_sensor.front_door_camera_voordeur_sound_detected
 
-  - icon: mdi:network
+  - id: 5  # Automatically created id
+    icon: mdi:network
     title: Network
     cards:
-      - type: entities
+      - id: 3fe5628fb1af4581ac183ca52e110db9  # Automatically created id
+        type: entities
         entities:
           - sensor.pihole_status
           - script.enable_pihole
@@ -209,29 +246,34 @@ views:
           - sensor.pihole_dns_unique_domains
           - sensor.pihole_domains_blocked
           - sensor.pihole_seen_clients
-      - type: entities
+      - id: 46c741ff7cfc4491a6b3712909c80469  # Automatically created id
+        type: entities
         entities:
           - sensor.speedtest_download
           - sensor.speedtest_upload
           - sensor.speedtest_ping
-      - type: entities
+      - id: a9b870b423a14aabaab904e4b37d6fc4  # Automatically created id
+        type: entities
         entities:
           - sensor.samsung_printer
           - sensor.samsung_printer_toner_black
           - sensor.samsung_printer_tray_1
           - sensor.samsung_printer_output_tray_0
-  - icon: mdi:settings
+  - id: 6  # Automatically created id
+    icon: mdi:settings
     title: Settings
     cards:
-      - type: entities
+      - id: 7b93b97d36d449729c9e45775313200b  # Automatically created id
+        type: entities
         entities:
           - input_select.current_theme
-      - type: custom:monster-card
+      - id: 6442b597c98341909b8cf2d0a6adf750  # Automatically created id
+        type: custom:monster-card
         card:
           type: entities
           title: All Automations
         filter:
           include:
             - domain: automation
-              state: 'on'
+              state: on
 

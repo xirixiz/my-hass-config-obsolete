@@ -267,7 +267,6 @@ switch:
             mdi:flashlight-off
           {% endif %}
 
-
 ################################################
 ## Sensor
 ################################################
@@ -414,66 +413,11 @@ sensor:
             off
           {%- endif -%}
 
+
 ################################################
 ## Automation
 ################################################
 automation:
-#  - alias: 'Woonkamer Motion - True'
-#    trigger:
-#    - platform: state
-#      entity_id: sensor.woonkamer_motion
-#      to: 'True'
-#    condition:
-#    - condition: time
-#      after: '00:00:00'
-#      before: '05:00:00'
-#    action:
-#    - service: homeassistant.turn_on
-#      entity_id: input_boolean.woonkamer_motion
-#
-#  - alias: 'Woonkamer Motion - False'
-#    trigger:
-#    - platform: state
-#      entity_id: sensor.woonkamer_motion
-#      to: 'False'
-#      for:
-#        minutes: 30
-#    condition:
-#    - condition: time
-#      after: '00:00:00'
-#      before: '05:00:00'
-#    action:
-#    - service: homeassistant.turn_off
-#      entity_id: input_boolean.woonkamer_motion
-#
-#  - alias: 'Hal Motion - True'
-#    trigger:
-#    - platform: state
-#      entity_id: sensor.hal_motion
-#      to: 'True'
-#    condition:
-#    - condition: time
-#      after: '00:00:00'
-#      before: '05:00:00'
-#    action:
-#    - service: homeassistant.turn_on
-#      entity_id: input_boolean.hal_motion
-#
-#  - alias: 'Hal Motion - False'
-#    trigger:
-#      - platform: state
-#        entity_id: sensor.hal_motion
-#        to: 'False'
-#        for:
-#          minutes: 30
-#    condition:
-#      - condition: time
-#        after: '00:00:00'
-#        before: '05:00:00'
-#    action:
-#      - service: homeassistant.turn_off
-#        entity_id: input_boolean.hal_motion
-
   - alias: "Slider - Keuken - Hanglamp - Set value"
     initial_state: on
     trigger:
@@ -564,36 +508,7 @@ automation:
       entity_id:
         - script.buiten_off
 
-  - alias: "Motion - Woonkamer - Morning on"
-    trigger:
-    - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'True'
-    - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
-    condition:
-    - condition: time
-      before: '10:00:00'
-      after: '5:00:00'
-    - condition: state
-      entity_id: sensor.switch_woonkamer
-      state: 'on'
-    - condition: state
-      entity_id: sensor.switch_hal
-      state: 'on'
-    - condition: state
-      entity_id: input_boolean.automation_mode
-      state: 'off'
-    action:
-    - service: script.turn_on
-      entity_id:
-        - script.woonkamer_bright
-        - script.keuken_bright
-        - script.buiten_bright
-  
-  
-  - alias: "Switch - Woonkamer - Daytime on"
+  - alias: "Switch - Woonkamer - Daytime/Evening on"
     trigger:
     - platform: state
       entity_id: sensor.switch_woonkamer
@@ -601,47 +516,10 @@ automation:
       to: 'on'
       for:
         minutes: 5
-    - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'True'
     condition:
     - condition: time
-      before: '20:00:00'
+      before: '00:00:00'
       after: '5:00:00'
-    - condition: state
-      entity_id: sensor.switch_woonkamer
-      state: 'on'
-    - condition: state
-      entity_id: sensor.switch_hal
-      state: 'on'
-    - condition: state
-      entity_id: input_boolean.automation_mode
-      state: 'off'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.woonkamer_bright
-      - script.keuken_bright
-      - script.buiten_bright
-
-  
-  - alias: "Switch - Woonkamer - Evening on"
-    trigger:
-    - platform: state
-      entity_id: sensor.switch_woonkamer
-      from: 'off'
-      to: 'on'
-      for:
-        minutes: 5
-    - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'True'
-    - platform: time
-      at: '20:00:00'
-    condition:
-    - condition: time
-      before: '05:00:00'
-      after: '20:00:00'
     - condition: state
       entity_id: sensor.switch_woonkamer
       state: 'on'
@@ -657,9 +535,8 @@ automation:
       - script.woonkamer
       - script.keuken
       - script.buiten
-  
-  
-  - alias: "Switch - Woonkamer - Off - Lux and Motion"
+
+  - alias: "Switch - Woonkamer - Off - Lux"
     trigger:
     - platform: state
       entity_id: sensor.switch_woonkamer
@@ -667,11 +544,6 @@ automation:
       to: 'off'
       for:
         minutes: 5
-    - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'False'
-      for:
-        minutes: 30
     condition:
     - condition: state
       entity_id: input_boolean.automation_mode
@@ -680,7 +552,6 @@ automation:
     - service: script.turn_on
       entity_id:
       - script.all_off
-
 
   - alias: "Switch - Woonkamer - Off - Time"
     trigger:
@@ -689,7 +560,7 @@ automation:
       seconds: 00
     condition:
     - condition: time
-      after: '00:00:00'
+      after: '21:00:00'
       before: '05:00:00'
     - condition: state
       entity_id: media_player.livingroom_tv
@@ -702,36 +573,13 @@ automation:
       entity_id:
       - script.all_off
 
-
-  - alias: "Switch - Woonkamer - Off - TV"
-    trigger:
-    - platform: state
-      entity_id: media_player.livingroom_tv
-      to: 'off'
-      for:
-        minutes: 10
-    - platform: state
-      entity_id: media_player.bedroom_tv
-      to: 'off'
-      for:
-        minutes: 10
-    condition:
-    - condition: time
-      before: '05:00:00'
-      after: '21:00:00'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.all_off
-  
-
   - alias: "Motion - Hal en overlopen - Morning and evening on"
     trigger:
     - platform: state
       entity_id: sensor.hal_motion
       to: 'True'
     condition:
-    - condition: or
+    - condition: and
       conditions:
       - condition: time
         before: '06:00:00'
@@ -743,7 +591,6 @@ automation:
     - service: script.turn_on
       entity_id:
       - script.hal_en_overlopen_nightlight
-
 
   - alias: "Motion - Hal en overlopen - Daytime on"
     trigger:
@@ -762,8 +609,7 @@ automation:
     action:
     - service: script.turn_on
       entity_id:
-      - script.hal_en_overlopen_bright
-
+      - script.hal_en_overlopen
 
   - alias: "Motion - Hal en overlopen - Off"
     trigger:
@@ -776,7 +622,6 @@ automation:
     - service: script.turn_on
       entity_id:
       - script.hal_en_overlopen_off
-
 
   - alias: Lighting - Reset scene selector
     trigger:
@@ -791,7 +636,6 @@ automation:
       data:
         entity_id: input_select.light_scenes
         option: "Select Scene"
-
 
   - alias: Lighting - Trigger scene
     trigger:

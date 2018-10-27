@@ -35,7 +35,7 @@ ios:
         identifier: 'medicijnen'
         actions:
           - identifier: 'MARK_MEDS_TAKEN'
-            title: 'Medicijnen Ingenomen'
+            title: 'Medicijnen ingenomen'
             activationMode: 'background'
             authenticationRequired: no
             destructive: yes
@@ -45,6 +45,15 @@ ios:
         actions:
           - identifier: 'MARK_TRASH_MOVED'
             title: 'Afval verwerkt'
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: yes
+            behavior: 'default'
+      - name: Wasmachine
+        identifier: 'wasmachine'
+        actions:
+          - identifier: 'MARK_WAS_DONE'
+            title: 'Wasmachine klaar'
             activationMode: 'background'
             authenticationRequired: no
             destructive: yes
