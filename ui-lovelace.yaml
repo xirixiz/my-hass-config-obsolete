@@ -2,7 +2,7 @@ custom_updater:
 component_urls:
   - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
 resources:
-  - url: /local/monster-card.js
+  - url: /local/custom-lovelace/monster-card/monster-card.js
     type: js
 name: Home
 views:
@@ -16,6 +16,11 @@ views:
         entities:
           - device_tracker.taipan5g
           - device_tracker.lieke_iphone
+      - id: aedc813edd634881b238ec562b68643b  # Automatically created id
+        type: entities
+        entities:
+          - input_boolean.vacation_mode
+          - input_boolean.automation_mode
       - id: 831a7ae69913420388b01fa8b4b3a77f  # Automatically created id
         type: entities
         entities:
@@ -23,30 +28,80 @@ views:
           - script.all_on_bright
           - script.all_on_super_bright
           - script.all_off
-#          - input_select.light_scenes
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
+          - input_number.keuken_hanglamp_brightness
+          - switch.smartplug2
       - id: dcb17306a9af4348ac01a6969ccb5ebe  # Automatically created id
         type: entities
         entities:
-          - sensor.electricity_currently_delivered
-          - sensor.electricity1
-          - sensor.gas
+          - input_number.woonkamer_nest_thermostat_temperature
+          #- sensor.living_room_thermostat_temperature
+          - climate.living_room
+#          - input_select.light_scenes
       - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
         type: entities
         entities:
+          - sensor.smartplug2_watts
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
           - sensor.smartplug1_watts
-          #- sensor.washing_machine_statistics_mean
-          - sensor.washingmachine_status_time
-          - sensor.washingmachine_status_value
+          - sensor.wasmachine_status_time
+          - sensor.wasmachine_status_value
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
+          - sensor.smartplug3_watts
+          - sensor.droger_status_time
+          - sensor.droger_status_value
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
+          - sensor.electricity_currently_delivered
+          - sensor.electricity1
+          - sensor.gas
+      - id: 294517673fc146a4971cd37ef41fcbe1  # Automatically created id
+        type: entities
+        entities:
+          - sensor.trash_today
+          - sensor.trash_tomorrow
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
+          - sensor.trash_gft
+          - sensor.trash_restafval
+          - sensor.trash_papier
+          - sensor.trash_pmd
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
+          - input_boolean.trash_moved
+          - input_boolean.trash_reminder
       - id: 274799b9eb634da6985a9cedd0d83017  # Automatically created id
         type: entities
         entities:
           - input_boolean.meds_taken
           - input_boolean.meds_reminder
-      - id: aedc813edd634881b238ec562b68643b  # Automatically created id
-        type: entities
-        entities:
-          - input_boolean.vacation_mode
-          - input_boolean.automation_mode
       - id: 5ca59718cacc4a849d6584d9cda04778  # Automatically created id
         type: picture-entity
         entity: camera.front_door_voordeur
@@ -96,17 +151,6 @@ views:
 #          - script.buiten_bright
 #          - script.buiten_super_bright
 #          - script.buiten_off
-      - id: 294517673fc146a4971cd37ef41fcbe1  # Automatically created id
-        type: entities
-        entities:
-          - sensor.trash_today
-          - sensor.trash_tomorrow
-          - sensor.trash_gft
-          - sensor.trash_restafval
-          - sensor.trash_papier
-          - sensor.trash_pmd
-          - input_boolean.trash_moved
-          - input_boolean.trash_reminder
 
   - id: 1  # Automatically created id
     icon: mdi:weather-cloudy

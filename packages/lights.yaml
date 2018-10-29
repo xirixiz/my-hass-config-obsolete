@@ -24,7 +24,7 @@ homeassistant:
       <<: *customize
       hidden: false
       friendly_name: All Lights Off
-      icon: mdi:flashlight-off
+      icon: mdi:flash
 
     script.woonkamer_off:
       <<: *customize
@@ -47,28 +47,27 @@ homeassistant:
       friendly_name: Buiten
       icon: mdi:flashlight-off
 
+    switch.all_on:
+      <<: *customize
+      hidden: false
+      friendly_name: All lights
+      icon: mdi:flash
+
     script.all_on:
       <<: *customize
       hidden: false
       friendly_name: All Lights On
-      icon: mdi:flashlight
-
+      icon: mdi:flash
     script.all_on_bright:
       <<: *customize
       hidden: false
       friendly_name: All Lights Bright
-      icon: mdi:flashlight
-
+      icon: mdi:flash
     script.all_on_super_bright:
       <<: *customize
       hidden: false
       friendly_name: All Lights Super Bright
-      icon: mdi:flashlight
-
-    input_boolean.all_lights:
-      <<: *customize
-      hidden: false
-      icon: mdi:flashlight
+      icon: mdi:flash
 
     script.woonkamer:
       <<: *customize
@@ -227,13 +226,10 @@ hue:
 ################################################
 input_number:
   keuken_hanglamp_brightness:
+    initial: 127
     min: 0
     max: 255
     step: 1
-
-input_boolean:
-  all_lights:
-    name: All Lights
 
 input_select:
   light_scenes:
@@ -247,25 +243,57 @@ input_select:
     initial: "Select Scene"
     icon: mdi:creation
 
-switch:
-  - platform: template
-    switches:
-      all_lights:
-        value_template: "{{ is_state('input_boolean.all_lights', 'on') }}"
-        turn_on:
-          - service: script.all_on
-          - service: input_boolean.turn_on
-            entity_id: input_boolean.all_lights
-        turn_off:
-          - service: script.all_off
-          - service: input_boolean.turn_off
-            entity_id: input_boolean.all_lights
-        icon_template: >-
-          {% if is_state('input_boolean.all_lights', 'on') %}
-            mdi:flashlight
-          {% else %}
-            mdi:flashlight-off
-          {% endif %}
+#input_boolean:
+#  all_on:
+#    name: All lights
+#    initial: off
+#  all_on_bright:
+#    name: All lights bright
+#    initial: off
+#  all_on_super_bright:
+#    name: All lights super bright
+#    initial: off
+
+#switch:
+#  - platform: template
+#    switches:
+#      all_on:
+#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on', 'on') }}"
+#        turn_on:
+#          - service: script.all_on
+#        turn_off:
+#          - service: script.all_off
+#        icon_template: >-
+#          {% if is_state('input_boolean.all_on', 'on') %}
+#            mdi:flashlight
+#          {% else %}
+#            mdi:flashlight-off
+#          {% endif %}
+#      all_on_bright:
+#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on_bright', 'on') }}"
+#        turn_on:
+#          - service: script.all_on_bright
+#        turn_off:
+#          - service: script.all_off
+#        icon_template: >-
+#          {% if is_state('input_boolean.all_on_bright', 'on') %}
+#            mdi:flashlight
+#          {% else %}
+#            mdi:flashlight-off
+#          {% endif %}
+#      all_on_super_bright:
+#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on_super_bright', 'on') }}"
+#        turn_on:
+#          - service: script.all_on_super_bright
+#        turn_off:
+#          - service: script.all_off
+#        icon_template: >-
+#          {% if is_state('input_boolean.all_on_super_bright', 'on') %}
+#            mdi:flashlight
+#          {% else %}
+#            mdi:flashlight-off
+#          {% endif %}
+
 
 ################################################
 ## Sensor
@@ -434,7 +462,8 @@ automation:
       data_template:
         entity_id: input_number.keuken_hanglamp_brightness
         value: "{{ states.light.keuken_hanglamp.attributes.brightness | int }}"
-  
+        #value: "{{ states.sensor.keuken_hanglamp_brightness | int }}"
+
   - alias: "Switch - Keuken - Hanglamp - On"
     trigger:
     - platform: state
@@ -516,6 +545,12 @@ automation:
       to: 'on'
       for:
         minutes: 5
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
     condition:
     - condition: time
       before: '00:00:00'

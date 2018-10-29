@@ -182,3 +182,11 @@ automation:
             shows_user_location: true
             latitude: "{{ trigger.to_state.attributes.latitude }}"
             longitude: "{{ trigger.to_state.attributes.longitude }}"
+
+
+#        value_template: >-
+#          {%- if is_state('states.sensor.lieke_distance_to_home', 'unknown') -%}
+#            0
+#          {%- else -%}
+#            {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}
+#          {%- endif -%}

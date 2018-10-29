@@ -52,15 +52,18 @@ homeassistant:
 
     sensor.electricity_currently_delivered:
       <<: *customize
-      friendly_name: Huidig verbruik electriciteit (Watt)
+      friendly_name: Huidig verbruik electriciteit
+      icon: mdi:power-plug
 
     sensor.electricity1:
       <<: *customize
-      friendly_name: Verbruik vandaag electriciteit (Watt)
+      friendly_name: Verbruik vandaag electriciteit
+      icon: mdi:power-plug
 
     sensor.gas:
       <<: *customize
-      friendly_name: Verbruik vandaag gas (M3)
+      friendly_name: Verbruik vandaag gas
+      icon: mdi:power-plug
 
 ################################################
 ## Sensor
@@ -69,6 +72,7 @@ sensor:
   - platform: rest
     name: electricity_currently_delivered
     resource: !secret dsmr_current
+    unit_of_measurement: 'W'
     value_template: '{{ value_json["results"][0].electricity_currently_delivered | multiply(1000) | round(0) }}'
     headers:
       X-AUTHKEY: !secret dsmr_token
@@ -76,6 +80,7 @@ sensor:
   - platform: rest
     name: electricity1
     resource: !secret dsmr_today
+    unit_of_measurement: 'W'
     value_template: '{{ value_json.electricity1 }}'
     headers:
       X-AUTHKEY: !secret dsmr_token
@@ -83,6 +88,7 @@ sensor:
   - platform: rest
     name: gas
     resource: !secret dsmr_today
+    unit_of_measurement: 'm³'
     value_template: '{{ value_json.gas }}'
     headers:
       X-AUTHKEY: !secret dsmr_token
