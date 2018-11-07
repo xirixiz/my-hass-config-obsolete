@@ -7,7 +7,7 @@
 !*.yml
 !scenes
 !.gitignore
-www/
+tmp_bram/
 deps/
 tmp/
 secrets.yaml

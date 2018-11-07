@@ -1,0 +1,3 @@
+[submodule "www/custom-lovelace"]
+	path = www/custom-lovelace
+	url = https://github.com/ciotlosm/custom-lovelace.git

@@ -492,6 +492,9 @@ automation:
       - script.keuken_off
       - script.hal_en_overlopen_off
       - script.buiten_off
+    - service: switch.turn_off
+      entity_id:
+      - switch.smartplug2
 
   - alias: "Motion and Person - Doorbel - Turn On"
     trigger:
@@ -511,7 +514,7 @@ automation:
     action:
     - service: script.turn_on
       entity_id:
-        - script.buiten_bright
+      - script.buiten_bright
 
   - alias: "Motion and Person - Doorbel - Turn Off"
     trigger:
@@ -535,7 +538,7 @@ automation:
     action:
     - service: script.turn_on
       entity_id:
-        - script.buiten_off
+      - script.buiten_off
 
   - alias: "Switch - Woonkamer - Daytime/Evening on"
     trigger:
@@ -570,6 +573,9 @@ automation:
       - script.woonkamer
       - script.keuken
       - script.buiten
+    - service: switch.turn_on
+      entity_id:
+      - switch.smartplug2
 
   - alias: "Switch - Woonkamer - Off - Lux"
     trigger:
@@ -702,6 +708,9 @@ script:
       - light.keuken
       - light.buitenvoor
       - light.buitenachter
+    - service: switch.turn_off
+      entity_id:
+        - switch.smartplug2
 
   all_on:
     sequence:
@@ -859,3 +868,6 @@ script:
       entity_id:
       - light.buitenvoor
       - light.buitenachter
+    - service: switch.turn_off
+      entity_id:
+        - switch.smartplug2

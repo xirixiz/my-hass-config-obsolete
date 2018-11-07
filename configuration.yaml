@@ -96,44 +96,50 @@ input_boolean:
 ## Sensor
 ################################################
 sensor:
-  - platform: template
-    sensors:
-      time_of_day:
-        friendly_name: 'Time of Day'
-        value_template: >-
-          {% if   now().strftime("%H:%M") < "06:00" %} late night
-          {% elif now().strftime("%H:%M") < "08:00" %} early morning
-          {% elif now().strftime("%H:%M") < "10:30" %} morning
-          {% elif now().strftime("%H:%M") < "13:00" %} lunchtime
-          {% elif now().strftime("%H:%M") < "16:00" %} afternoon
-          {% elif now().strftime("%H:%M") < "19:00" %} evening
-          {% elif now().strftime("%H:%M") < "22:00" %} late evening
-          {% elif now().strftime("%H:%M") < "24:00" %} night
-          {% endif %}
-      sunset_time:
-        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%H:%M") }}'
-        friendly_name: "Sunset"
-      sunrise_time:
-        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%H:%M") }}'
-        friendly_name: "Sunrise"
-      solar_angle:
-        value_template: '{{ states.sun.sun.attributes.elevation }}'
-        friendly_name: "Solar Angle"
-        unit_of_measurement: degrees
-      next_sunrise:
-        friendly_name: "Next Sunrise"
-        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%d.%m.%Y %-H:%M") }}'
-        icon_template: mdi:weather-sunset-up
-      next_sunset:
-        friendly_name: "Next Sunset"
-        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%d.%m.%Y %-H:%M") }}'
-        icon_template: mdi:weather-sunset-down
-      day_of_year:
-        friendly_name: "Day Number"
-        value_template: '{{ now().strftime("%j") }}'
-      week_of_year:
-        friendly_name: "Week Number"
-        value_template: '{{ now().strftime("%U") }}'
+#  - platform: template
+#    sensors:
+#      time_of_day:
+#        friendly_name: 'Time of Day'
+#        value_template: >-
+#          {% if   now().strftime("%H:%M") < "06:00" %} late night
+#          {% elif now().strftime("%H:%M") < "08:00" %} early morning
+#          {% elif now().strftime("%H:%M") < "10:30" %} morning
+#          {% elif now().strftime("%H:%M") < "13:00" %} lunchtime
+#          {% elif now().strftime("%H:%M") < "16:00" %} afternoon
+#          {% elif now().strftime("%H:%M") < "19:00" %} evening
+#          {% elif now().strftime("%H:%M") < "22:00" %} late evening
+#          {% elif now().strftime("%H:%M") < "24:00" %} night
+#          {% endif %}
+#      sunset_time:
+#        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%H:%M") }}'
+#        friendly_name: "Sunset"
+#      sunrise_time:
+#        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%H:%M") }}'
+#        friendly_name: "Sunrise"
+#      solar_angle:
+#        value_template: '{{ states.sun.sun.attributes.elevation }}'
+#        friendly_name: "Solar Angle"
+#        unit_of_measurement: degrees
+#      next_sunrise:
+#        friendly_name: "Next Sunrise"
+#        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_rising) | timestamp_custom("%d.%m.%Y %-H:%M") }}'
+#        icon_template: mdi:weather-sunset-up
+#      next_sunset:
+#        friendly_name: "Next Sunset"
+#        value_template: '{{ as_timestamp(states.sun.sun.attributes.next_setting) | timestamp_custom("%d.%m.%Y %-H:%M") }}'
+#        icon_template: mdi:weather-sunset-down
+#      day_of_year:
+#        friendly_name: "Day Number"
+#        value_template: '{{ now().strftime("%j") }}'
+#      week_of_year:
+#        friendly_name: "Week Number"
+#        value_template: '{{ now().strftime("%U") }}'
+#
+#sensor.time_of_day:
+#sensor.next_sunrise:
+#sensor.next_sunset:
+#sensor.day_of_year:
+#sensor.week_of_year:
 
   - platform: time_date
     display_options:

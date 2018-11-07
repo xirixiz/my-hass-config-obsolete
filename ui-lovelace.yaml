@@ -42,7 +42,9 @@ views:
           - input_number.woonkamer_nest_thermostat_temperature
           #- sensor.living_room_thermostat_temperature
           - climate.living_room
-#          - input_select.light_scenes
+          #- input_select.light_scenes
+      #- type: thermostat
+      #  entity: climate.living_room
       - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
         type: entities
         entities:
