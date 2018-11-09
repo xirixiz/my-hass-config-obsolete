@@ -243,58 +243,6 @@ input_select:
     initial: "Select Scene"
     icon: mdi:creation
 
-#input_boolean:
-#  all_on:
-#    name: All lights
-#    initial: off
-#  all_on_bright:
-#    name: All lights bright
-#    initial: off
-#  all_on_super_bright:
-#    name: All lights super bright
-#    initial: off
-
-#switch:
-#  - platform: template
-#    switches:
-#      all_on:
-#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on', 'on') }}"
-#        turn_on:
-#          - service: script.all_on
-#        turn_off:
-#          - service: script.all_off
-#        icon_template: >-
-#          {% if is_state('input_boolean.all_on', 'on') %}
-#            mdi:flashlight
-#          {% else %}
-#            mdi:flashlight-off
-#          {% endif %}
-#      all_on_bright:
-#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on_bright', 'on') }}"
-#        turn_on:
-#          - service: script.all_on_bright
-#        turn_off:
-#          - service: script.all_off
-#        icon_template: >-
-#          {% if is_state('input_boolean.all_on_bright', 'on') %}
-#            mdi:flashlight
-#          {% else %}
-#            mdi:flashlight-off
-#          {% endif %}
-#      all_on_super_bright:
-#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on_super_bright', 'on') }}"
-#        turn_on:
-#          - service: script.all_on_super_bright
-#        turn_off:
-#          - service: script.all_off
-#        icon_template: >-
-#          {% if is_state('input_boolean.all_on_super_bright', 'on') %}
-#            mdi:flashlight
-#          {% else %}
-#            mdi:flashlight-off
-#          {% endif %}
-
-
 ################################################
 ## Sensor
 ################################################
@@ -664,43 +612,12 @@ automation:
       entity_id:
       - script.hal_en_overlopen_off
 
-  - alias: Lighting - Reset scene selector
-    trigger:
-      platform: state
-      entity_id: light.woonkamer
-      to: 'off'
-    condition:
-      condition: template
-      value_template: "{{ not is_state('input_select.light_scenes' , 'Select Scene') }}"
-    action:
-      service: input_select.select_option
-      data:
-        entity_id: input_select.light_scenes
-        option: "Select Scene"
-
-  - alias: Lighting - Trigger scene
-    trigger:
-      platform: state
-      entity_id: input_select.light_scenes
-    condition:
-      condition: template
-      value_template: "{{ not is_state('input_select.light_scenes' , 'Select') }}"
-    action:
-      service: script.turn_on
-      data_template:
-          entity_id: >
-            {% if is_state("input_select.light_scenes", "On") %} script.all_on
-            {% elif is_state("input_select.light_scenes", "Off") %} script.all_off
-            {% elif is_state("input_select.light_scenes", "Bright") %} script.all_on_bright
-            {% elif is_state("input_select.light_scenes", "Super Bright") %} script.all_on_super_bright
-            {% endif %}
-
 
 ################################################
 ## Scenes
 ################################################
 scene:
-  - name: one
+  - name: general_one
     entities:
       light.woonkamer:
         state: true
@@ -714,7 +631,11 @@ scene:
         state: true
         xy_color: [0.52, 0.41]
         brightness_pct: 25
-  - name: two
+      light.hal_en_overlopen:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+  - name: general_two
     entities:
       light.woonkamer:
         state: true
@@ -728,7 +649,11 @@ scene:
         state: true
         xy_color: [0.52, 0.41]
         brightness_pct: 35
-  - name: three
+      light.hal_en_overlopen:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 45
+  - name: general_three
     entities:
       light.woonkamer:
         state: true
@@ -742,7 +667,11 @@ scene:
         state: true
         xy_color: [0.52, 0.41]
         brightness_pct: 50
-  - name: four
+      light.hal_en_overlopen:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 60
+  - name: general_four
     entities:
       light.woonkamer:
         state: true
@@ -756,7 +685,11 @@ scene:
         state: true
         xy_color: [0.52, 0.41]
         brightness_pct: 75
-  - name: five
+      light.hal_en_overlopen:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 75
+  - name: general_five
     entities:
       light.woonkamer:
         state: true
@@ -770,31 +703,83 @@ scene:
         state: true
         xy_color: [0.52, 0.41]
         brightness_pct: 100
+      light.hal_en_overlopen:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 100
+
+  - name: buiten_one
+    entities:
+      light.buitenvoor:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+      light.buitenachter:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+  - name: buiten_two
+    entities:
+      light.buitenvoor:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 45
+      light.buitenachter:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 45
+  - name: buiten_three
+    entities:
+      light.buitenvoor:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 60
+      light.buitenachter:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 60
+  - name: buiten_four
+    entities:
+      light.buitenvoor:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 75
+      light.buitenachter:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 75
+  - name: buiten_five
+    entities:
+      light.buitenvoor:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 100
+      light.buitenachter:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 100
+
 
 ################################################
 ## Script
 ################################################
 script:
-  one:
+  time_test:
+    alias: Time Test
     sequence:
     - service: scene.turn_on
-      entity_id: scene.one
-  two:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.two
-  three:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.three
-  four:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.four
-  five:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.five
+      data_template:
+        entity_id: >
+          scene.general_
+          {%-  if now().hour < 7 %}one
+          {% elif now().hour < 20 %}two
+          {% elif now().hour >= 21 %}one
+          {% endif %}
+
+#  one:
+#    sequence:
+#    - service: scene.turn_on
+#      entity_id: scene.one
 
   all_off:
     sequence:
@@ -802,166 +787,6 @@ script:
       entity_id:
       - light.woonkamer
       - light.keuken
-      - light.buitenvoor
-      - light.buitenachter
-    - service: switch.turn_off
-      entity_id:
-        - switch.smartplug2
-
-  all_on:
-    sequence:
-    - service: script.woonkamer
-    - service: script.keuken
-    - service: script.hal_en_overlopen
-    - service: script.buiten
-
-  all_on_bright:
-    sequence:
-    - service: script.woonkamer_bright
-    - service: script.keuken_bright
-    - service: script.hal_en_overlopen_bright
-    - service: script.buiten_bright
-
-  all_on_super_bright:
-    sequence:
-    - service: script.woonkamer_super_bright
-    - service: script.keuken_super_bright
-    - service: script.hal_en_overlopen_super_bright
-    - service: script.buiten_super_bright
-
-
-  woonkamer:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer'
-
-  woonkamer_nightlight:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer Nightlight'
-
-  woonkamer_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer Bright'
-
-  woonkamer_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer Super Bright'
-
-  woonkamer_off:
-    sequence:
-    - service: light.turn_off
-      entity_id: light.woonkamer
-
-
-  keuken:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'keuken'
-        scene_name: 'Keuken'
-
-  keuken_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'keuken'
-        scene_name: 'Keuken Bright'
-
-  keuken_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'keuken'
-        scene_name: 'Keuken Super Bright'
-
-  keuken_off:
-    sequence:
-    - service: light.turn_off
-      entity_id: light.keuken
-
-
-  hal_en_overlopen:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen'
-
-  hal_en_overlopen_nightlight:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen Nightlight'
-
-  hal_en_overlopen_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen Bright'
-
-  hal_en_overlopen_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen Super Bright'
-
-  hal_en_overlopen_off:
-    sequence:
-    - service: light.turn_off
-      entity_id: light.hal_en_overlopen
-
-
-  buiten:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenvoor'
-        scene_name: 'BuitenVoor'
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenachter'
-        scene_name: 'BuitenAchter'
-
-  buiten_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenvoor'
-        scene_name: 'BuitenVoor Bright'
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenachter'
-        scene_name: 'BuitenAchter Bright'
-
-  buiten_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenvoor'
-        scene_name: 'BuitenVoor Super Bright'
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenachter'
-        scene_name: 'BuitenAchter Super Bright'
-
-  buiten_off:
-    sequence:
-    - service: light.turn_off
-      entity_id:
       - light.buitenvoor
       - light.buitenachter
     - service: switch.turn_off

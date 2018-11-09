@@ -24,11 +24,6 @@ views:
       - id: 831a7ae69913420388b01fa8b4b3a77f  # Automatically created id
         type: entities
         entities:
-          - script.one
-          - script.two
-          - script.three
-          - script.four
-          - script.five          
           - script.all_on
           - script.all_on_bright
           - script.all_on_super_bright
