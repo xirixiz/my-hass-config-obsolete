@@ -697,9 +697,105 @@ automation:
 
 
 ################################################
+## Scenes
+################################################
+scene:
+  - name: one
+    entities:
+      light.woonkamer:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+      light.keuken:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+      light.keuken_hanglamp:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 25
+  - name: two
+    entities:
+      light.woonkamer:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 45
+      light.keuken:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 45
+      light.keuken_hanglamp:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+  - name: three
+    entities:
+      light.woonkamer:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 60
+      light.keuken:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 60
+      light.keuken_hanglamp:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 50
+  - name: four
+    entities:
+      light.woonkamer:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 75
+      light.keuken:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 75
+      light.keuken_hanglamp:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 75
+  - name: five
+    entities:
+      light.woonkamer:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 100
+      light.keuken:
+        state: true1
+        xy_color: [0.52, 0.41]
+        brightness_pct: 100
+      light.keuken_hanglamp:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 100
+
+################################################
 ## Script
 ################################################
 script:
+  one:
+    sequence:
+    - service: scene.turn_on
+      entity_id: scene.one
+  two:
+    sequence:
+    - service: scene.turn_on
+      entity_id: scene.two
+  three:
+    sequence:
+    - service: scene.turn_on
+      entity_id: scene.three
+  four:
+    sequence:
+    - service: scene.turn_on
+      entity_id: scene.four
+  five:
+    sequence:
+    - service: scene.turn_on
+      entity_id: scene.five
+
   all_off:
     sequence:
     - service: light.turn_off

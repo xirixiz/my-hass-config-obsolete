@@ -40,6 +40,7 @@ media_player:
         - youtube
         - netflix
     filename: webostv1.conf
+
   - platform: webostv
     host: !secret lgwebostv_host_2
     name: Bedroom TV
@@ -63,6 +64,24 @@ sensor:
     username: !secret plex_username
     password: !secret plex_password
     token: !secret plex_token
+
+  - platform: history_stats
+    name: TV livingroom on last 30 days
+    entity_id: media_player.livingroom_tv
+    state: 'on'
+    type: time
+    end: '{{ now() }}'
+    duration:
+      days: 30
+
+  - platform: history_stats
+    name: TV bedroom on last 30 days
+    entity_id: media_player.bedroom_tv
+    state: 'on'
+    type: time
+    end: '{{ now() }}'
+    duration:
+      days: 30
 
 ################################################
 ## Automation

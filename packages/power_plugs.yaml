@@ -92,6 +92,16 @@ input_boolean:
     initial: off
     icon: mdi:tumble-dryer
 
+input_number:
+  wasmachine_start:
+    name: Wasmachine start
+    min: 0
+    max: 999999999
+  wasmachine_stop:
+    name: Wasmachine stop
+    min: 0
+    max: 999999999
+
 ################################################
 ## Sensor
 ################################################
@@ -168,6 +178,13 @@ sensor:
 # WASMACHINE
   - platform: template
     sensors:
+      wasmachine_verbruik:
+        friendly_name: "Wasmachine verbruik"
+        value_template: '{{ (float(states.sensor.input_number.wasmachine_stop.state) - float(states.input_number.wasmachine_start.state)) }}'
+        unit_of_measurement: 'kWh'
+
+  - platform: template
+    sensors:
       wasmachine_status_time:
         friendly_name: "Wasmachine draaitijd"
         unit_of_measurement: 'minuten'
@@ -186,9 +203,11 @@ sensor:
           {%- else -%}
             Uit
           {%- endif -%}
+
   - platform: statistics
     name: Wasmachine statistics
     entity_id: sensor.smartplug1_watts
+
 
 # DROGER
   - platform: template
@@ -211,9 +230,20 @@ sensor:
           {%- else -%}
             Uit
           {%- endif -%}
+
   - platform: statistics
     name: Droger statistics
     entity_id: sensor.smartplug3_watts
+
+history_graph:
+  wasmachine:
+    name: Wasmachine en Droger
+    entities:
+      - sensor.smartplug1_watts
+      - sensor.smartplug3_watts
+    hours_to_show: 24
+    refresh: 60
+
 
 ################################################
 ## Automation
@@ -232,6 +262,10 @@ automation:
     action:
     - service: homeassistant.turn_on
       entity_id: input_boolean.wasmachine
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.wasmachine_start
+        value: "{{ states.sensor.smartplug1_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Wasmachine:'
@@ -249,10 +283,14 @@ automation:
       entity_id: input_boolean.wasmachine
       state: 'on'
     action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.wasmachine_stop
+        value: "{{ states.sensor.smartplug1_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Wasmachine:'
-        message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten."
+        message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }}"
     - service: homeassistant.turn_off
       entity_id: input_boolean.wasmachine
 
