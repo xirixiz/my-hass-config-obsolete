@@ -101,6 +101,14 @@ input_number:
     name: Wasmachine stop
     min: 0
     max: 999999999
+  droger_start:
+    name: Droger start
+    min: 0
+    max: 999999999
+  droger_stop:
+    name: Droger stop
+    min: 0
+    max: 999999999
 
 ################################################
 ## Sensor
@@ -180,7 +188,7 @@ sensor:
     sensors:
       wasmachine_verbruik:
         friendly_name: "Wasmachine verbruik"
-        value_template: '{{ (float(states.sensor.input_number.wasmachine_stop.state) - float(states.input_number.wasmachine_start.state)) }}'
+        value_template: '{{ (float(states("input_number.wasmachine_stop")) - float(states("input_number.wasmachine_start"))) | round(3) }}'
         unit_of_measurement: 'kWh'
 
   - platform: template
@@ -210,6 +218,13 @@ sensor:
 
 
 # DROGER
+  - platform: template
+    sensors:
+      droger_verbruik:
+        friendly_name: "Droger verbruik"
+        value_template: '{{ (float(states("input_number.droger_stop")) - float(states("input_number.droger_start"))) | round(3) }}'
+        unit_of_measurement: 'kWh'
+
   - platform: template
     sensors:
       droger_status_time:
@@ -290,7 +305,7 @@ automation:
     - service: notify.family
       data_template:
         title: 'Wasmachine:'
-        message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }}"
+        message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh."
     - service: homeassistant.turn_off
       entity_id: input_boolean.wasmachine
 
@@ -306,6 +321,10 @@ automation:
     action:
     - service: homeassistant.turn_on
       entity_id: input_boolean.droger
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.wasmachine_start
+        value: "{{ states.sensor.smartplug3_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Droger:'
@@ -323,9 +342,13 @@ automation:
       entity_id: input_boolean.droger
       state: 'on'
     action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.wasmachine_stop
+        value: "{{ states.sensor.smartplug3_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Droger:'
-        message: "Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten."
+        message: "Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh."
     - service: homeassistant.turn_off
       entity_id: input_boolean.droger

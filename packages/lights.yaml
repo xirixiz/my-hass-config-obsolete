@@ -473,8 +473,8 @@ automation:
       data_template:
         entity_id: light.keuken_hanglamp
         brightness: "{{ trigger.to_state.state | int }}"
-  
-  
+
+
   - alias: "Automation - All - Turn off"
     trigger:
     - platform: state
@@ -775,6 +775,19 @@ scene:
 ## Script
 ################################################
 script:
+  time_test:
+    alias: Time Test
+    sequence:
+    - service: scene.turn_on
+      data_template:
+        entity_id: >
+          scene.woonkamer_
+          {%-  if now().hour < 7 %}night
+          {% elif now().hour < 17 %}daylight
+          {% elif now().hour < 19 %}evening
+          {% elif now().hour >= 21 %}night
+          {% endif %}
+
   one:
     sequence:
     - service: scene.turn_on
@@ -836,33 +849,33 @@ script:
       data:
         group_name: 'woonkamer'
         scene_name: 'Woonkamer'
-  
+
   woonkamer_nightlight:
     sequence:
     - service: hue.hue_activate_scene
       data:
         group_name: 'woonkamer'
         scene_name: 'Woonkamer Nightlight'
-  
+
   woonkamer_bright:
     sequence:
     - service: hue.hue_activate_scene
       data:
         group_name: 'woonkamer'
         scene_name: 'Woonkamer Bright'
-  
+
   woonkamer_super_bright:
     sequence:
     - service: hue.hue_activate_scene
       data:
         group_name: 'woonkamer'
         scene_name: 'Woonkamer Super Bright'
-  
+
   woonkamer_off:
     sequence:
     - service: light.turn_off
       entity_id: light.woonkamer
-  
+
 
   keuken:
     sequence:
@@ -870,34 +883,34 @@ script:
       data:
         group_name: 'keuken'
         scene_name: 'Keuken'
-  
+
   keuken_bright:
     sequence:
     - service: hue.hue_activate_scene
       data:
         group_name: 'keuken'
         scene_name: 'Keuken Bright'
-  
+
   keuken_super_bright:
     sequence:
     - service: hue.hue_activate_scene
       data:
         group_name: 'keuken'
         scene_name: 'Keuken Super Bright'
-  
+
   keuken_off:
     sequence:
     - service: light.turn_off
       entity_id: light.keuken
-  
-  
+
+
   hal_en_overlopen:
     sequence:
     - service: hue.hue_activate_scene
       data:
         group_name: 'hal en overlopen'
         scene_name: 'Hal en Overlopen'
-  
+
   hal_en_overlopen_nightlight:
     sequence:
     - service: hue.hue_activate_scene
@@ -911,7 +924,7 @@ script:
       data:
         group_name: 'hal en overlopen'
         scene_name: 'Hal en Overlopen Bright'
-  
+
   hal_en_overlopen_super_bright:
     sequence:
     - service: hue.hue_activate_scene
@@ -923,8 +936,8 @@ script:
     sequence:
     - service: light.turn_off
       entity_id: light.hal_en_overlopen
-  
-  
+
+
   buiten:
     sequence:
     - service: hue.hue_activate_scene
@@ -935,7 +948,7 @@ script:
       data:
         group_name: 'buitenachter'
         scene_name: 'BuitenAchter'
-  
+
   buiten_bright:
     sequence:
     - service: hue.hue_activate_scene
@@ -946,7 +959,7 @@ script:
       data:
         group_name: 'buitenachter'
         scene_name: 'BuitenAchter Bright'
-  
+
   buiten_super_bright:
     sequence:
     - service: hue.hue_activate_scene
@@ -957,7 +970,7 @@ script:
       data:
         group_name: 'buitenachter'
         scene_name: 'BuitenAchter Super Bright'
-  
+
   buiten_off:
     sequence:
     - service: light.turn_off
