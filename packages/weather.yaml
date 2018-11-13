@@ -7,57 +7,39 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'weather'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
     sensor.dark_sky_minutely_summary:
-      <<: *customize
       friendly_name: "Komende uur"
     sensor.dark_sky_hourly_summary:
-      <<: *customize
       friendly_name: "Vandaag"
     sensor.dark_sky_daily_summary:
-      <<: *customize
       friendly_name: "Komende Week"
     sensor.dark_sky_precip_probability:
-      <<: *customize
       friendly_name: "Regen"
     sensor.dark_sky_temperature:
-      <<: *customize
       friendly_name: "Temp"
     sensor.dark_sky_apparent_temperature:
-      <<: *customize
       friendly_name: "Gevoel"
     sensor.dark_sky_humidity:
-      <<: *customize
       friendly_name: "Luchtvocht"
     sensor.dark_sky_wind_speed:
-      <<: *customize
       friendly_name: "Wind"
-
     sensor.yr_symbol:
-      <<: *customize
       friendly_name: " "
     sensor.yr_temperature:
-      <<: *customize
       friendly_name: " "
     sensor.yr_wind_speed:
-      <<: *customize
       friendly_name: " "
       icon: mdi:weather-windy
     sensor.yr_humidity:
-      <<: *customize
       friendly_name: " "
       icon: mdi:water-percent
     sensor.yr_fog:
-      <<: *customize
       friendly_name: " "
       icon: mdi:weather-fog
 
+################################################
+## Weather
+################################################
 weather:
   - platform: yweather
 #  - platform: darksky

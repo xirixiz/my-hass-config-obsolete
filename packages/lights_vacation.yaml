@@ -7,27 +7,6 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'lights_vacation'
-      expose: &expose # This merges the keys/values from "&customize"
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
-################################################
-## Sensor
-################################################
-sensor:
-  - platform: template
-    sensors:
-      vacation_mode:
-        value_template: >-
-          {%- if is_state('input_boolean.vacation_mode', 'on') -%}
-            enabled
-          {%- else -%}
-            disabled
-          {%- endif -%}
 
 ################################################
 ## Script
@@ -116,7 +95,6 @@ automation:
     - service: script.turn_on
       entity_id: script.flash_rgb_lights
 
-  
   - alias: 'Motion Detection - Alert Stop'
     trigger:
     - platform: state

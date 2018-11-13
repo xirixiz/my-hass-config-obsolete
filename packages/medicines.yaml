@@ -7,18 +7,6 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'medicines'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
-    group.meds_reminder:
-      <<: *customize
-      control: hidden
-      hidden: false
 
 ################################################
 ## Input Boolean
@@ -45,7 +33,7 @@ automation:
         hours: 8
     action:
       service: input_boolean.turn_off
-  
+
   - alias: Mark meds as taken from notification
     trigger:
       platform: event

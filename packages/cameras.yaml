@@ -7,31 +7,16 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'cameras'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
     sensor.slaapkamer_boris_temperature:
-      <<: *customize
       friendly_name: Temperatuur Slaapkamer Boris
-
     binary_sensor.front_door_camera_voordeur_online:
-      <<: *customize
       friendly_name: Nest Hello Online
     binary_sensor.front_door_camera_voordeur_motion_detected:
-      <<: *customize
       friendly_name: Nest Hello Motion
     binary_sensor.front_door_camera_voordeur_person_detected:
-      <<: *customize
       friendly_name: Nest Hello Person
     binary_sensor.front_door_camera_voordeur_sound_detected:
-      <<: *customize
       friendly_name: Nest Hello Sound
-
 
 ################################################
 ## Camera
@@ -48,31 +33,13 @@ camera:
     username: !secret foscam_username
     password: !secret foscam_password
 
+################################################
+## Sensor
+################################################
 sensor:
   - platform: command_line
     command: !secret camera_boris_temperature
     scan_interval: 300
     unit_of_measurement: '°C'
     name: 'slaapkamer_boris_temperature'
-
-################################################
-## Automation
-################################################
-#automation:
-#  - id: notify_camera_pictures
-#    alias: 'Notify camera pictures'
-#    initial_state: 'on'
-#    trigger:
-#     - platform: time
-#       minutes: '/2'
-#       seconds: 00
-#    action:
-#    - service: notify.bram
-#      data_template:
-#        message: "Check Camera."
-#        data:
-#          photo:
-#            - url: !secret camera_boris_image_url
-#              caption: "Test"
-
 

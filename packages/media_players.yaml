@@ -7,23 +7,20 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'media_players'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
     media_player.livingroom_tv:
-      <<: *customize
       friendly_name: "Livingroom TV"
     media_player.bedroom_tv:
-      <<: *customize
       friendly_name: "Bedroom TV"
     sensor.plex_activity:
-      <<: *customize
       friendly_name: "Plex Activity"
+
+################################################
+## Input Boolean
+################################################
+input_boolean:
+  tv_status_woonkamer:
+    name: "TV Status - Woonkamer"
+    initial: off
 
 ################################################
 ## Media Player

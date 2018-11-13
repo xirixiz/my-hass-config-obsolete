@@ -7,47 +7,28 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'protection'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
     sensor.living_room_nest_protect_co_status:
-      <<: *customize
       friendly_name: CO status - Woonkamer
     sensor.living_room_nest_protect_smoke_status:
-      <<: *customize
       friendly_name: Smoke status - Woonkamer
       icon: mdi:fire
     sensor.living_room_nest_protect_battery_health:
-      <<: *customize
       friendly_name: Battery status - Woonkamer
       icon: mdi:battery
-
     sensor.entryway_nest_protect_co_status:
-      <<: *customize
       friendly_name: CO status - HAL
     sensor.entryway_nest_protect_smoke_status:
-      <<: *customize
       friendly_name: Smoke status - HAL
       icon: mdi:fire
     sensor.entryway_nest_protect_battery_health:
-      <<: *customize
       friendly_name: Battery status - HAL
       icon: mdi:battery
-
     sensor.upstairs_nest_protect_co_status:
-      <<: *customize
       friendly_name: CO status - Overloop
     sensor.upstairs_nest_protect_smoke_status:
-      <<: *customize
       friendly_name: Smoke status - Overloop
       icon: mdi:fire
     sensor.upstairs_nest_protect_battery_health:
-      <<: *customize
       friendly_name: Battery status - Overloop
       icon: mdi:battery
 

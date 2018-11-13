@@ -2,66 +2,18 @@
 ## Packages / Dsmr
 ################################################
 
-# dsmr_current values:
-#  "timestamp": "2018-08-25T06:19:34.655802+02:00",
-#  "electricity_delivered_1": "9021.467",
-#  "electricity_returned_1": "0.000",
-#  "electricity_delivered_2": "8064.328",
-#  "electricity_returned_2": "0.002",
-#  "electricity_currently_delivered": "0.440",
-#  "electricity_currently_returned": "0.000",
-#  "phase_currently_delivered_l1": null,
-#  "phase_currently_delivered_l2": null,
-#  "phase_currently_delivered_l3": null,
-#  "extra_device_timestamp": "2018-08-25T06:00:00+02:00",
-#  "extra_device_delivered": "7476.751",
-#  "phase_currently_returned_l1": null,
-#  "phase_currently_returned_l2": null,
-#  "phase_currently_returned_l3": null
-
-# dsmr_today values:
-#  "day": "2018-08-25",
-#  "electricity1": 2.334,
-#  "electricity2": 0,
-#  "electricity1_returned": 0,
-#  "electricity2_returned": 0,
-#  "electricity1_cost": 0,
-#  "electricity2_cost": 0,
-#  "total_cost": 0,
-#  "gas": 0,
-#  "gas_cost": 0,
-#  "energy_supplier_price_electricity_delivered_1": 0,
-#  "energy_supplier_price_electricity_delivered_2": 0,
-#  "energy_supplier_price_electricity_returned_1": 0,
-#  "energy_supplier_price_electricity_returned_2": 0,
-#  "energy_supplier_price_gas": 0
-
-
 ################################################
 ## Customize
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'dsmr'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
     sensor.electricity_currently_delivered:
-      <<: *customize
       friendly_name: Huidig verbruik electriciteit
       icon: mdi:power-plug
-
     sensor.electricity1:
-      <<: *customize
       friendly_name: Verbruik vandaag electriciteit
       icon: mdi:power-plug
-
     sensor.gas:
-      <<: *customize
       friendly_name: Verbruik vandaag gas
       icon: mdi:power-plug
 

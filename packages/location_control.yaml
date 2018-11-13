@@ -7,45 +7,25 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'location_control'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
     device_tracker.taipan5g:
-      <<: *customize
-      hidden: false
       friendly_name: Bram
     device_tracker.lieke_iphone:
-      <<: *customize
-      hidden: false
       friendly_name: Lieke
-
     zone.home:
-      <<: *customize
       friendly_name: "Home"
     zone.work_lieke:
-      <<: *customize
       friendly_name: "Work"
       icon: mdi:briefcase
     zone.parents_lieke:
-      <<: *customize
       friendly_name: "Parents"
       icon: mdi:cow
     zone.zus_lieke:
-      <<: *customize
       friendly_name: "Zus"
       icon: mdi:cow
-
     sensor.bram_distance_to_home:
-      <<: *customize
       friendly_name: Bram - Distance to home
       icon: mdi:car
     sensor.lieke_distance_to_home:
-      <<: *customize
       friendly_name: Lieke - Distance to home
       icon: mdi:car
 
@@ -58,14 +38,14 @@ device_tracker:
     username: !secret ap_username
     password: !secret ap_password
 
-#  - platform: nmap_tracker
-#    hosts:
-#      - !secret nmap_hosts
+  - platform: nmap_tracker
+    hosts:
+      - !secret nmap_hosts
 
-#  - platform: luci
-#    host: !secret openwrt_tracker_boven_host
-#    username: !secret openwrt_tracker_boven_username
-#    password: !secret openwrt_tracker_boven_password
+  - platform: luci
+    host: !secret openwrt_tracker_boven_host
+    username: !secret openwrt_tracker_boven_username
+    password: !secret openwrt_tracker_boven_password
 
 ################################################
 ## Zone

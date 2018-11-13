@@ -1,5 +1,5 @@
 ################################################
-## Packages / Printers
+## Packages / Speedtest
 ################################################
 
 ################################################
@@ -7,15 +7,18 @@
 ################################################
 homeassistant:
   customize:
+    sensor.pihole_status:
+       friendly_name: Pi-Hole Status
 
 ################################################
-## Printer
+## Sensor
 ################################################
 sensor:
-- platform: syncthru
-  resource: !secret printer
-  name: Samsung Printer
-  monitored_conditions:
-    - toner_black
-    - tray_1
-    - output_tray_0
+  - platform: speedtest
+    server_id: 13218
+    minute:
+      - 0
+    monitored_conditions:
+      - ping
+      - download
+      - upload

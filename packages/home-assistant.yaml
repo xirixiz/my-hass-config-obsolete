@@ -1,0 +1,31 @@
+################################################
+## Packages / Home-Assistant
+################################################
+homeassistant:
+  name: Home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  elevation: !secret home_elevation
+  unit_system: metric
+  time_zone: Europe/Amsterdam
+  packages: !include_dir_named packages
+  auth_providers:
+   - type: homeassistant
+   - type: legacy_api_password
+
+################################################
+## Customize
+################################################
+  customize:
+
+################################################
+## Component
+################################################
+logbook:
+config:
+conversation:
+history:
+#map:
+zeroconf:
+tts:
+python_script:

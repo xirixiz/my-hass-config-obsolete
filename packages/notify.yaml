@@ -7,13 +7,31 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'notify'
-      expose: &expose
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
+
+################################################
+## Component
+################################################
+ios:
+  push:
+    categories:
+      - name: Medicijnen
+        identifier: 'medicijnen'
+        actions:
+          - identifier: 'MARK_MEDS_TAKEN'
+            title: 'Medicijnen ingenomen'
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: yes
+            behavior: 'default'
+      - name: Afval
+        identifier: 'afval'
+        actions:
+          - identifier: 'MARK_TRASH_MOVED'
+            title: 'Afval verwerkt'
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: yes
+            behavior: 'default'
 
 ################################################
 ## Notify

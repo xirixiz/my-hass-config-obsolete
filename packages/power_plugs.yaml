@@ -7,60 +7,30 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'power_plugs'
-      expose: &expose # This merges the keys/values from "&customize"
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
     switch.smartplug1:
-      <<: *customize
-      hidden: false
       friendly_name: Wasmachine
     switch.smartplug2:
-      <<: *customize
-      hidden: false
       friendly_name: Tuinverlichting
     switch.smartplug3:
-      <<: *customize
-      hidden: false
       friendly_name: Droger
     switch.smartplug4:
-      <<: *customize
-      hidden: false
       friendly_name: Verlichting Lex
-
-
     sensor.smartplug1_watts:
-      <<: *customize
-      hidden: false
       friendly_name: Huidig verbruik wasmachine
       icon: mdi:washing-machine
     sensor.smartplug3_watts:
-      <<: *customize
-      hidden: false
       friendly_name: Huidig verbruik droger
       icon: mdi:tumble-dryer
     sensor.wasmachine_status_time:
-      <<: *customize
-      hidden: false
       friendly_name: Wasmachine draaitijd
       icon: mdi:washing-machine
     sensor.wasmachine_status_value:
-      <<: *customize
-      hidden: false
       friendly_name: Wasmachine status
       icon: mdi:washing-machine
     sensor.droger_status_time:
-      <<: *customize
-      hidden: false
       friendly_name: Droger draaitijd
       icon: mdi:tumble-dryer
     sensor.droger_status_value:
-      <<: *customize
-      hidden: false
       friendly_name: Droger status
       icon: mdi:tumble-dryer
 
@@ -75,7 +45,7 @@ switch:
   - platform: tplink
     host: 192.168.1.172
   - platform: tplink
-    host: 192.168.1.173    
+    host: 192.168.1.173
 
 group:
   hometracking:

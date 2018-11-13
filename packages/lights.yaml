@@ -7,208 +7,120 @@
 ################################################
 homeassistant:
   customize:
-    package.node_anchors:
-      customize: &customize
-        package: 'lights'
-      expose: &expose # This merges the keys/values from "&customize"
-        <<: *customize
-        haaska_hidden: false
-        homebridge_hidden: false
-
     group.all_lights:
-      <<: *customize
       control: hidden
-      hidden: false
-
     script.all_off:
-      <<: *customize
-      hidden: false
       friendly_name: All Lights Off
       icon: mdi:flash
-
     script.woonkamer_off:
-      <<: *customize
-      hidden: false
       friendly_name: Woonkamer
       icon: mdi:flashlight-off
     script.keuken_off:
-      <<: *customize
-      hidden: false
       friendly_name: Keuken
       icon: mdi:flashlight-off
     script.hal_en_overlopen_off:
-      <<: *customize
-      hidden: false
       friendly_name: Hal en Overlopen
       icon: mdi:flashlight-off
     script.buiten_off:
-      <<: *customize
-      hidden: false
       friendly_name: Buiten
       icon: mdi:flashlight-off
-
     switch.all_on:
-      <<: *customize
-      hidden: false
       friendly_name: All lights
       icon: mdi:flash
-
     script.all_on:
-      <<: *customize
-      hidden: false
       friendly_name: All Lights On
       icon: mdi:flash
     script.all_on_bright:
-      <<: *customize
-      hidden: false
       friendly_name: All Lights Bright
       icon: mdi:flash
     script.all_on_super_bright:
-      <<: *customize
-      hidden: false
       friendly_name: All Lights Super Bright
       icon: mdi:flash
-
     script.woonkamer:
-      <<: *customize
-      hidden: false
       friendly_name: Woonkamer
       icon: mdi:flashlight
     script.woonkamer_nightlight:
-      <<: *customize
-      hidden: false
       friendly_name: Woonkamer NL
       icon: mdi:flashlight
     script.woonkamer_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Woonkamer B
       icon: mdi:flashlight
     script.woonkamer_super_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Woonkamer SB
       icon: mdi:flashlight
-
     script.keuken:
-      <<: *customize
-      hidden: false
       friendly_name: Keuken
       icon: mdi:flashlight
     script.keuken_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Keuken B
       icon: mdi:flashlight
     script.keuken_super_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Keuken SB
       icon: mdi:flashlight
-
     script.hal_en_overlopen:
-      <<: *customize
-      hidden: false
       friendly_name: Hal & Overlopen
       icon: mdi:flashlight
     script.hal_en_overlopen_nightlight:
-      <<: *customize
-      hidden: false
       friendly_name: Hal & Overlopen NL
       icon: mdi:flashlight
     script.hal_en_overlopen_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Hal & Overlopen B
       icon: mdi:flashlight
     script.hal_en_overlopen_super_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Hal & Overlopen SB
       icon: mdi:flashlight
-
     script.buiten:
-      <<: *customize
-      hidden: false
       friendly_name: Buiten
       icon: mdi:flashlight
     script.buiten_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Buiten B
       icon: mdi:flashlight
     script.buiten_super_bright:
-      <<: *customize
-      hidden: false
       friendly_name: Buiten SB
       icon: mdi:flashlight
-
     sensor.woonkamer_motion:
-      <<: *customize
-      hidden: false
       friendly_name: Woonkamer Motion
       icon: mdi:run-fast
     sensor.woonkamer_lux:
-      <<: *customize
-      hidden: false
-      icon: mdi:theme-light-dark
       friendly_name: Woonkamer Lux
+      icon: mdi:theme-light-dark
     sensor.woonkamer_battery:
-      <<: *customize
-      icon: mdi:battery
       friendly_name: Woonkamer Battery
+      icon: mdi:battery
     sensor.hal_motion:
-      <<: *customize
-      hidden: false
       friendly_name: Hal Motion
       icon: mdi:run-fast
     sensor.hal_lux:
-      <<: *customize
-      hidden: false
-      icon: mdi:theme-light-dark
       friendly_name: Hal Lux
+      icon: mdi:theme-light-dark
     sensor.hal_battery:
-      <<: *customize
-      icon: mdi:battery
       friendly_name: Hal Battery
+      icon: mdi:battery
     sensor.switch_hal:
-      <<: *customize
-      hidden: false
       friendly_name: Switch Hal
     sensor.switch_woonkamer:
-      <<: *customize
-      hidden: false
       friendly_name: Switch Woonkamer
     sensor.hue_remote_1_state:
-      <<: *customize
-      icon: mdi:remote
-      persistence: false
       friendly_name: Remote 1 State
-    sensor.hue_remote_1_last_update:
-      <<: *customize
-      icon: mdi:clock
-      friendly_name: Remote 1 Last Update
-    sensor.hue_remote_1_battery:
-      <<: *customize
-      icon: mdi:battery
-      friendly_name: Remote 1 Battery
-    sensor.hue_remote_2_state:
-      <<: *customize
       icon: mdi:remote
       persistence: false
-      friendly_name: Remote 2 State
-    sensor.hue_remote_2_last_update:
-      <<: *customize
+    sensor.hue_remote_1_last_update:
+      friendly_name: Remote 1 Last Update
       icon: mdi:clock
-      friendly_name: Remote 2 Last Update
-    sensor.hue_remote_2_battery:
-      <<: *customize
+    sensor.hue_remote_1_battery:
+      friendly_name: Remote 1 Battery
       icon: mdi:battery
+    sensor.hue_remote_2_state:
+      friendly_name: Remote 2 State
+      icon: mdi:remote
+      persistence: false
+    sensor.hue_remote_2_last_update:
+      friendly_name: Remote 2 Last Update
+      icon: mdi:clock
+    sensor.hue_remote_2_battery:
       friendly_name: Remote 2 Battery
-
+      icon: mdi:battery
     input_number.keuken_hanglamp_brightness:
-      <<: *customize
-      hidden: false
       friendly_name: Keuken Hanglamp
 
 
@@ -243,57 +155,23 @@ input_select:
     initial: "Select Scene"
     icon: mdi:creation
 
-#input_boolean:
-#  all_on:
-#    name: All lights
-#    initial: off
-#  all_on_bright:
-#    name: All lights bright
-#    initial: off
-#  all_on_super_bright:
-#    name: All lights super bright
-#    initial: off
-
-#switch:
-#  - platform: template
-#    switches:
-#      all_on:
-#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on', 'on') }}"
-#        turn_on:
-#          - service: script.all_on
-#        turn_off:
-#          - service: script.all_off
-#        icon_template: >-
-#          {% if is_state('input_boolean.all_on', 'on') %}
-#            mdi:flashlight
-#          {% else %}
-#            mdi:flashlight-off
-#          {% endif %}
-#      all_on_bright:
-#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on_bright', 'on') }}"
-#        turn_on:
-#          - service: script.all_on_bright
-#        turn_off:
-#          - service: script.all_off
-#        icon_template: >-
-#          {% if is_state('input_boolean.all_on_bright', 'on') %}
-#            mdi:flashlight
-#          {% else %}
-#            mdi:flashlight-off
-#          {% endif %}
-#      all_on_super_bright:
-#        value_template: "{{ is_state('light.woonkamer', 'on') and is_state('light.keuken', 'on') and is_state('input_boolean.all_on_super_bright', 'on') }}"
-#        turn_on:
-#          - service: script.all_on_super_bright
-#        turn_off:
-#          - service: script.all_off
-#        icon_template: >-
-#          {% if is_state('input_boolean.all_on_super_bright', 'on') %}
-#            mdi:flashlight
-#          {% else %}
-#            mdi:flashlight-off
-#          {% endif %}
-
+input_boolean:
+  automation_mode:
+    name: "Automation Mode"
+    initial: off
+    icon: mdi:human-male-female
+  vacation_mode:
+    name: "Vacation Mode"
+    initial: off
+    icon: mdi:human-male-female
+  woonkamer_motion:
+    name: "Woonkamer Motion"
+    initial: off
+    icon: mdi:human-male-female
+  hal_motion:
+    name: "Woonkamer Motion"
+    initial: off
+    icon: mdi:human-male-female
 
 ################################################
 ## Sensor
@@ -693,7 +571,6 @@ automation:
             {% elif is_state("input_select.light_scenes", "Bright") %} script.all_on_bright
             {% elif is_state("input_select.light_scenes", "Super Bright") %} script.all_on_super_bright
             {% endif %}
-
 
 ################################################
 ## Scenes
