@@ -1,10 +1,6 @@
 ################################################
 ## Packages / Lights
 ################################################
-
-################################################
-## Customize
-################################################
 homeassistant:
   customize:
     group.all_lights:
@@ -540,9 +536,33 @@ automation:
       entity_id:
       - script.hal_en_overlopen_off
 
+  - alias: 'Light on Sunset'
+    trigger:
+    - platform: sun
+      event: sunset
+      offset: "-00:15:00"
+    action:
+    - service: switch.turn_on
+      entity_id: switch.smartplug4
+    - service: notify.bram
+      data:
+        message: "Sunset - Lights ON at {{ states('sensor.date__time') }}"
+
+  - alias: 'Light off Sunrise'
+    trigger:
+    - platform: sun
+      event: sunrise
+      offset: '+00:00:00'
+    action:
+    - service: switch.turn_off
+      entity_id: switch.smartplug4
+    - service: notify.bram
+      data:
+        message: "Sunset - Lights OFF at {{ states('sensor.date__time') }}"
+
   - alias: Lighting - Reset scene selector
     trigger:
-      platform: state
+    platform: state
       entity_id: light.woonkamer
       to: 'off'
     condition:
@@ -638,7 +658,7 @@ scene:
         xy_color: [0.52, 0.41]
         brightness_pct: 100
       light.keuken:
-        state: true1
+        state: true
         xy_color: [0.52, 0.41]
         brightness_pct: 100
       light.keuken_hanglamp:

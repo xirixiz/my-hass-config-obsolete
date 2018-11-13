@@ -1,10 +1,6 @@
 ################################################
 ## Packages / Time
 ################################################
-
-################################################
-## Customize
-################################################
 homeassistant:
   customize:
     sun.sun:
@@ -89,6 +85,27 @@ sensor:
 ## Automation
 ################################################
 automation:
+
+  - alias: Notify on sunrise
+    trigger:
+    - platform: sun
+      event: sunrise
+      offset: '+00:00:00'
+    action:
+    - service: notify.bram
+      data:
+        message: "The sun is up. Wake Up! {{ states('sensor.date__time') }}"
+
+  - alias: Notify on sunset
+    trigger:
+    - platform: sun
+      event: sunset
+      offset: '+00:00:00'
+    action:
+    - service: notify.bram
+      data:
+        message: "Oh wow you really missed something great. {{ states('sensor.date__time') }}"
+
   - alias: Season Change Notification
     initial_state: true
     hide_entity: true
@@ -99,10 +116,10 @@ automation:
     - condition: template
       value_template: '{{ trigger.from_state.state | lower != "unknown" }}'
     action:
-      - service: script.notify_me
-        data:
-          title: "Season Change"
-          message: "Good bye {{ trigger.from_state.state }}, and Say Hello to {{ trigger.to_state.state }}!"
+    - service: script.notify_me
+      data:
+        title: "Season Change"
+        message: "Good bye {{ trigger.from_state.state }}, and Say Hello to {{ trigger.to_state.state }}!"
 
   - alias: 'Notify - Full Moon'
     trigger:

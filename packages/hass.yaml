@@ -1,14 +1,11 @@
 ################################################
 ## Packages / Hass
 ################################################
-
-################################################
-## Customize
-################################################
 homeassistant:
   customize:
     sensor.external_ip:
       friendly_name: External IP Address
+
 ################################################
 ## Sensor
 ################################################
@@ -31,6 +28,16 @@ sensor:
 ## Automation
 ################################################
 automation:
+  - alias: Login Failure
+    hide_entity: True
+    trigger:
+    - platform: template
+      value_template: "{{ states('persistent_notification.httplogin') != 'authentication' }}"
+    action:
+    - service: notify.bram
+      data:
+        message: 'Bad Login.. There was a Hack attempt! Go Check the GUI for details.'
+
   - alias: Notify Of New External IP
     initial_state: true
     hide_entity: true

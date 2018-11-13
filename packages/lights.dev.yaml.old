@@ -1,10 +1,6 @@
 ################################################
 ## Packages / Lights
 ################################################
-
-################################################
-## Customize
-################################################
 homeassistant:
   customize:
     group.all_lights:
@@ -123,7 +119,6 @@ homeassistant:
     input_number.keuken_hanglamp_brightness:
       friendly_name: Keuken Hanglamp
 
-
 ################################################
 ## Hue
 ################################################
@@ -142,18 +137,6 @@ input_number:
     min: 0
     max: 255
     step: 1
-
-input_select:
-  light_scenes:
-    name: Scenes
-    options:
-      - "Select Scene"
-      - "On"
-      - "Off"
-      - "Bright"
-      - "Super Bright"
-    initial: "Select Scene"
-    icon: mdi:creation
 
 ################################################
 ## Sensor
@@ -269,6 +252,17 @@ sensor:
     resource: !secret hue_remote_2
     value_template: '{{ value_json.state.lastupdated }}'
     scan_interval: 10
+input_select:
+  light_scenes:
+    name: Scenes
+    options:
+      - "Select Scene"
+      - "On"
+      - "Off"
+      - "Bright"
+      - "Super Bright"
+    initial: "Select Scene"
+    icon: mdi:creation
     name: 'hue_remote_2_last_update'
   - platform: template
     sensors:
@@ -322,7 +316,6 @@ automation:
       data_template:
         entity_id: input_number.keuken_hanglamp_brightness
         value: "{{ states.light.keuken_hanglamp.attributes.brightness | int }}"
-        #value: "{{ states.sensor.keuken_hanglamp_brightness | int }}"
 
   - alias: "Switch - Keuken - Hanglamp - On"
     trigger:
@@ -524,9 +517,33 @@ automation:
       entity_id:
       - script.hal_en_overlopen_off
 
+  - alias: 'Light on Sunset'
+    trigger:
+    - platform: sun
+      event: sunset
+      offset: "-00:15:00"
+    action:
+    - service: switch.turn_on
+      entity_id: switch.smartplug4
+    - service: notify.bram
+      data:
+        message: "Sunset - Lights ON at {{ states('sensor.date__time') }}"
+
+  - alias: 'Light off Sunrise'
+    trigger:
+    - platform: sun
+      event: sunrise
+      offset: '+00:00:00'
+    action:
+    - service: switch.turn_off
+      entity_id: switch.smartplug4
+    - service: notify.bram
+      data:
+        message: "Sunset - Lights OFF at {{ states('sensor.date__time') }}"
+
 
 ################################################
-## Scenes
+## Scene
 ################################################
 scene:
   - name: general_one
@@ -699,6 +716,7 @@ script:
       entity_id:
       - light.woonkamer
       - light.keuken
+      - light.hal_en_overlopen
       - light.buitenvoor
       - light.buitenachter
     - service: switch.turn_off

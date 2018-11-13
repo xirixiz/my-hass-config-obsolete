@@ -1,10 +1,6 @@
 ################################################
 ## Packages / Plex
 ################################################
-
-################################################
-## Customize
-################################################
 homeassistant:
   customize:
     media_player.livingroom_tv:
@@ -13,14 +9,6 @@ homeassistant:
       friendly_name: "Bedroom TV"
     sensor.plex_activity:
       friendly_name: "Plex Activity"
-
-################################################
-## Input Boolean
-################################################
-input_boolean:
-  tv_status_woonkamer:
-    name: "TV Status - Woonkamer"
-    initial: off
 
 ################################################
 ## Media Player
@@ -49,6 +37,14 @@ media_player:
         - youtube
         - netflix
     filename: webostv2.conf
+
+################################################
+## Input Boolean
+################################################
+input_boolean:
+  tv_status_woonkamer:
+    name: "TV Status - Woonkamer"
+    initial: off
 
 ################################################
 ## Sensor

@@ -1,14 +1,28 @@
 ################################################
 ## Packages / pi-hole
 ################################################
-
-################################################
-## Customize
-################################################
 homeassistant:
   customize:
     sensor.pihole_status:
        friendly_name: Pi-Hole Status
+
+################################################
+## Input Select
+################################################
+input_select:
+  pihole_time:
+    name: Disable Time (seconds)
+    options:
+      - Select Time
+      - 10
+      - 30
+      - 60
+      - 300
+      - 600
+      - 900
+      - 1800
+      - 3600
+    initial: Select Time
 
 ################################################
 ## Sensor
@@ -34,24 +48,6 @@ sensor:
     name: 'pihole_status'
     value_template: '{{ value_json.status }}'
     scan_interval: 10
-
-################################################
-## Input Select
-################################################
-input_select:
-  pihole_time:
-    name: Disable Time (seconds)
-    options:
-      - Select Time
-      - 10
-      - 30
-      - 60
-      - 300
-      - 600
-      - 900
-      - 1800
-      - 3600
-    initial: Select Time
 
 ################################################
 ## Script
