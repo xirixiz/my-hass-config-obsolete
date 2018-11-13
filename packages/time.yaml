@@ -32,7 +32,12 @@ sensor:
       - 'time_date'
       - 'time_utc'
       - 'beat'
+
+  - platform: season
+    type: astronomical
+
   - platform: moon
+
   - platform: uptime
 
 #  - platform: template
@@ -84,6 +89,21 @@ sensor:
 ## Automation
 ################################################
 automation:
+  - alias: Season Change Notification
+    initial_state: true
+    hide_entity: true
+    trigger:
+    - platform: state
+      entity_id: sensor.season
+    condition:
+    - condition: template
+      value_template: '{{ trigger.from_state.state | lower != "unknown" }}'
+    action:
+      - service: script.notify_me
+        data:
+          title: "Season Change"
+          message: "Good bye {{ trigger.from_state.state }}, and Say Hello to {{ trigger.to_state.state }}!"
+
   - alias: 'Notify - Full Moon'
     trigger:
     - platform: sun

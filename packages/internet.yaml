@@ -6,18 +6,25 @@
 ## Customize
 ################################################
 homeassistant:
-  customize:
-    sensor.pihole_status:
-       friendly_name: Pi-Hole Status
 
 ################################################
 ## Sensor
 ################################################
 sensor:
+  - platform: rest
+    resource: http://icanhazip.com
+    name: external_ip
+    value_template: '{{ value }}'
+    scan_interval: 14400
+
   - platform: speedtest
     server_id: 13218
-    minute:
+    minute: 30
+    hour:
       - 0
+      - 6
+      - 12
+      - 18
     monitored_conditions:
       - ping
       - download

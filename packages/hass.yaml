@@ -1,0 +1,52 @@
+################################################
+## Packages / Hass
+################################################
+
+################################################
+## Customize
+################################################
+homeassistant:
+  customize:
+    sensor.external_ip:
+      friendly_name: External IP Address
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: uptime
+    name: Home Assistant Up Time
+    unit_of_measurement: hours
+
+  - platform: rest
+    resource: https://pypi.python.org/pypi/homeassistant/json
+    name: HA Current Version
+    value_template: '{{ value_json.info.version }}'
+
+  - platform: command_line
+    name: HA Installed Version
+    command: "/usr/src/app/python -m homeassistant --version"
+    scan_interval: 86400
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: Notify Of New External IP
+    initial_state: true
+    hide_entity: true
+    trigger:
+      platform: state
+      entity_id: sensor.external_ip
+    condition:
+      - condition: template
+        value_template: "{% if trigger.from_state and trigger.to_state %} true {% else %} false {% endif %}"
+      - condition: template
+        value_template: "{% if trigger.from_state.state == 'unknown' %} false {% else %} true {% endif %}"
+      - condition: template
+        value_template: "{% if trigger.to_state.state == 'unknown' %} false {% else %} true {% endif %}"
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+    action:
+      - service: notify.bram
+        data_template:
+          message: "Your External IP changed from {{ trigger.from_state.state }} to {{ trigger.to_state.state }}"
