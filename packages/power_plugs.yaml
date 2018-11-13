@@ -27,6 +27,10 @@ homeassistant:
       <<: *customize
       hidden: false
       friendly_name: Droger
+    switch.smartplug4:
+      <<: *customize
+      hidden: false
+      friendly_name: Verlichting Lex
 
 
     sensor.smartplug1_watts:
@@ -65,11 +69,13 @@ homeassistant:
 ################################################
 switch:
   - platform: tplink
-    host: 192.168.1.157
+    host: 192.168.1.170
   - platform: tplink
-    host: 192.168.1.182
+    host: 192.168.1.171
   - platform: tplink
-    host: 192.168.1.183
+    host: 192.168.1.172
+  - platform: tplink
+    host: 192.168.1.173    
 
 group:
   hometracking:
@@ -114,6 +120,30 @@ input_number:
 ## Sensor
 ################################################
 sensor:
+# SLAAPKAMER LEX
+  - platform: template
+    sensors:
+      smartplug4_watts:
+        friendly_name: "Huidig verbruik Lex"
+        value_template: '{{ states.switch.smartplug4.attributes["current_power_w"] | replace(" W", "") | float }}'
+        unit_of_measurement: 'W'
+      smartplug4_kw:
+        friendly_name: "Current KiloWatts"
+        value_template: '{{ states.switch.smartplug4.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug4_amps:
+        friendly_name: "Amps"
+        value_template: '{{ states.switch.smartplug4.attributes["current_a"] | replace(" A", "") | float }}'
+        unit_of_measurement: 'A'
+      smartplug4_kw_today:
+        friendly_name: "Today's KiloWatts"
+        value_template: '{{ states.switch.smartplug4.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      smartplug4_volts:
+        friendly_name: "Current Voltage"
+        value_template: '{{ states.switch.smartplug4.attributes["voltage"] | replace(" V", "") | float }}'
+        unit_of_measurement: 'V'
+
 # TUIN
   - platform: template
     sensors:

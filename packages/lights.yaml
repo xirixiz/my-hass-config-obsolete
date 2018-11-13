@@ -474,7 +474,6 @@ automation:
         entity_id: light.keuken_hanglamp
         brightness: "{{ trigger.to_state.state | int }}"
 
-
   - alias: "Automation - All - Turn off"
     trigger:
     - platform: state

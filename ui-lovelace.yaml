@@ -36,6 +36,7 @@ views:
               background: '#62717b'
           - input_number.keuken_hanglamp_brightness
           - switch.smartplug2
+          - switch.smartplug4
       - id: dcb17306a9af4348ac01a6969ccb5ebe  # Automatically created id
         type: entities
         entities:
