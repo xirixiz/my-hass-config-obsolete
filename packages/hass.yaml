@@ -21,8 +21,8 @@ sensor:
 
   - platform: command_line
     name: HA Installed Version
-    command: "/usr/src/app/python -m homeassistant --version"
-    scan_interval: 86400
+    command: "PYTHONPATH=/usr/src/app && /usr/local/bin/python -m homeassistant --version"
+    scan_interval: 14400
 
 ################################################
 ## Automation

@@ -109,6 +109,10 @@ views:
         type: picture-entity
         entity: camera.front_door_voordeur
         show_info: false
+#      - id: eba458b16c324dd19d8893598722c9f6  # Automatically created id
+#        type: picture-entity
+#        entity: camera.synology
+#        show_info: false
       - id: eba458b16c324dd19d8893598722c9f6  # Automatically created id
         type: picture-entity
         entity: camera.boris

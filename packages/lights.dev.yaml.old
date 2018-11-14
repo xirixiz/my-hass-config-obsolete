@@ -252,17 +252,6 @@ sensor:
     resource: !secret hue_remote_2
     value_template: '{{ value_json.state.lastupdated }}'
     scan_interval: 10
-input_select:
-  light_scenes:
-    name: Scenes
-    options:
-      - "Select Scene"
-      - "On"
-      - "Off"
-      - "Bright"
-      - "Super Bright"
-    initial: "Select Scene"
-    icon: mdi:creation
     name: 'hue_remote_2_last_update'
   - platform: template
     sensors:
@@ -294,7 +283,6 @@ input_select:
           {%- else -%}
             off
           {%- endif -%}
-
 
 ################################################
 ## Automation

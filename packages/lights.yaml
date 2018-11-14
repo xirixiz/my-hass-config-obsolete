@@ -335,7 +335,6 @@ automation:
       data_template:
         entity_id: input_number.keuken_hanglamp_brightness
         value: "{{ states.light.keuken_hanglamp.attributes.brightness | int }}"
-        #value: "{{ states.sensor.keuken_hanglamp_brightness | int }}"
 
   - alias: "Switch - Keuken - Hanglamp - On"
     trigger:
@@ -346,6 +345,7 @@ automation:
       data_template:
         entity_id: light.keuken_hanglamp
         brightness: "{{ trigger.to_state.state | int }}"
+
 
   - alias: "Automation - All - Turn off"
     trigger:
@@ -562,27 +562,27 @@ automation:
 
   - alias: Lighting - Reset scene selector
     trigger:
-    platform: state
+    - platform: state
       entity_id: light.woonkamer
       to: 'off'
     condition:
       condition: template
       value_template: "{{ not is_state('input_select.light_scenes' , 'Select Scene') }}"
     action:
-      service: input_select.select_option
+    - service: input_select.select_option
       data:
         entity_id: input_select.light_scenes
         option: "Select Scene"
 
   - alias: Lighting - Trigger scene
     trigger:
-      platform: state
+    - platform: state
       entity_id: input_select.light_scenes
     condition:
       condition: template
       value_template: "{{ not is_state('input_select.light_scenes' , 'Select') }}"
     action:
-      service: script.turn_on
+    - service: script.turn_on
       data_template:
           entity_id: >
             {% if is_state("input_select.light_scenes", "On") %} script.all_on

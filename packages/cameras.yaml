@@ -28,6 +28,12 @@ camera:
     ip: !secret foscam_camera
     username: !secret foscam_username
     password: !secret foscam_password
+  - platform: synology
+    url: !secret synology_surveillance_url
+    username: !secret synology_surveillance_username
+    password: !secret synology_surveillance_password
+    timeout: 60
+    verify_ssl: False
 
 ################################################
 ## Sensor
