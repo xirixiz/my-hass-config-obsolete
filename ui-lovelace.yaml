@@ -109,17 +109,13 @@ views:
         type: picture-entity
         entity: camera.front_door_voordeur
         show_info: false
-#      - id: eba458b16c324dd19d8893598722c9f6  # Automatically created id
-#        type: picture-entity
-#        entity: camera.synology
-#        show_info: false
       - id: eba458b16c324dd19d8893598722c9f6  # Automatically created id
         type: picture-entity
-        entity: camera.boris
+        entity: camera.boriscam
         show_info: false
       - id: ebfd7ee15b4a4dcd8077e62cbc80aaf5  # Automatically created id
         type: picture-entity
-        entity: camera.foscam_camera
+        entity: camera.lexcam
         show_info: false
 #      - type: picture-glance
 #        image: https://images.pexels.com/photos/189333/pexels-photo-189333.jpeg?auto=compress&cs=tinysrgb&h=350
@@ -195,11 +191,11 @@ views:
         show_info: false
       - id: fb7710eeba984a5b8d026b8e2347ef83  # Automatically created id
         type: picture-entity
-        entity: camera.boris
+        entity: camera.boriscam
         show_info: false
       - id: f57bc50ad329439790f9ff6550f9a298  # Automatically created id
         type: picture-entity
-        entity: camera.foscam_camera
+        entity: camera.lexcam
         show_info: false
 
   - id: 3  # Automatically created id
