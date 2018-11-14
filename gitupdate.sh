@@ -15,6 +15,6 @@ $git commit -m "${CHANGE_MSG}"
 $git push origin master
 #ansible-vault decrypt .*.conf *.conf secrets.yaml entity_registry.yaml .config_entries.json .uuid
 
-chmod 444 /var/services/homes/xirixiz/.ssh/id_rsa
+#chmod 444 /var/services/homes/xirixiz/.ssh/id_rsa
 
 exit
