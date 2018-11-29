@@ -1,10 +1,7 @@
 """
 @ Authors     : Bram van Dartel
-@ Date        : 11/07/2018
-@ Version     : 1.1.1
-@ Description : MijnAfvalwijzer Sensor - It queries mijnafvalwijzer.nl.
+@ Description : MijnAfvalwijzer Test Script - It queries mijnafvalwijzer.nl.
 """
-
 from datetime import datetime, timedelta
 import requests
 import logging
@@ -25,7 +22,7 @@ SCAN_INTERVAL = timedelta(seconds=30)
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=900)
 
 url = ("http://json.mijnafvalwijzer.nl/?method=postcodecheck& \
-        postcode=5146EG&street=&huisnummer=6& \
+        postcode=5685HE&street=&huisnummer=16& \
         platform=phone&langs=nl&")
 
 response = requests.get(url)
@@ -46,16 +43,18 @@ for item in json_data or json_data_next:
         countType += 1
         trashTotal.append(trash)
 
+print("trashTotal:",trashTotal)
+
 today = datetime.today().strftime("%Y-%m-%d")
 dateConvert = datetime.strptime(today, "%Y-%m-%d") + timedelta(days=1)
 tomorrow = datetime.strftime(dateConvert, "%Y-%m-%d")
 
+today = '2018-11-29'
 trash = {}
 trashType = {}
 trashToday = {}
 trashTomorrow = {}
 tschedule = []
-
 
 for name in trashTotal:
     for item in json_data or json_data_next:
@@ -85,6 +84,9 @@ for name in trashTotal:
                 trash['pickup_date'] = dateConvert
                 tschedule.append(trash)
 
+#if trashToday['name_type'] = "today":
+#    trashToday['pickup_date'] = item['nameType']
+
 if len(trashToday) == 0:
     trashToday = {}
     trashType[name] = "today"
@@ -111,8 +113,6 @@ for item in json_data or json_data_next:
 print(tschedule)
 
 
-
-print(tschedule.intersection(trashType))
 
 #list = ['350882 348521 350166\r\n']
 #id = 348522
