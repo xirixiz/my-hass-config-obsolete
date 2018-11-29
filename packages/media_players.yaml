@@ -4,11 +4,38 @@
 homeassistant:
   customize:
     media_player.livingroom_tv:
-      friendly_name: "Livingroom TV"
+      friendly_name: Livingroom TV
     media_player.bedroom_tv:
-      friendly_name: "Bedroom TV"
+      friendly_name: Bedroom TV
+
     sensor.plex_activity:
-      friendly_name: "Plex Activity"
+      friendly_name: Plex Activity
+
+    sensor.livingroom_tv_this_week:
+      friendly_name: Weekly Watch Hours Livingroom
+      icon: mdi:filmstrip
+    sensor.livingroom_tv_this_month:
+      friendly_name: Monthly Watch Hours Livingroom
+      icon: mdi:movie
+    sensor.bedroom_tv_this_week:
+      friendly_name: Weekly Watch Hours Bedroom
+      icon: mdi:filmstrip
+    sensor.bedroom_tv_this_month:
+      friendly_name: Monthly Watch Hours Bedroom
+      icon: mdi:movie
+
+    sensor.percent_livingroom_tv_weekly:
+      friendly_name: Weekly Watch Livingroom
+      icon: mdi:filmstrip
+    sensor.percent_livingroom_tv_monthly:
+      friendly_name: Monthly Watch Livingroom
+      icon: mdi:movie
+    sensor.percent_bedroom_tv_weekly:
+      friendly_name: Weekly Watch Bedroom
+      icon: mdi:filmstrip
+    sensor.percent_bedroom_tv_monthly:
+      friendly_name: Monthly Watch Bedroom
+      icon: mdi:movie
 
 ################################################
 ## Media Player
@@ -38,6 +65,12 @@ media_player:
         - netflix
     filename: webostv2.conf
 
+cast:
+  media_player:
+  - host: 192.168.1.162
+  - host: 192.168.1.217
+  - host: 192.168.1.221
+
 ################################################
 ## Input Boolean
 ################################################
@@ -58,42 +91,62 @@ sensor:
     password: !secret plex_password
     token: !secret plex_token
 
+ # LIVINGROOM
   - platform: history_stats
-    name: TV livingroom on last 30 days
+    name: Livingroom TV this week
     entity_id: media_player.livingroom_tv
-    state: 'on'
+    state: 'playing'
     type: time
+    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
     end: '{{ now() }}'
-    duration:
-      days: 30
 
   - platform: history_stats
-    name: TV bedroom on last 30 days
-    entity_id: media_player.bedroom_tv
-    state: 'on'
+    name: Livingroom TV this month
+    entity_id:  media_player.livingroom_tv
+    state: 'playing'
     type: time
-    end: '{{ now() }}'
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
     duration:
       days: 30
 
-################################################
-## Automation
-################################################
-automation:
-  - alias: "Woonkamer TV - Off"
-    trigger:
-    - platform: state
-      entity_id: media_player.livingroom_tv
-      to: "off"
-    action:
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.tv_status_woonkamer
+  - platform: template
+    sensors:
+      percent_livingroom_tv_weekly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.livingroom_tv_this_week')|float * 100 / 168) }}"
 
-  - alias: "Woonkamer TV - On"
-    trigger:
-    - platform: state
-      entity_id: media_player.livingroom_tv
-      to: "playing"
-    action:
-    - service: homeassistant.turn_on
-      entity_id: input_boolean.tv_status_woonkamer
+  - platform: template
+    sensors:
+      percent_livingroom_tv_monthly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.livingroom_tv_this_month')|float * 100 / 720) }}"
+
+ # BEDROOM
+  - platform: history_stats
+    name: Bedroom TV this week
+    entity_id: media_player.bedroom_tv
+    state: 'playing'
+    type: time
+    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
+    end: '{{ now() }}'
+
+  - platform: history_stats
+    name: Bedroom TV this month
+    entity_id:  media_player.bedroom_tv
+    state: 'playing'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      days: 30
+
+  - platform: template
+    sensors:
+      percent_bedroom_tv_weekly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.bedroom_tv_this_week')|float * 100 / 168) }}"
+
+  - platform: template
+    sensors:
+      percent_bedroom_tv_monthly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.bedroom_tv_this_month')|float * 100 / 720) }}"

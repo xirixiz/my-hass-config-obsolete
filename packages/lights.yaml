@@ -119,7 +119,6 @@ homeassistant:
     input_number.keuken_hanglamp_brightness:
       friendly_name: Keuken Hanglamp
 
-
 ################################################
 ## Hue
 ################################################
@@ -228,17 +227,12 @@ sensor:
       hue_remote_1_state:
         friendly_name: 'hue_remote_1_state'
         value_template: >-
-                      {% if states('sensor.hue_remote_1_state_2')[0] == "1" %}
-                        On
-                      {% elif states('sensor.hue_remote_1_state_2')[0] == "2" %}
-                        Dim Up
-                      {% elif states('sensor.hue_remote_1_state_2')[0] == "3" %}
-                        Dim Down
-                      {% elif states('sensor.hue_remote_1_state_2')[0] == "4" %}
-                        Off
-                      {% else %}
-                        None
-                      {% endif %}
+          {%- if states('sensor.hue_remote_1_state_2')[0] == "1" -%} On
+          {%- elif states('sensor.hue_remote_1_state_2')[0] == "2" -%} Dim Up
+          {%- elif states('sensor.hue_remote_1_state_2')[0] == "3" -%} Dim Down
+          {%- elif states('sensor.hue_remote_1_state_2')[0] == "4" -%} Off
+          {%- else -%} None
+          {%- endif -%}
   - platform: rest
     resource: !secret hue_remote_1
     value_template: '{{ value_json.state.lastupdated }}'
@@ -268,17 +262,12 @@ sensor:
       hue_remote_2_state:
         friendly_name: 'hue_remote_2_state'
         value_template: >-
-                      {% if states('sensor.hue_remote_2_state_2')[0] == "1" %}
-                        On
-                      {% elif states('sensor.hue_remote_2_state_2')[0] == "2" %}
-                        Dim Up
-                      {% elif states('sensor.hue_remote_2_state_2')[0] == "3" %}
-                        Dim Down
-                      {% elif states('sensor.hue_remote_2_state_2')[0] == "4" %}
-                        Off
-                      {% else %}
-                        None
-                      {% endif %}
+          {%- if states('sensor.hue_remote_2_state_2')[0] == "1" -%} On
+          {%- elif states('sensor.hue_remote_2_state_2')[0] == "2" -%} Dim Up
+          {%- elif states('sensor.hue_remote_2_state_2')[0] == "3" -%} Dim Down
+          {%- elif states('sensor.hue_remote_2_state_2')[0] == "4" -%} Off
+          {%- else -%} None
+          {%- endif -%}
   - platform: rest
     resource: !secret hue_remote_2
     value_template: '{{ value_json.state.lastupdated }}'
@@ -302,23 +291,21 @@ sensor:
           {%- endif -%}
       switch_hal:
         value_template: >-
-          {%- if states('sensor.hal_lux') | int < 8000 -%}
-            on
-          {%- else -%}
-            off
+          {%- if states('sensor.hal_lux') | int < 6000 -%} on
+          {%- else -%} off
           {%- endif -%}
       switch_woonkamer:
         value_template: >-
-          {%- if states('sensor.woonkamer_lux') | int < 14000 -%}
-            on
-          {%- else -%}
-            off
+          {%- if states('sensor.woonkamer_lux') | int < 12000 -%} on
+          {%- else -%} off
           {%- endif -%}
 
 ################################################
 ## Automation
 ################################################
 automation:
+
+  # KEUKEN
   - alias: "Slider - Keuken - Hanglamp - Set value"
     initial_state: on
     trigger:
@@ -346,29 +333,8 @@ automation:
         entity_id: light.keuken_hanglamp
         brightness: "{{ trigger.to_state.state | int }}"
 
-
-  - alias: "Automation - All - Turn off"
-    trigger:
-    - platform: state
-      entity_id: input_boolean.automation_mode
-      to: 'on'
-    condition:
-    - condition: state
-      entity_id: input_boolean.automation_mode
-      state: 'on'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.all_off
-      - script.woonkamer_off
-      - script.keuken_off
-      - script.hal_en_overlopen_off
-      - script.buiten_off
-    - service: switch.turn_off
-      entity_id:
-      - switch.smartplug2
-
-  - alias: "Motion and Person - Doorbel - Turn On"
+  # FRONTDOOR
+  - alias: "Motion and Person - Doorbel - Turn On/Off"
     trigger:
     - platform: state
       entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
@@ -376,48 +342,46 @@ automation:
     - platform: state
       entity_id: binary_sensor.front_door_camera_voordeur_person_detected
       to: 'on'
+    - platform: state
+      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
+      to: 'off'
+      for:
+        minutes: 10
+    - platform: state
+      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
+      to: 'off'
+      for:
+        minutes: 10
     condition:
     - condition: time
       before: '05:00:00'
       after: '00:00:00'
-    - condition: state
-      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
-      state: 'on'
     action:
     - service: script.turn_on
-      entity_id:
-      - script.buiten_bright
+      data_template:
+        entity_id: >-
+          {%- if is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') or is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') -%}
+          script.buiten_bright
+          {%- else -%}
+          script.all_off
+          {%- endif -%}
 
-  - alias: "Motion and Person - Doorbel - Turn Off"
+  # GENERAL
+  - alias: "General lights On/Off"
     trigger:
-    - platform: state
-      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
-      to: 'off'
-      for:
-        minutes: 10
-    - platform: state
-      entity_id: binary_sensor.front_door_camera_voordeur_person_detected
-      to: 'off'
-      for:
-        minutes: 10
-    condition:
-    - condition: time
-      before: '5:00:00'
-      after: '00:00:00'
-    - condition: state
-      entity_id: binary_sensor.front_door_camera_voordeur_motion_detected
-      state: 'off'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.buiten_off
-
-  - alias: "Switch - Woonkamer - Daytime/Evening on"
-    trigger:
+    - platform: time
+      minutes: '/10'
+      seconds: 00
     - platform: state
       entity_id: sensor.switch_woonkamer
       from: 'off'
       to: 'on'
+      for:
+        minutes: 5
+    - platform: state
+      entity_id: sensor.switch_woonkamer
+      from: 'on'
+      to: 'off'
       for:
         minutes: 5
     - platform: state
@@ -427,105 +391,29 @@ automation:
       entity_id: sensor.woonkamer_motion
       to: 'True'
     condition:
-    - condition: time
-      before: '00:00:00'
-      after: '5:00:00'
-    - condition: state
-      entity_id: sensor.switch_woonkamer
-      state: 'on'
-    - condition: state
-      entity_id: sensor.switch_hal
-      state: 'on'
     - condition: state
       entity_id: input_boolean.automation_mode
       state: 'off'
     action:
     - service: script.turn_on
-      entity_id:
-      - script.woonkamer
-      - script.keuken
-      - script.buiten
-    - service: switch.turn_on
-      entity_id:
-      - switch.smartplug2
+      data_template:
+        entity_id: >-
+          {%- if (is_state('sensor.switch_woonkamer', 'on') and is_state('sensor.switch_hal', 'on')) and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
+          script.woonkamer, script.keuken, script.buiten, script.tuin
+          {%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
+          script.woonkamer, script.keuken, script.buiten
+          {%- elif is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
+          script.all_off
+          {%- elif is_state('sensor.switch_woonkamer', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
+          script.all_off
+          {%- endif -%}
 
-  - alias: "Switch - Woonkamer - Off - Lux"
-    trigger:
-    - platform: state
-      entity_id: sensor.switch_woonkamer
-      from: 'on'
-      to: 'off'
-      for:
-        minutes: 5
-    condition:
-    - condition: state
-      entity_id: input_boolean.automation_mode
-      state: 'off'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.all_off
-
-  - alias: "Switch - Woonkamer - Off - Time"
-    trigger:
-    - platform: time
-      minutes: '/10'
-      seconds: 00
-    condition:
-    - condition: time
-      after: '21:00:00'
-      before: '05:00:00'
-    - condition: state
-      entity_id: media_player.livingroom_tv
-      state: 'off'
-    - condition: state
-      entity_id: input_boolean.automation_mode
-      state: 'off'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.all_off
-
-  - alias: "Motion - Hal en overlopen - Morning and evening on"
+  # HAL & OVERLOPEN
+  - alias: "Hal en overlopen On/Off"
     trigger:
     - platform: state
       entity_id: sensor.hal_motion
       to: 'True'
-    condition:
-    - condition: and
-      conditions:
-      - condition: time
-        before: '06:00:00'
-        after: '21:00:00'
-      - condition: state
-        entity_id: sensor.switch_hal
-        state: 'on'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.hal_en_overlopen_nightlight
-
-  - alias: "Motion - Hal en overlopen - Daytime on"
-    trigger:
-    - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
-    condition:
-    - condition: and
-      conditions:
-      - condition: time
-        before: '21:00:00'
-        after: '06:00:00'
-      - condition: state
-        entity_id: sensor.switch_hal
-        state: 'on'
-    action:
-    - service: script.turn_on
-      entity_id:
-      - script.hal_en_overlopen
-
-  - alias: "Motion - Hal en overlopen - Off"
-    trigger:
     - platform: state
       entity_id: sensor.hal_motion
       to: 'False'
@@ -533,143 +421,51 @@ automation:
         minutes: 10
     action:
     - service: script.turn_on
-      entity_id:
-      - script.hal_en_overlopen_off
+      data_template:
+        entity_id: >-
+          {%- if is_state('sensor.switch_hal', 'on') and is_state('sensor.hal_motion', 'True')-%}
+          script.hal_en_overlopen
+          {%- else -%}
+          script.hal_en_overlopen_off
+          {%- endif -%}
 
-  - alias: 'Light on Sunset'
+  - alias: 'Lights Lex On/Off'
     trigger:
     - platform: sun
       event: sunset
       offset: "-00:15:00"
-    action:
-    - service: switch.turn_on
-      entity_id: switch.smartplug4
-    - service: notify.bram
-      data:
-        message: "Sunset - Lights ON at {{ states('sensor.date__time') }}"
-
-  - alias: 'Light off Sunrise'
-    trigger:
     - platform: sun
       event: sunrise
       offset: '+00:00:00'
     action:
-    - service: switch.turn_off
+    - service_template: >-
+        {%- if trigger.event == "sunset" -%}
+        switch.turn_on
+        {%- elif trigger.event == "sunrise" -%}
+        switch.turn_off
+        {%- endif -%}
       entity_id: switch.smartplug4
-    - service: notify.bram
-      data:
-        message: "Sunset - Lights OFF at {{ states('sensor.date__time') }}"
-
-  - alias: Lighting - Reset scene selector
-    trigger:
-    - platform: state
-      entity_id: light.woonkamer
-      to: 'off'
-    condition:
-      condition: template
-      value_template: "{{ not is_state('input_select.light_scenes' , 'Select Scene') }}"
-    action:
-    - service: input_select.select_option
-      data:
-        entity_id: input_select.light_scenes
-        option: "Select Scene"
-
-  - alias: Lighting - Trigger scene
-    trigger:
-    - platform: state
-      entity_id: input_select.light_scenes
-    condition:
-      condition: template
-      value_template: "{{ not is_state('input_select.light_scenes' , 'Select') }}"
-    action:
-    - service: script.turn_on
-      data_template:
-          entity_id: >
-            {% if is_state("input_select.light_scenes", "On") %} script.all_on
-            {% elif is_state("input_select.light_scenes", "Off") %} script.all_off
-            {% elif is_state("input_select.light_scenes", "Bright") %} script.all_on_bright
-            {% elif is_state("input_select.light_scenes", "Super Bright") %} script.all_on_super_bright
-            {% endif %}
-
-################################################
-## Scenes
-################################################
-scene:
-  - name: one
-    entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 35
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 35
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 25
-  - name: two
-    entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 45
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 45
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 35
-  - name: three
-    entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 60
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 60
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 50
-  - name: four
-    entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-  - name: five
-    entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 100
 
 ################################################
 ## Script
 ################################################
 script:
+  hal_en_overlopen:
+    sequence:
+    - service: scene.turn_on
+      data_template:
+        entity_id: >
+          scene.hal_en_overlopen_
+          {%-  if now().hour < 6 %}night
+          {% elif now().hour < 21 %}day
+          {% elif now().hour >= 21 %}night
+          {% endif %}
+
+  hal_en_overlopen_off:
+    sequence:
+    - service: light.turn_off
+      entity_id: light.hal_en_overlopen
+
   one:
     sequence:
     - service: scene.turn_on
@@ -786,38 +582,38 @@ script:
       entity_id: light.keuken
 
 
-  hal_en_overlopen:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen'
+#  hal_en_overlopen:
+#    sequence:
+#    - service: hue.hue_activate_scene
+#      data:
+#        group_name: 'hal en overlopen'
+#        scene_name: 'Hal en Overlopen'
 
-  hal_en_overlopen_nightlight:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen Nightlight'
+#  hal_en_overlopen_nightlight:
+#    sequence:
+#    - service: hue.hue_activate_scene
+#      data:
+#        group_name: 'hal en overlopen'
+#        scene_name: 'Hal en Overlopen Nightlight'
+#
+#  hal_en_overlopen_bright:
+#    sequence:
+#    - service: hue.hue_activate_scene
+#      data:
+#        group_name: 'hal en overlopen'
+#        scene_name: 'Hal en Overlopen Bright'
+#
+#  hal_en_overlopen_super_bright:
+#    sequence:
+#    - service: hue.hue_activate_scene
+#      data:
+#        group_name: 'hal en overlopen'
+#        scene_name: 'Hal en Overlopen Super Bright'
 
-  hal_en_overlopen_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen Bright'
-
-  hal_en_overlopen_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'hal en overlopen'
-        scene_name: 'Hal en Overlopen Super Bright'
-
-  hal_en_overlopen_off:
-    sequence:
-    - service: light.turn_off
-      entity_id: light.hal_en_overlopen
+#  hal_en_overlopen_off:
+#    sequence:
+#    - service: light.turn_off
+#      entity_id: light.hal_en_overlopen
 
 
   buiten:

@@ -11,12 +11,14 @@ homeassistant:
       friendly_name: Droger
     switch.smartplug4:
       friendly_name: Verlichting Lex
+
     sensor.smartplug1_watts:
       friendly_name: Huidig verbruik wasmachine
       icon: mdi:washing-machine
     sensor.smartplug3_watts:
       friendly_name: Huidig verbruik droger
       icon: mdi:tumble-dryer
+
     sensor.wasmachine_status_time:
       friendly_name: Wasmachine draaitijd
       icon: mdi:washing-machine
@@ -28,6 +30,32 @@ homeassistant:
       icon: mdi:tumble-dryer
     sensor.droger_status_value:
       friendly_name: Droger status
+      icon: mdi:tumble-dryer
+
+    sensor.wasmachine_this_week:
+      friendly_name: Weekly Wasmachine Running Hours
+      icon: mdi:washing-machine
+    sensor.wasmachine_this_month:
+      friendly_name: Monthly Wasmachine Running Hours
+      icon: mdi:washing-machine
+    sensor.droger_this_week:
+      friendly_name: Weekly Droger Running Hours
+      icon: mdi:tumble-dryer
+    sensor.droger_this_month:
+      friendly_name: Monthly Droger Running Hours
+      icon: mdi:tumble-dryer
+
+    sensor.percent_wasmachine_weekly:
+      friendly_name: Weekly Wasmachine
+      icon: mdi:washing-machine
+    sensor.percent_wasmachine_monthly:
+      friendly_name: Monthly Wasmachine
+      icon: mdi:washing-machine
+    sensor.percent_droger_weekly:
+      friendly_name: Weekly Droger
+      icon: mdi:tumble-dryer
+    sensor.percent_droger_monthly:
+      friendly_name: Monthly Droger
       icon: mdi:tumble-dryer
 
 ################################################
@@ -180,16 +208,43 @@ sensor:
       wasmachine_status_value:
         friendly_name: "Wasmachine status"
         value_template: >-
-          {%- if is_state('input_boolean.wasmachine', 'on') -%}
-            Aan
-          {%- else -%}
-            Uit
+          {%- if is_state('input_boolean.wasmachine', 'on') -%} Aan
+          {%- else -%} Uit
           {%- endif -%}
 
   - platform: statistics
     name: Wasmachine statistics
     entity_id: sensor.smartplug1_watts
 
+  # HISTORY WASMACHINE
+  - platform: history_stats
+    name: Wasmachine this week
+    entity_id: input_boolean.wasmachine
+    state: 'on'
+    type: time
+    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
+    end: '{{ now() }}'
+
+  - platform: history_stats
+    name: Wasmachine this month
+    entity_id:  input_boolean.wasmachine
+    state: 'on'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      days: 30
+
+  - platform: template
+    sensors:
+      percent_wasmachine_weekly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.wasmachine_this_week')|float * 100 / 168) }}"
+
+  - platform: template
+    sensors:
+      percent_wasmachine_monthly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.wasmachine_this_month')|float * 100 / 720) }}"
 
 # DROGER
   - platform: template
@@ -237,24 +292,43 @@ sensor:
       droger_status_value:
         friendly_name: "Droger status"
         value_template: >-
-          {%- if is_state('input_boolean.droger', 'on') -%}
-            Aan
-          {%- else -%}
-            Uit
+          {%- if is_state('input_boolean.droger', 'on') -%} Aan
+          {%- else -%} Uit
           {%- endif -%}
 
   - platform: statistics
     name: Droger statistics
     entity_id: sensor.smartplug3_watts
 
-history_graph:
-  wasmachine:
-    name: Wasmachine en Droger
-    entities:
-      - sensor.smartplug1_watts
-      - sensor.smartplug3_watts
-    hours_to_show: 24
-    refresh: 60
+  # HISTORY DROGER
+  - platform: history_stats
+    name: Droger this week
+    entity_id: input_boolean.droger
+    state: 'on'
+    type: time
+    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
+    end: '{{ now() }}'
+
+  - platform: history_stats
+    name: Droger this month
+    entity_id:  input_boolean.droger
+    state: 'on'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      days: 30
+
+  - platform: template
+    sensors:
+      percent_droger_weekly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.droger_this_week')|float * 100 / 168) }}"
+
+  - platform: template
+    sensors:
+      percent_droger_monthly:
+        unit_of_measurement: "%"
+        value_template: "{{ '%.1f'|format(states('sensor.droger_this_month')|float * 100 / 720) }}"
 
 
 ################################################
