@@ -7,7 +7,6 @@ homeassistant:
 ## Scene
 ################################################
 scene:
-
 # ALL
   - name: all_off
     entities:
@@ -22,14 +21,14 @@ scene:
         state: true
         transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 35
+        brightness_pct: 30
   - name: woonkamer_bright
     entities:
       light.woonkamer:
         state: true
         transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 50
+        brightness_pct: 40
   - name: woonkamer_super_bright
     entities:
       light.woonkamer:
@@ -45,7 +44,7 @@ scene:
         state: true
         transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 35
+        brightness_pct: 30
       light.keuken_hanglamp:
         state: true
         transition: 3
@@ -57,7 +56,7 @@ scene:
         state: true
         transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 50
+        brightness_pct: 40
   - name: keuken_super_bright
     entities:
       light.keuken:
@@ -73,7 +72,7 @@ scene:
         state: true
         transition: 1
         xy_color: [0.52, 0.41]
-        brightness_pct: 35
+        brightness_pct: 30
   - name: hal_en_overlopen_night
     entities:
       light.hal_en_overlopen:
@@ -87,7 +86,7 @@ scene:
         state: true
         transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 50
+        brightness_pct: 40
   - name: hal_en_overlopen_super_bright
     entities:
       light.hal_en_overlopen:
@@ -103,14 +102,14 @@ scene:
         state: true
         transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 40
+        brightness_pct: 30
   - name: buiten_bright
     entities:
       group.buiten:
         state: true
         transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 60
+        brightness_pct: 40
   - name: buiten_super_bright
     entities:
       group.buiten:

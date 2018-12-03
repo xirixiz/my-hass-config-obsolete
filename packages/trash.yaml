@@ -64,7 +64,10 @@ automation:
       for:
         hours: 12
     action:
-      service: input_boolean.turn_off
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.trash_moved
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.trash_reminder
 
   - alias: Mark trash as moved from notification
     trigger:

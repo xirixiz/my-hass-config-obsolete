@@ -27,7 +27,10 @@ automation:
       for:
         hours: 8
     action:
-      service: input_boolean.turn_off
+      - service: input_boolean.turn_off
+        entity_id: input_boolean.meds_taken
+      - service: input_boolean.turn_on
+        entity_id: input_boolean.meds_reminder        
 
   - alias: Mark meds as taken from notification
     trigger:
@@ -63,5 +66,5 @@ automation:
           message: "Medicijnen innemen!"
           data:
             push:
-              badge: 0            
+              badge: 0
               category: 'medicijnen'

@@ -4,6 +4,12 @@ resources:
   - url: /local/custom-lovelace/tracker-card/tracker-card.js
     type: js
 
+custom_updater:   # https://github.com/custom-components/custom_updater/wiki/Installation
+  track:
+    - components
+    - cards
+    - python_scripts
+
   card_urls:
     - https://raw.githubusercontent.com/arsaboo/homeassistant-config/master/www/custom_ui/weather-card.json
     - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
@@ -335,6 +341,7 @@ views:
     cards:
       - id: 3fe5628fb1af4581ac183ca52e110db9  # Automatically created id
         type: entities
+        title: Pi-Hole
         entities:
           - sensor.pihole_status
           - script.enable_pihole
@@ -350,13 +357,29 @@ views:
           - sensor.pihole_seen_clients
 
       - type: entities
+        title: HASS
         entities:
           - sensor.uptime
           - sensor.ha_installed_version
           - sensor.ha_current_version
 
+      - type: entities
+        title: Synology
+        entities:
+          - sensor.cpu_load_total
+          - sensor.memory_usage_real
+          - sensor.status_smart_sda
+          - sensor.status_smart_sdb
+          - sensor.status_smart_sdc
+          - sensor.temperature_sda
+          - sensor.temperature_sdb
+          - sensor.temperature_sdc
+          - sensor.volume_used_volume_1
+          - sensor.total_size_volume_1
+
       - id: 46c741ff7cfc4491a6b3712909c80469  # Automatically created id
         type: entities
+        title: Internet
         entities:
           - sensor.external_ip
           - sensor.speedtest_download
@@ -365,6 +388,7 @@ views:
 
       - id: a9b870b423a14aabaab904e4b37d6fc4  # Automatically created id
         type: entities
+        title: Printer
         entities:
           - sensor.samsung_printer
           - sensor.samsung_printer_toner_black
