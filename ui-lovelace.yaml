@@ -4,23 +4,8 @@ resources:
   - url: /local/custom-lovelace/tracker-card/tracker-card.js
     type: js
 
-custom_updater:   # https://github.com/custom-components/custom_updater/wiki/Installation
-  track:
-    - components
-    - cards
-    - python_scripts
-
-  card_urls:
-    - https://raw.githubusercontent.com/arsaboo/homeassistant-config/master/www/custom_ui/weather-card.json
-    - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
-    - https://raw.githubusercontent.com/kalkih/mini-media-player/master/mini-media-player.json
-    - https://raw.githubusercontent.com/matisaul/vertical-style-card/master/tracker.json
-    - https://raw.githubusercontent.com/kuuji/button-card/master/button-card.json
-    - https://raw.githubusercontent.com/thomasloven/lovelace-long-press/master/long-press.json
-
 name: Home
 views:
-
   ################################################
   ## HOME
   ################################################
