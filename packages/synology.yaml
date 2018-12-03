@@ -1,0 +1,22 @@
+################################################
+## Packages / Synology
+################################################
+homeassistant:
+
+################################################
+## Sensor
+################################################
+sensor:
+  - platform: synologydsm
+    host: !secret nas_host_ip
+    port: 5000
+    ssl: 'false'
+    username: !secret nas_username
+    password: !secret nas_password
+    monitored_conditions:
+      - cpu_total_load
+      - memory_real_usage
+      - disk_smart_status
+      - disk_temp
+      - volume_percentage_used
+      - volume_size_total

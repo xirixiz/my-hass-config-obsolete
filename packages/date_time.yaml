@@ -55,7 +55,7 @@ sensor:
         friendly_name: 'Time of Day Short'
         entity_id: sensor.time__date
         value_template: >-
-          {% if   now().strftime("%H:%M") < "05:00" %} night
+          {% if   now().strftime("%H:%M") < "06:00" %} night
           {% elif now().strftime("%H:%M") < "18:00" %} daytime
           {% elif now().strftime("%H:%M") < "21:00" %} early evening
           {% elif now().strftime("%H:%M") < "24:00" %} evening

@@ -8,201 +8,113 @@ homeassistant:
 ################################################
 scene:
 
-#light.buiten_achter_links
-#light.buiten_achter_rechts
-#light.buiten_garage
-#light.buiten_voordeur
-#light.hal_bg
-#light.hal_verdieping_1
-#light.hal_verdieping_2
-#light.kastlamp_links
-#light.kastlamp_rechts
-#light.keuken_hanglamp
-#light.keuken_spot_nis_links
-#light.keuken_spot_nis_rechts
-#light.keuken_spot_tuin_links_1
-#light.keuken_spot_tuin_links_2
-#light.keuken_spot_tuin_rechts_1
-#light.keuken_spot_tuin_rechts_2
-#light.keuken_spot_werkblad_links
-#light.keuken_spot_werkblad_rechts
-#light.slaapkamer_hanglamp
-#light.studeerkamer_links
-#light.studeerkamer_rechts
-#light.woonkamer_rails_links
-#light.woonkamer_rails_rechts
-#light.woonkamer_spot_tuin_links_1
-#light.woonkamer_spot_tuin_links_2
-#light.woonkamer_spot_tuin_midden_1
-#light.woonkamer_spot_tuin_midden_2
-#light.woonkamer_spot_tuin_rechts_1
-#light.woonkamer_spot_tuin_rechts_2
-#
-#light.woonkamer
-#light.keuken
-#light.hal_en_overlopen
-#light.buitenachter
-#light.buitenvoor
-
-
-  - name: all_off_one
+# ALL
+  - name: all_off
     entities:
       light.woonkamer: off
       light.keuken: off
-      light.buitenachter: off
-      light.buitenvoor: off
-      switch.smartplug2: off
+      group.buiten: off
 
-  - name: hal_en_overlopen_day
+# WOONKAMER
+  - name: woonkamer_general
+    entities:
+      light.woonkamer:
+        state: true
+        transition: 3
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+  - name: woonkamer_bright
+    entities:
+      light.woonkamer:
+        state: true
+        transition: 3
+        xy_color: [0.52, 0.41]
+        brightness_pct: 50
+  - name: woonkamer_super_bright
+    entities:
+      light.woonkamer:
+        state: true
+        transition: 3
+        xy_color: [0.52, 0.41]
+        brightness_pct: 90
+
+# KEUKEN
+  - name: keuken_general
+    entities:
+      light.keuken:
+        state: true
+        transition: 3
+        xy_color: [0.52, 0.41]
+        brightness_pct: 35
+      light.keuken_hanglamp:
+        state: true
+        transition: 3
+        xy_color: [0.52, 0.41]
+        brightness_pct: 25
+  - name: keuken_bright
+    entities:
+      light.keuken:
+        state: true
+        transition: 3
+        xy_color: [0.52, 0.41]
+        brightness_pct: 50
+  - name: keuken_super_bright
+    entities:
+      light.keuken:
+        state: true
+        transition: 3
+        xy_color: [0.52, 0.41]
+        brightness_pct: 90
+
+# HAL EN OVERLOPEN
+  - name: hal_en_overlopen_general
     entities:
       light.hal_en_overlopen:
         state: true
+        transition: 1
         xy_color: [0.52, 0.41]
         brightness_pct: 35
-
   - name: hal_en_overlopen_night
     entities:
       light.hal_en_overlopen:
         state: true
+        transition: 5
         xy_color: [0.52, 0.41]
-        brightness_pct: 35
-
-  - name: all_on_one
+        brightness_pct: 10
+  - name: hal_en_overlopen_bright
     entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 35
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 35
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 25
       light.hal_en_overlopen:
         state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 35
-      light.buitenvoor:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 40
-      light.buitenachter:
-        state: true
+        transition: 3
         xy_color: [0.52, 0.41]
         brightness_pct: 50
-      switch.smartplug2: on
-
-  - name: all_on_two
+  - name: hal_en_overlopen_super_bright
     entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 45
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 45
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 35
       light.hal_en_overlopen:
         state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 45
-      light.buitenvoor:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct:  50
-      light.buitenachter:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 60
-      switch.smartplug2: on
-
-  - name: all_on_three
-    entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 60
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 60
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 50
-      light.hal_en_overlopen:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 60
-      light.buitenvoor:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 65
-      light.buitenachter:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-      switch.smartplug2: on
-
-  - name: all_on_four
-    entities:
-      light.woonkamer:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-      light.keuken:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-      light.keuken_hanglamp:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-      light.hal_en_overlopen:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 75
-      light.buitenvoor:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 80
-      light.buitenachter:
-        state: true
+        transition: 3
         xy_color: [0.52, 0.41]
         brightness_pct: 90
-      switch.smartplug2: on
 
-  - name: all_on_five
+# BUITEN
+  - name: buiten_general
     entities:
-      light.woonkamer:
+      group.buiten:
         state: true
+        transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      light.keuken:
-        state: true1
-        xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      light.keuken_hanglamp:
+        brightness_pct: 40
+  - name: buiten_bright
+    entities:
+      group.buiten:
         state: true
+        transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      light.hal_en_overlopen:
+        brightness_pct: 60
+  - name: buiten_super_bright
+    entities:
+      group.buiten:
         state: true
+        transition: 3
         xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      light.buitenvoor:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      light.buitenachter:
-        state: true
-        xy_color: [0.52, 0.41]
-        brightness_pct: 100
-      switch.smartplug2: on
+        brightness_pct: 90

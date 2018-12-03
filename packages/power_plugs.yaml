@@ -11,6 +11,12 @@ homeassistant:
       friendly_name: Droger
     switch.smartplug4:
       friendly_name: Verlichting Lex
+    switch.smartplug5:
+      friendly_name: TV Kast
+    switch.smartplug6:
+      friendly_name: Kerstboom
+    switch.smartplug7:
+      friendly_name: Verlichting Boris
 
     sensor.smartplug1_watts:
       friendly_name: Huidig verbruik wasmachine
@@ -70,6 +76,14 @@ switch:
     host: 192.168.1.172
   - platform: tplink
     host: 192.168.1.173
+  - platform: tplink
+    host: 192.168.1.174
+  - platform: tplink
+    host: 192.168.1.175
+  - platform: tplink
+    host: 192.168.1.176
+  - platform: tplink
+    host: 192.168.1.177
 
 group:
   hometracking:

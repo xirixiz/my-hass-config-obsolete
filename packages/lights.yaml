@@ -138,18 +138,6 @@ input_number:
     max: 255
     step: 1
 
-input_select:
-  light_scenes:
-    name: Scenes
-    options:
-      - "Select Scene"
-      - "On"
-      - "Off"
-      - "Bright"
-      - "Super Bright"
-    initial: "Select Scene"
-    icon: mdi:creation
-
 input_boolean:
   automation_mode:
     name: "Automation Mode"
@@ -357,13 +345,13 @@ automation:
       before: '05:00:00'
       after: '00:00:00'
     action:
-    - service: script.turn_on
+    - service: scene.turn_on
       data_template:
         entity_id: >-
           {%- if is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') or is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') -%}
-          script.buiten_bright
+          scene.buiten_bright
           {%- else -%}
-          script.all_off
+          script.off
           {%- endif -%}
 
   # GENERAL
@@ -399,9 +387,9 @@ automation:
       data_template:
         entity_id: >-
           {%- if (is_state('sensor.switch_woonkamer', 'on') and is_state('sensor.switch_hal', 'on')) and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
-          script.woonkamer, script.keuken, script.buiten, script.tuin
-          {%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
           script.woonkamer, script.keuken, script.buiten
+          {%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
+          script.woonkamer, script.keuken
           {%- elif is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
           script.all_off
           {%- elif is_state('sensor.switch_woonkamer', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
@@ -429,6 +417,7 @@ automation:
           script.hal_en_overlopen_off
           {%- endif -%}
 
+# KIDS NACHTLAMP
   - alias: 'Lights Lex On/Off'
     trigger:
     - platform: sun
@@ -440,221 +429,120 @@ automation:
     action:
     - service_template: >-
         {%- if trigger.event == "sunset" -%}
-        switch.turn_on
+        homeassistant.turn_on
         {%- elif trigger.event == "sunrise" -%}
-        switch.turn_off
+        homeassistant.turn_off
         {%- endif -%}
-      entity_id: switch.smartplug4
+      entity_id: group.kinderen
+
+################################################
+## Group
+################################################
+group:
+  buiten:
+    - light.buitenachter
+    - light.buitenvoor
+    - switch.smartplug2
+  beneden:
+    - light.woonkamer
+    - light.keuken
+  kinderen:
+    - switch.smartplug4
+    - switch.smartplug7
+  hal_en_overlopen:
+    - light.hal_en_overlopen
 
 ################################################
 ## Script
 ################################################
 script:
-  hal_en_overlopen:
-    sequence:
-    - service: scene.turn_on
-      data_template:
-        entity_id: >
-          scene.hal_en_overlopen_
-          {%-  if now().hour < 6 %}night
-          {% elif now().hour < 21 %}day
-          {% elif now().hour >= 21 %}night
-          {% endif %}
-
-  hal_en_overlopen_off:
-    sequence:
-    - service: light.turn_off
-      entity_id: light.hal_en_overlopen
-
-  one:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.one
-  two:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.two
-  three:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.three
-  four:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.four
-  five:
-    sequence:
-    - service: scene.turn_on
-      entity_id: scene.five
-
-  all_off:
-    sequence:
-    - service: light.turn_off
-      entity_id:
-      - light.woonkamer
-      - light.keuken
-      - light.buitenvoor
-      - light.buitenachter
-    - service: switch.turn_off
-      entity_id:
-        - switch.smartplug2
-
+# ALL
   all_on:
     sequence:
-    - service: script.woonkamer
-    - service: script.keuken
-    - service: script.hal_en_overlopen
-    - service: script.buiten
+    - service: scene.turn_on
+      entity_id: scene.woonkamer_general
+    - service: scene.turn_on
+      entity_id: scene.keuken_general
 
   all_on_bright:
     sequence:
-    - service: script.woonkamer_bright
-    - service: script.keuken_bright
-    - service: script.hal_en_overlopen_bright
-    - service: script.buiten_bright
+    - service: scene.turn_on
+      entity_id: scene.woonkamer_bright
+    - service: scene.turn_on
+      entity_id: scene.keuken_bright
+    - service: scene.turn_on
+      entity_id: scene.hal_en_overlopen_bright
 
   all_on_super_bright:
     sequence:
-    - service: script.woonkamer_super_bright
-    - service: script.keuken_super_bright
-    - service: script.hal_en_overlopen_super_bright
-    - service: script.buiten_super_bright
+    - service: scene.turn_on
+      entity_id: scene.woonkamer_super_bright
+    - service: scene.turn_on
+      entity_id: scene.keuken_super_bright
+    - service: scene.turn_on
+      entity_id: scene.hal_en_overlopen_super_bright
 
+  all_off:
+    sequence:
+    - service: scene.turn_on
+      entity_id: scene.all_off
 
+# WOONKAMER
   woonkamer:
     sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer'
-
-  woonkamer_nightlight:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer Nightlight'
-
-  woonkamer_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer Bright'
-
-  woonkamer_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'woonkamer'
-        scene_name: 'Woonkamer Super Bright'
+    - service: scene.turn_on
+      data_template:
+        entity_id: >-
+          scene.woonkamer_
+          {%- if states('sensor.time_of_day_short') in ['daytime'] -%}bright
+          {%- else -%}general
+          {%- endif -%}
 
   woonkamer_off:
     sequence:
     - service: light.turn_off
       entity_id: light.woonkamer
 
-
+# KEUKEN
   keuken:
     sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'keuken'
-        scene_name: 'Keuken'
-
-  keuken_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'keuken'
-        scene_name: 'Keuken Bright'
-
-  keuken_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'keuken'
-        scene_name: 'Keuken Super Bright'
+    - service: scene.turn_on
+      data_template:
+        entity_id: >-
+          scene.keuken_
+          {%- if states('sensor.time_of_day_short') in ['daytime'] -%}bright
+          {%- else -%}general
+          {%- endif -%}
 
   keuken_off:
     sequence:
     - service: light.turn_off
       entity_id: light.keuken
 
+# HAL EN OVERLOPEN
+  hal_en_overlopen:
+    sequence:
+    - service: scene.turn_on
+      data_template:
+        entity_id: >-
+          scene.hal_en_overlopen_
+          {%- if states('sensor.time_of_day_short') in ['evening','night'] -%}night
+          {%- else -%}general
+          {%- endif -%}
 
-#  hal_en_overlopen:
-#    sequence:
-#    - service: hue.hue_activate_scene
-#      data:
-#        group_name: 'hal en overlopen'
-#        scene_name: 'Hal en Overlopen'
+  hal_en_overlopen_off:
+    sequence:
+    - service: light.turn_off
+      entity_id: light.hal_en_overlopen
 
-#  hal_en_overlopen_nightlight:
-#    sequence:
-#    - service: hue.hue_activate_scene
-#      data:
-#        group_name: 'hal en overlopen'
-#        scene_name: 'Hal en Overlopen Nightlight'
-#
-#  hal_en_overlopen_bright:
-#    sequence:
-#    - service: hue.hue_activate_scene
-#      data:
-#        group_name: 'hal en overlopen'
-#        scene_name: 'Hal en Overlopen Bright'
-#
-#  hal_en_overlopen_super_bright:
-#    sequence:
-#    - service: hue.hue_activate_scene
-#      data:
-#        group_name: 'hal en overlopen'
-#        scene_name: 'Hal en Overlopen Super Bright'
-
-#  hal_en_overlopen_off:
-#    sequence:
-#    - service: light.turn_off
-#      entity_id: light.hal_en_overlopen
-
-
+# BUITEN
   buiten:
     sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenvoor'
-        scene_name: 'BuitenVoor'
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenachter'
-        scene_name: 'BuitenAchter'
-
-  buiten_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenvoor'
-        scene_name: 'BuitenVoor Bright'
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenachter'
-        scene_name: 'BuitenAchter Bright'
-
-  buiten_super_bright:
-    sequence:
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenvoor'
-        scene_name: 'BuitenVoor Super Bright'
-    - service: hue.hue_activate_scene
-      data:
-        group_name: 'buitenachter'
-        scene_name: 'BuitenAchter Super Bright'
+    - service: scene.turn_on
+      data_template:
+        entity_id: scene.buiten_general
 
   buiten_off:
     sequence:
     - service: light.turn_off
-      entity_id:
-      - light.buitenvoor
-      - light.buitenachter
-    - service: switch.turn_off
-      entity_id:
-        - switch.smartplug2
+      entity_id: group.buiten

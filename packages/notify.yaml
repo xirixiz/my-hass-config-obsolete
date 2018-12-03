@@ -27,6 +27,21 @@ ios:
             authenticationRequired: no
             destructive: yes
             behavior: 'default'
+      - name: Lampen
+        identifier: 'lampen'
+        actions:
+          - identifier: 'LAMPEN_UIT'
+            title: 'Lampen uit'
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: yes
+            behavior: 'default'
+          - identifier: 'DISMISS'
+            title: 'Dismiss'
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: no
+            behavior: 'default'
 
 ################################################
 ## Notify
@@ -41,3 +56,41 @@ notify:
     name: bram
     services:
       - service: ios_taipan5g
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: Living Room Lamps on at Bedtime
+    trigger:
+      platform: state
+      entity_id: media_player.livingroom_tv
+      to: 'off'
+      for:
+        minutes: 10
+    condition:
+      condition: and
+      conditions:
+        - condition: time
+          after: '21:00:00'
+        - condition: state
+          entity_id: light.woonkamer
+          state: 'on'
+    action:
+      - service: notify.family
+        data:
+          message: "De verlichting staat nog aan!"
+          data:
+            push:
+              badge: 0
+              category: 'lampen'
+
+  - alias: Lamps on bedtime notification
+    trigger:
+      platform: event
+      event_type: ios.notification_action_fired
+      event_data:
+        actionName: LAMPS_OFF
+    action:
+      - service: script.turn_on
+        entity_id: script.all_off

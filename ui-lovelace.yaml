@@ -1,20 +1,10 @@
-#custom_updater:
-#component_urls:
-#  - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
 resources:
   - url: /local/custom-lovelace/monster-card/monster-card.js
     type: js
   - url: /local/custom-lovelace/tracker-card/tracker-card.js
     type: js
 
-custom_updater:   # https://github.com/custom-components/custom_updater/wiki/Installation
-  track:
-    - components
-    - cards
-    - python_scripts
-
   card_urls:
-    - https://raw.githubusercontent.com/custom-cards/tracker-card/master/tracker-card.json
     - https://raw.githubusercontent.com/arsaboo/homeassistant-config/master/www/custom_ui/weather-card.json
     - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
     - https://raw.githubusercontent.com/kalkih/mini-media-player/master/mini-media-player.json
@@ -65,6 +55,7 @@ views:
           - input_number.keuken_hanglamp_brightness
           - switch.smartplug2
           - switch.smartplug4
+          - switch.smartplug7
 
       - type: vertical-stack
         cards:

@@ -63,4 +63,5 @@ automation:
           message: "Medicijnen innemen!"
           data:
             push:
+              badge: 0            
               category: 'medicijnen'
