@@ -357,9 +357,6 @@ automation:
   # GENERAL
   - alias: "General lights On/Off"
     trigger:
-    - platform: time
-      minutes: '/10'
-      seconds: 00
     - platform: state
       entity_id: sensor.switch_woonkamer
       from: 'off'
@@ -372,6 +369,12 @@ automation:
       to: 'off'
       for:
         minutes: 5
+    - platform: state
+      entity_id: media_player.livingroom_tv
+      from: 'off'
+      to: 'on'
+      for:
+        minutes: 10
     - platform: state
       entity_id: sensor.hal_motion
       to: 'True'
@@ -386,8 +389,10 @@ automation:
     - service: script.turn_on
       data_template:
         entity_id: >-
-          {%- if (is_state('sensor.switch_woonkamer', 'on') and is_state('sensor.switch_hal', 'on')) and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
-          script.woonkamer, script.keuken, script.buiten
+          {%- if (is_state('sensor.switch_woonkamer', 'on') and is_state('sensor.switch_hal', 'on')) and states('sensor.time_of_day_short') in ['daytime'] -%}
+          script.woonkamer, script.keuken
+          {%- elif (is_state('sensor.switch_woonkamer', 'on') and is_state('sensor.switch_hal', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
+          script.woonkamer, script.keuken,script.buiten
           {%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
           script.woonkamer, script.keuken
           {%- elif is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}

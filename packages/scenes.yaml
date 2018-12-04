@@ -70,16 +70,16 @@ scene:
     entities:
       light.hal_en_overlopen:
         state: true
-        transition: 1
+        transition: 3
         xy_color: [0.52, 0.41]
         brightness_pct: 30
   - name: hal_en_overlopen_night
     entities:
       light.hal_en_overlopen:
         state: true
-        transition: 5
+        transition: 1
         xy_color: [0.52, 0.41]
-        brightness_pct: 10
+        brightness_pct: 0
   - name: hal_en_overlopen_bright
     entities:
       light.hal_en_overlopen:
