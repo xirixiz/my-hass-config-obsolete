@@ -23,3 +23,16 @@ history:
 #map:
 zeroconf:
 tts:
+
+custom_updater:  # https://github.com/custom-components/custom_updater/wiki/Installation
+  show_installable: false
+  hide_sensor: false
+  track:
+    - components
+    - cards
+    #- python_scripts
+  card_urls:
+    - https://raw.githubusercontent.com/custom-cards/information/master/repos.json
+  component_urls:
+    - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
+    - https://raw.githubusercontent.com/robmarkcole/Hue-sensors-HASS/master/custom_updater.json

@@ -67,7 +67,7 @@ automation:
       entity_id: media_player.livingroom_tv
       to: 'off'
       for:
-        minutes: 10
+        minutes: 5
     condition:
       condition: and
       conditions:

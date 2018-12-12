@@ -1,7 +1,7 @@
 resources:
-  - url: /local/custom-lovelace/monster-card/monster-card.js
+  - url: /local/custom-lovelace/monster-card/monster-card.js?v=0.2.3
     type: js
-  - url: /local/custom-lovelace/tracker-card/tracker-card.js
+  - url: /local/custom-lovelace/tracker-card/tracker-card.js?v=0.1.5
     type: js
 
 name: Home
@@ -13,11 +13,6 @@ views:
     icon: mdi:home-assistant
     title: Home
     cards:
-#      - type: custom:tracker-card
-#        title:
-#        trackers:
-#          - sensor.custom_card_tracker
-#          - sensor.custom_component_tracker
       - id: 634f213a3d2f480faf0e4172ae4c0e4e  # Automatically created id
         type: entities
         entities:
@@ -43,7 +38,19 @@ views:
               margin-left: auto
               margin-right: auto
               background: '#62717b'
+          - scene.slaapkamer_general
+          - scene.slaapkamer_bright
+          - scene.slaapkamer_night
+          - scene.slaapkamer_wakeup
+          - scene.slaapkamer_off
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
           - input_number.keuken_hanglamp_brightness
+          - group.kerstmis
           - switch.smartplug2
           - switch.smartplug4
           - switch.smartplug7
@@ -99,9 +106,9 @@ views:
                 margin-right: auto
                 background: '#62717b'
             #- sensor.smartplug1_watts
-            - sensor.wasmachine_this_week
+            #- sensor.wasmachine_this_week
             #- sensor.percent_wasmachine_weekly
-            - sensor.wasmachine_this_month
+            #- sensor.wasmachine_this_month
             #- sensor.percent_wasmachine_monthly
             - sensor.wasmachine_status_time
             - sensor.wasmachine_status_value
@@ -112,36 +119,68 @@ views:
                 margin-right: auto
                 background: '#62717b'
             #- sensor.smartplug3_watts
-            - sensor.droger_this_week
+            #- sensor.droger_this_week
             #- sensor.percent_droger_weekly
-            - sensor.droger_this_month
+            #- sensor.droger_this_month
             #- sensor.percent_droger_monthly
             - sensor.droger_status_time
             - sensor.droger_status_value
 
-      - id: 294517673fc146a4971cd37ef41fcbe1  # Automatically created id
-        type: entities
-        entities:
-          - sensor.trash_today
-          - sensor.trash_tomorrow
-          - type: divider
-            style:
-              height: 1px
-              margin-left: auto
-              margin-right: auto
-              background: '#62717b'
-          - sensor.trash_gft
-          - sensor.trash_restafval
-          - sensor.trash_papier
-          - sensor.trash_pmd
-          - type: divider
-            style:
-              height: 1px
-              margin-left: auto
-              margin-right: auto
-              background: '#62717b'
-          - input_boolean.trash_moved
-          - input_boolean.trash_reminder
+        - type: horizontal-stack
+          cards:
+            - type: picture-entity
+              entity: sensor.trash_today
+              name: Vandaag
+              state_image:
+                "gft": /local/afvalwijzer/gft3.png
+                "papier": /local/afvalwijzer/papier3.png
+                "restafval": /local/afvalwijzer/rest3.png
+                "pmd": /local/afvalwijzer/plastic3.png
+                "Geen": /local/afvalwijzer/kliko.png
+            - type: picture-entity
+              entity: sensor.trash_tomorrow
+              name: Morgen
+              state_image:
+                "gft": /local/afvalwijzer/gft3.png
+                "papier": /local/afvalwijzer/papier3.png
+                "restafval": /local/afvalwijzer/rest3.png
+                "pmd": /local/afvalwijzer/plastic3.png
+                "Geen": /local/afvalwijzer/kliko.png
+
+        - type: glance
+          entities:
+            - entity: sensor.trash_gft_formatted
+              name: GFT
+            - entity: sensor.trash_papier_formatted
+              name: Papier
+            - entity: sensor.trash_pmd_formatted
+              name: Plastic
+            - entity: sensor.trash_restafval_formatted
+              name: Restafval
+
+#      - id: 294517673fc146a4971cd37ef41fcbe1  # Automatically created id
+#        type: entities
+#        entities:
+#          - sensor.trash_today
+#          - sensor.trash_tomorrow
+#          - type: divider
+#            style:
+#              height: 1px
+#              margin-left: auto
+#              margin-right: auto
+#              background: '#62717b'
+#          - sensor.trash_gft
+#          - sensor.trash_restafval
+#          - sensor.trash_papier
+#          - sensor.trash_pmd
+#          - type: divider
+#            style:
+#              height: 1px
+#              margin-left: auto
+#              margin-right: auto
+#              background: '#62717b'
+#          - input_boolean.trash_moved
+#          - input_boolean.trash_reminder
 
       - id: 274799b9eb634da6985a9cedd0d83017  # Automatically created id
         type: entities
@@ -340,6 +379,12 @@ views:
           - sensor.pihole_dns_unique_domains
           - sensor.pihole_domains_blocked
           - sensor.pihole_seen_clients
+
+      - type: custom:tracker-card
+        title: Custom Card Updates
+        trackers:
+          - sensor.custom_card_tracker
+          - sensor.custom_component_tracker
 
       - type: entities
         title: HASS

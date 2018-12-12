@@ -2,6 +2,22 @@
 ## Packages / Lights
 ################################################
 homeassistant:
+  customize:
+    scene.slaapkamer_general:
+      friendly_name: Slaapkamer On
+      icon: mdi:flash
+    scene.slaapkamer_wakeup:
+      friendly_name: Slaapkamer WakeUp
+      icon: mdi:flash
+    scene.slaapkamer_bright:
+      friendly_name: Slaapkamer Bright
+      icon: mdi:flash
+    scene.slaapkamer_night:
+      friendly_name: Slaapkamer Night
+      icon: mdi:flash
+    scene.slaapkamer_off:
+      friendly_name: Slaapkamer Off
+      icon: mdi:flash
 
 ################################################
 ## Scene
@@ -13,6 +29,37 @@ scene:
       light.woonkamer: off
       light.keuken: off
       group.buiten: off
+
+# SLAAPKAMER
+  - name: slaapkamer_general
+    entities:
+      light.slaapkamer:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 30
+  - name: slaapkamer_wakeup
+    entities:
+      light.slaapkamer:
+        state: true
+        transition: 300
+        xy_color: [0.52, 0.41]
+        brightness_pct: 30
+  - name: slaapkamer_bright
+    entities:
+      light.slaapkamer:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 50
+  - name: slaapkamer_night
+    entities:
+      light.slaapkamer:
+        state: true
+        transition: 5
+        xy_color: [0.52, 0.41]
+        brightness_pct: 0
+  - name: slaapkamer_off
+    entities:
+      light.slaapkamer: off
 
 # WOONKAMER
   - name: woonkamer_general
@@ -70,14 +117,19 @@ scene:
     entities:
       light.hal_en_overlopen:
         state: true
-        transition: 3
         xy_color: [0.52, 0.41]
         brightness_pct: 30
+  - name: hal_en_overlopen_evening
+    entities:
+      light.hal_en_overlopen:
+        state: true
+        xy_color: [0.52, 0.41]
+        brightness_pct: 5
   - name: hal_en_overlopen_night
     entities:
       light.hal_en_overlopen:
         state: true
-        transition: 1
+        transition: 30
         xy_color: [0.52, 0.41]
         brightness_pct: 0
   - name: hal_en_overlopen_bright

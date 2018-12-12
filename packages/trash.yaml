@@ -8,15 +8,26 @@ homeassistant:
     sensor.trash_tomorrow:
       friendly_name: Morgen
     sensor.trash_gft:
-      friendly_name: Groente, fruit & tuinafval
-    sensor.trash_pmd:
-      friendly_name: Plastic
+      friendly_name: GFT
+      entity_picture: /local/afvalwijzer/gft3.png
     sensor.trash_papier:
       friendly_name: Papier
+      entity_picture: /local/afvalwijzer/papier3.png
+    sensor.trash_pmd:
+      friendly_name: Plastic
+      entity_picture: /local/afvalwijzer/plastic3.png
     sensor.trash_restafval:
       friendly_name: Restafval
-    sensor.trash_kerstbomen:
-      friendly_name: Kerstbomen
+      entity_picture: /local/afvalwijzer/rest3.png
+
+    sensor.trash_gft_formatted:
+      entity_picture: /local/afvalwijzer/gft3.png
+    sensor.trash_papier_formatted:
+      entity_picture: /local/afvalwijzer/papier3.png
+    sensor.trash_pmd_formatted:
+      entity_picture: /local/afvalwijzer/plastic3.png
+    sensor.trash_restafval_formatted:
+      entity_picture: /local/afvalwijzer/rest3.png
 
 ################################################
 ## Input Boolean
@@ -37,6 +48,21 @@ sensor:
   - platform: mijnafvalwijzer
     postcode: !secret afvalwijzer_postcode
     huisnummer: !secret afvalwijzer_huisnummer
+
+  - platform: template
+    sensors:
+      trash_gft_formatted:
+        entity_id: sensor.trash_gft
+        value_template: '{{ as_timestamp(strptime(states.sensor.trash_gft.state, "%Y-%m-%d")) | timestamp_custom("%a %d %b") }}'
+      trash_papier_formatted:
+        entity_id: sensor.trash_papier
+        value_template: '{{ as_timestamp(strptime(states.sensor.trash_papier.state, "%Y-%m-%d")) | timestamp_custom("%a %d %b") }}'
+      trash_pmd_formatted:
+        entity_id: sensor.trash_pmd
+        value_template: '{{ as_timestamp(strptime(states.sensor.trash_pmd.state, "%Y-%m-%d")) | timestamp_custom("%a %d %b") }}'
+      trash_restafval_formatted:
+        entity_id: sensor.trash_restafval
+        value_template: '{{ as_timestamp(strptime(states.sensor.trash_restafval.state, "%Y-%m-%d")) | timestamp_custom("%a %d %b") }}'
 
 #  - platform: file
 #    file_path: /local/trash.json

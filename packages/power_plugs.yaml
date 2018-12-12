@@ -17,6 +17,10 @@ homeassistant:
       friendly_name: Kerstboom
     switch.smartplug7:
       friendly_name: Verlichting Boris
+    switch.smartplug8:
+      friendly_name: Kerstmis1
+    switch.smartplug9:
+      friendly_name: Kerstmis2
 
     sensor.smartplug1_watts:
       friendly_name: Huidig verbruik wasmachine
@@ -69,8 +73,6 @@ homeassistant:
 ################################################
 switch:
   - platform: tplink
-    host: 192.168.1.170
-  - platform: tplink
     host: 192.168.1.171
   - platform: tplink
     host: 192.168.1.172
@@ -84,7 +86,14 @@ switch:
     host: 192.168.1.176
   - platform: tplink
     host: 192.168.1.177
+  - platform: tplink
+    host: 192.168.1.178
+  - platform: tplink
+    host: 192.168.1.179
 
+################################################
+## Group
+################################################
 group:
   hometracking:
     name: Household Tracking
@@ -92,6 +101,19 @@ group:
     entities:
       - device_tracker.taipan5g
       - device_tracker.lieke_iphone
+  kerstmis:
+    name: Kerstverlichting
+    entities:
+      - switch.smartplug6
+      - switch.smartplug8
+      - switch.smartplug9
+  powerplugs:
+     name: PowerPlugs
+     entities:
+      - group.kerstmis
+      - switch.smartplug1
+      - switch.smartplug3
+      - switch.smartplug5
 
 ################################################
 ## Inputs
@@ -344,11 +366,86 @@ sensor:
         unit_of_measurement: "%"
         value_template: "{{ '%.1f'|format(states('sensor.droger_this_month')|float * 100 / 720) }}"
 
-
 ################################################
 ## Automation
 ################################################
 automation:
+# KERSTMIS
+  - alias: Remote Hue 1
+    trigger:
+    - platform: state
+      entity_id: sensor.hue_remote_1_state
+    action:
+    - service_template: >-
+        {%- if trigger.to_state.state | lower == "on" -%}
+        homeassistant.turn_on
+        {%- elif trigger.to_state.state | lower == 'off' -%}
+        homeassistant.turn_off
+        {%- endif -%}
+      data_template:
+        entity_id: >-
+          {%- if trigger.to_state.state | lower == "on" -%}
+          group.kerstmis
+          {%- else -%}
+          group.kerstmis
+          {%- endif -%}
+
+  - alias: "Kerst Ritual"
+    trigger:
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
+    condition:
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: homeassistant.turn_on
+      data_template:
+        entity_id: >-
+          {%- if states('sensor.time_of_day_short') in ['daytime'] -%}
+          group.kerstmis
+          {%- endif -%}
+
+  - alias: 'Kerst Ritual 2'
+    trigger:
+    - platform: time
+      at: '09:30:00'
+    condition:
+    - condition: time
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri
+    action:
+    - service: homeassistant.turn_off
+      entity_id: group.kerstmis
+
+
+#   - alias: Alias
+#     initial_state: true
+#     hide_entity: true
+#     trigger:
+#       platform: state
+#       entity_id: 
+#         - sensor.switch_one
+#         - sensor.switch_two
+#     action:
+#       - service_template: >
+#           {%- if trigger.to_state.state | lower == "on" -%}
+#               homeassistant.turn_on
+#           {%- else -%}
+#               homeassistant.turn_off
+#           {%- endif -%}
+#         data_template:
+#           entity_id: 'switch.switch_{{ trigger.entity_id.split(".")[1].split("_")[2]}}'
+
+
 # WASMACHINE
   - alias: Action - Set wasmachine to running
     trigger:
