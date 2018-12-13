@@ -9,25 +9,25 @@ homeassistant:
       friendly_name: Morgen
     sensor.trash_gft:
       friendly_name: GFT
-      entity_picture: /local/afvalwijzer/gft3.png
+      entity_picture: /local/mijnafvalwijzer/gft3.png
     sensor.trash_papier:
       friendly_name: Papier
-      entity_picture: /local/afvalwijzer/papier3.png
+      entity_picture: /local/mijnafvalwijzer/papier3.png
     sensor.trash_pmd:
       friendly_name: Plastic
-      entity_picture: /local/afvalwijzer/plastic3.png
+      entity_picture: /local/mijnafvalwijzer/plastic3.png
     sensor.trash_restafval:
       friendly_name: Restafval
-      entity_picture: /local/afvalwijzer/rest3.png
+      entity_picture: /local/mijnafvalwijzer/rest3.png
 
     sensor.trash_gft_formatted:
-      entity_picture: /local/afvalwijzer/gft3.png
+      entity_picture: /local/mijnafvalwijzer/gft3.png
     sensor.trash_papier_formatted:
-      entity_picture: /local/afvalwijzer/papier3.png
+      entity_picture: /local/mijnafvalwijzer/papier3.png
     sensor.trash_pmd_formatted:
-      entity_picture: /local/afvalwijzer/plastic3.png
+      entity_picture: /local/mijnafvalwijzer/plastic3.png
     sensor.trash_restafval_formatted:
-      entity_picture: /local/afvalwijzer/rest3.png
+      entity_picture: /local/mijnafvalwijzer/rest3.png
 
 ################################################
 ## Input Boolean

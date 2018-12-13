@@ -55,6 +55,8 @@ views:
           - switch.smartplug4
           - switch.smartplug7
 
+      #- type: thermostat
+      #  entity: climate.living_room
       - type: vertical-stack
         cards:
         - type: horizontal-stack
@@ -62,13 +64,9 @@ views:
           - type: sensor
             entity: sensor.living_room_thermostat_temperature
             name: Temperatuur
-            line_color: '#f1c40f'
-            height: 75
           - type: sensor
             entity: sensor.living_room_thermostat_humidity
             name: Luchtvochtigheid
-            line_color: '#f1c40f'
-            height: 75
         - id: dcb17306a9af4348ac01a6969ccb5ebe  # Automatically created id
           type: entities
           entities:
@@ -81,20 +79,14 @@ views:
           cards:
           - type: sensor
             entity: sensor.electricity_currently_delivered
-            line_color: '#f1c40f'
-            height: 75
         - type: horizontal-stack
           cards:
           - type: sensor
             entity: sensor.smartplug1_watts
-            line_color: '#f1c40f'
             name: Wasmachine
-            height: 75
           - type: sensor
             entity: sensor.smartplug3_watts
-            line_color: '#f1c40f'
             name: Droger
-            height: 75
         - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
           type: entities
           entities:
@@ -126,37 +118,38 @@ views:
             - sensor.droger_status_time
             - sensor.droger_status_value
 
-        - type: horizontal-stack
+        - type: vertical-stack
           cards:
-            - type: picture-entity
-              entity: sensor.trash_today
-              name: Vandaag
-              state_image:
-                "gft": /local/afvalwijzer/gft3.png
-                "papier": /local/afvalwijzer/papier3.png
-                "restafval": /local/afvalwijzer/rest3.png
-                "pmd": /local/afvalwijzer/plastic3.png
-                "Geen": /local/afvalwijzer/kliko.png
-            - type: picture-entity
-              entity: sensor.trash_tomorrow
-              name: Morgen
-              state_image:
-                "gft": /local/afvalwijzer/gft3.png
-                "papier": /local/afvalwijzer/papier3.png
-                "restafval": /local/afvalwijzer/rest3.png
-                "pmd": /local/afvalwijzer/plastic3.png
-                "Geen": /local/afvalwijzer/kliko.png
-
-        - type: glance
-          entities:
-            - entity: sensor.trash_gft_formatted
-              name: GFT
-            - entity: sensor.trash_papier_formatted
-              name: Papier
-            - entity: sensor.trash_pmd_formatted
-              name: Plastic
-            - entity: sensor.trash_restafval_formatted
-              name: Restafval
+            - type: horizontal-stack
+              cards:
+                - type: picture-entity
+                  entity: sensor.trash_today
+                  name: Vandaag
+                  state_image:
+                    'gft': /local/mijnafvalwijzer/gft3.png
+                    'papier': /local/mijnafvalwijzer/papier3.png
+                    'restafval': /local/mijnafvalwijzer/rest3.png
+                    'pmd': /local/mijnafvalwijzer/plastic3.png
+                    'Geen': /local/mijnafvalwijzer/kliko3.png
+                - type: picture-entity
+                  entity: sensor.trash_tomorrow
+                  name: Morgen
+                  state_image:
+                    'gft': /local/mijnafvalwijzer/gft3.png
+                    'papier': /local/mijnafvalwijzer/papier3.png
+                    'restafval': /local/mijnafvalwijzer/rest3.png
+                    'pmd': /local/mijnafvalwijzer/plastic3.png
+                    'Geen': /local/mijnafvalwijzer/kliko3.png
+            - type: glance
+              entities:
+               - entity: sensor.trash_gft_formatted
+                 name: GFT
+               - entity: sensor.trash_papier_formatted
+                 name: Papier
+               - entity: sensor.trash_pmd_formatted
+                 name: Plastic
+               - entity: sensor.trash_restafval_formatted
+                 name: Restafval
 
 #      - id: 294517673fc146a4971cd37ef41fcbe1  # Automatically created id
 #        type: entities
@@ -292,17 +285,14 @@ views:
       - type: sensor
         entity: sensor.electricity_currently_delivered
         name: DSMR - Huidig
-        height: 75
 
       - type: sensor
         entity: sensor.electricity1
         name: DSMR - Totaal Energie
-        height: 75
 
       - type: sensor
         entity: sensor.gas
         name: DSMR - Totaal Gas
-        height: 75
 
       - id: c941976202ab41f8a9d3772ca5008dc7  # Automatically created id
         type: custom:monster-card

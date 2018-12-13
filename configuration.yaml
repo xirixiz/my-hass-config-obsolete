@@ -24,6 +24,9 @@ history:
 zeroconf:
 tts:
 
+lovelace:
+  mode: yaml
+
 custom_updater:  # https://github.com/custom-components/custom_updater/wiki/Installation
   show_installable: false
   hide_sensor: false
