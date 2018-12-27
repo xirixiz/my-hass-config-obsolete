@@ -2,7 +2,7 @@
 @ Authors     : Bram van Dartel
 @ Description : MijnAfvalwijzer Test Script - It queries mijnafvalwijzer.nl.
 """
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import requests
 import logging
 import json
@@ -22,19 +22,19 @@ SCAN_INTERVAL = timedelta(seconds=30)
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=900)
 
 url = ("http://json.mijnafvalwijzer.nl/?method=postcodecheck& \
-        postcode=5685HE&street=&huisnummer=16& \
-        platform=phone&langs=nl&")
+         postcode=5685HE&street=&huisnummer=16& \
+         platform=phone&langs=nl&")
 
 response = requests.get(url)
 json_obj = response.json()
-json_data = json_obj['data']['ophaaldagen']['data']
-json_data_next = json_obj['data']['ophaaldagenNext']['data']
-trashTotal = [{1: 'today'}, {2: 'tomorrow'}]
+json_data = (json_obj['data']['ophaaldagen']['data'] + json_obj['data']['ophaaldagenNext']['data'])
+
+trashTotal = [{1: 'today'}, {2: 'tomorrow'}, {3: 'next'} ]
 countType = len(trashTotal) + 1
 trashType = {}
 devices = []
 
-for item in json_data or json_data_next:
+for item in json_data:
     name = item["nameType"]
     if name not in trashType:
         trash = {}
@@ -43,21 +43,28 @@ for item in json_data or json_data_next:
         countType += 1
         trashTotal.append(trash)
 
-print("trashTotal:",trashTotal)
+#print("trashTotal:",trashTotal)
 
 today = datetime.today().strftime("%Y-%m-%d")
 dateConvert = datetime.strptime(today, "%Y-%m-%d") + timedelta(days=1)
 tomorrow = datetime.strftime(dateConvert, "%Y-%m-%d")
 
-today = '2018-11-29'
+today = '2018-07-06'
 trash = {}
 trashType = {}
 trashToday = {}
 trashTomorrow = {}
+trashInDays = {}
 tschedule = []
 
+def d(s):
+    [year, month, day] = map(int, s.split('-'))
+    return date(year, month, day)
+def days(start, end):
+    return (d(end) - d(start)).days
+
 for name in trashTotal:
-    for item in json_data or json_data_next:
+    for item in json_data:
         name = item["nameType"]
         dateFormat = datetime.strptime(item['date'], "%Y-%m-%d")
         dateConvert = dateFormat.strftime("%Y-%m-%d")
@@ -66,49 +73,57 @@ for name in trashTotal:
             if item['date'] == today:
                 trashToday = {}
                 trashType[name] = today
-                trashToday['name_type'] = "today"
-                trashToday['pickup_date'] = item['nameType']
+                trashToday['key'] = "today"
+                trashToday['value'] = item['nameType']
                 tschedule.append(trashToday)
 
             if item['date'] == tomorrow:
                 trashTomorrow = {}
                 trashType[name] = "tomorrow"
-                trashTomorrow['name_type'] = "tomorrow"
-                trashTomorrow['pickup_date'] = item['nameType']
+                trashTomorrow['key'] = "tomorrow"
+                trashTomorrow['value'] = item['nameType']
                 tschedule.append(trashTomorrow)
 
             if item['date'] >= today:
                 trash = {}
                 trashType[name] = item["nameType"]
-                trash['name_type'] = item['nameType']
-                trash['pickup_date'] = dateConvert
+                trash['key'] = item['nameType']
+                trash['value'] = dateConvert
                 tschedule.append(trash)
 
-#if trashToday['name_type'] = "today":
-#    trashToday['pickup_date'] = item['nameType']
+            if item['date'] > today:
+                if len(trashInDays) == 0:
+                    trashType[name] = "next"
+                    trashInDays['key'] = 'next'
+                    trashInDays['value'] = (days(today, dateConvert))
+                    tschedule.append(trashInDays)
+
+
+#if trashToday['key'] = "today":
+#    trashToday['value'] = item['nameType']
 
 if len(trashToday) == 0:
-    trashToday = {}
-    trashType[name] = "today"
-    trashToday['name_type'] = "today"
-    trashToday['pickup_date'] = "None"
-    tschedule.append(trashToday)
+   trashToday = {}
+   trashType[name] = "today"
+   trashToday['key'] = "today"
+   trashToday['value'] = "None"
+   tschedule.append(trashToday)
 
 if len(trashTomorrow) == 0:
-    trashTomorrow = {}
-    trashType[name] = "tomorrow"
-    trashTomorrow['name_type'] = "tomorrow"
-    trashTomorrow['pickup_date'] = "None"
-    tschedule.append(trashTomorrow)
+   trashTomorrow = {}
+   trashType[name] = "tomorrow"
+   trashTomorrow['key'] = "tomorrow"
+   trashTomorrow['value'] = "None"
+   tschedule.append(trashTomorrow)
 
-for item in json_data or json_data_next:
-    name = item["nameType"]
-    if name not in trashType:
-        trash = {}
-        trashType[name] = item["nameType"]
-        trash['name_type'] = item['nameType']
-        trash['pickup_date'] = "None"
-        tschedule.append(trash)
+for item in json_data:
+     name = item["nameType"]
+     if name not in trashType:
+         trash = {}
+         trashType[name] = item["nameType"]
+         trash['key'] = item['nameType']
+         trash['value'] = "None"
+         tschedule.append(trash)
 
 print(tschedule)
 
