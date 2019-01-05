@@ -197,11 +197,11 @@ automation:
       before: '05:00:00'
       after: '00:00:00'
     action:
-    - service: scene.turn_on
+    - service: script.turn_on
       data_template:
         entity_id: >-
           {%- if is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') -%}
-          scene.buiten_bright
+          script.buiten
           {%- else -%}
           script.buiten_off
           {%- endif -%}
@@ -239,7 +239,7 @@ automation:
       data_template:
         entity_id: >-
           {%- if (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['daytime'] -%}
-          script.woonkamer, script.keuken
+          script.woonkamer, script.keuken, script.buiten
           {%- elif (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
           script.woonkamer, script.keuken, script.buiten
           #{%- elif (is_state('sensor.motion_woonkamer', 'on') or is_state('sensor.motion_hal', 'on')) and states('sensor.time_of_day_short') in ['night'] -%}
@@ -396,7 +396,14 @@ script:
   buiten:
     sequence:
     - service: scene.turn_on
-      entity_id: scene.buiten_general
+      data_template:
+        entity_id: >-
+          scene.buiten_
+          {%- if states('sensor.time_of_day_short') in ['evening'] -%}evening
+          {%- elif states('sensor.time_of_day_short') in ['night'] -%}night
+          {%- else -%}general
+          {%- endif -%}
+
 
   buiten_off:
     sequence:
