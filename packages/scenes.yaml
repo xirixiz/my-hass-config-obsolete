@@ -35,27 +35,27 @@ scene:
     entities:
       light.slaapkamer:
         state: true
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 30
   - name: slaapkamer_wakeup
     entities:
       light.slaapkamer:
         state: true
         transition: 300
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 30
   - name: slaapkamer_bright
     entities:
       light.slaapkamer:
         state: true
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 50
   - name: slaapkamer_night
     entities:
       light.slaapkamer:
         state: true
         transition: 5
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 0
   - name: slaapkamer_off
     entities:
@@ -67,21 +67,21 @@ scene:
       light.woonkamer:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 30
   - name: woonkamer_bright
     entities:
       light.woonkamer:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 40
   - name: woonkamer_super_bright
     entities:
       light.woonkamer:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 90
 
 # KEUKEN
@@ -90,26 +90,26 @@ scene:
       light.keuken:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 30
       light.keuken_hanglamp:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 25
   - name: keuken_bright
     entities:
       light.keuken:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 40
   - name: keuken_super_bright
     entities:
       light.keuken:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 90
 
 # HAL EN OVERLOPEN
@@ -117,34 +117,33 @@ scene:
     entities:
       light.hal_en_overlopen:
         state: true
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 30
   - name: hal_en_overlopen_evening
     entities:
       light.hal_en_overlopen:
         state: true
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 5
   - name: hal_en_overlopen_night
     entities:
       light.hal_en_overlopen:
         state: true
-        transition: 30
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 0
   - name: hal_en_overlopen_bright
     entities:
       light.hal_en_overlopen:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 40
   - name: hal_en_overlopen_super_bright
     entities:
       light.hal_en_overlopen:
         state: true
         transition: 3
-        xy_color: [0.52, 0.41]
+        color_temp: 451
         brightness_pct: 90
 
 # BUITEN
@@ -152,20 +151,20 @@ scene:
     entities:
       group.buiten:
         state: true
+        color_temp: 451
         transition: 3
-        xy_color: [0.52, 0.41]
         brightness_pct: 30
   - name: buiten_bright
     entities:
       group.buiten:
         state: true
+        color_temp: 451
         transition: 3
-        xy_color: [0.52, 0.41]
         brightness_pct: 40
   - name: buiten_super_bright
     entities:
       group.buiten:
         state: true
+        color_temp: 451
         transition: 3
-        xy_color: [0.52, 0.41]
         brightness_pct: 90

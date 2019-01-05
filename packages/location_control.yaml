@@ -29,10 +29,13 @@ homeassistant:
 ## Device Tracker
 ################################################
 device_tracker:
-  - platform: unifi_direct
+  - platform: unifi
     host: !secret ap_host
     username: !secret ap_username
     password: !secret ap_password
+    port: 8443
+    verify_ssl: false
+    #track_new_devices: yes
 
   - platform: nmap_tracker
     hosts:
@@ -42,6 +45,7 @@ device_tracker:
     host: !secret openwrt_tracker_boven_host
     username: !secret openwrt_tracker_boven_username
     password: !secret openwrt_tracker_boven_password
+    ssl: false
 
 ################################################
 ## Zone

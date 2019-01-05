@@ -34,14 +34,6 @@ homeassistant:
       icon: mdi:weather-fog
 
 ################################################
-## Weather
-################################################
-weather:
-  - platform: yweather
-#  - platform: darksky
-#    api_key: !secret darksky_secret
-
-################################################
 ## Sensor
 ################################################
 sensor:
@@ -78,26 +70,3 @@ sensor:
       - visibility
     update_interval:
       minutes: 5
-
-  - platform: yr
-    name: Weather
-    forecast: 24
-    monitored_conditions:
-      - temperature
-      - symbol
-      - precipitation
-      - windSpeed
-      - pressure
-      - windDirection
-      - humidity
-      - fog
-      - cloudiness
-      - lowClouds
-      - mediumClouds
-      - highClouds
-      - dewpointTemperature
-
-  - platform: statistics
-    entity_id: sensor.weather_precipitation
-    name: Rain Average
-    sampling_size: 2000

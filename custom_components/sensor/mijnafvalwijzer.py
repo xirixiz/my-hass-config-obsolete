@@ -1,9 +1,9 @@
 """
 @ Authors     : Bram van Dartel
-@ Date        : 27/12/2018
+@ Date        : 31/12/2018
 @ Description : MijnAfvalwijzer Sensor - It queries mijnafvalwijzer.nl.
 """
-VERSION = '1.1.7'
+VERSION = '1.1.9'
 
 from datetime import datetime, timedelta, date
 import voluptuous as vol
@@ -56,7 +56,7 @@ def setup_platform(hass, config, add_devices, discovery_info=None):
     response = requests.get(url)
     json_obj = response.json()
     json_data = (json_obj['data']['ophaaldagen']['data'] + json_obj['data']['ophaaldagenNext']['data'])
-    trashTotal = [{1: 'today'}, {2: 'tomorrow'}, {2: 'days_to_next_pickup'}]
+    trashTotal = [{1: 'today'}, {2: 'tomorrow'}, {2: 'next_in_days'}]
     countIndex = len(trashTotal) + 1
     trashType = {}
     devices = []
@@ -164,8 +164,8 @@ class TrashCollectionSchedule(object):
 
                     if item['date'] > today:
                         if len(trashInDays) == 0:
-                            trashType[name] = "days_to_next_pickup"
-                            trashInDays['key'] = "days_to_next_pickup"
+                            trashType[name] = "next_in_days"
+                            trashInDays['key'] = "next_in_days"
                             trashInDays['value'] = (days(today, dateConvert))
                             tschedule.append(trashInDays)
 
@@ -180,6 +180,12 @@ class TrashCollectionSchedule(object):
                         trashTomorrow['key'] = "tomorrow"
                         multiTrashTomorrow.append(item['nameType'])
                         tschedule.append(trashTomorrow)
+
+        if len(trashInDays) == 0:
+            trashType[name] = "next_in_days"
+            trashInDays['key'] = 'next_in_days'
+            trashInDays['value'] = labelNone
+            tschedule.append(trashInDays)
 
         if len(multiTrashToday) == 0:
             trashToday = {}

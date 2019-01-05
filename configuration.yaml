@@ -11,11 +11,25 @@ homeassistant:
   packages: !include_dir_named packages
   auth_providers:
    - type: homeassistant
+   - type: trusted_networks
    - type: legacy_api_password
 
-################################################
-## Component
-################################################
+http:
+  api_password: !secret http_password
+#  ssl_certificate: !secret ssl_certificate
+#  ssl_key: !secret ssl_key
+  use_x_forwarded_for: true
+  ip_ban_enabled: false
+  login_attempts_threshold: 5
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+  trusted_networks:
+    - 127.0.0.1
+    - ::1
+    - 192.168.1.0/24
+    - fd00::/8
+
 logbook:
 config:
 conversation:
@@ -23,6 +37,8 @@ history:
 #map:
 zeroconf:
 tts:
+  - platform: google
+    base_url: !secret http_url
 
 lovelace:
   mode: yaml
@@ -35,7 +51,9 @@ custom_updater:  # https://github.com/custom-components/custom_updater/wiki/Inst
     - cards
     #- python_scripts
   card_urls:
+    - https://raw.githubusercontent.com/maykar/custom-lovelace/master/tracker.json
     - https://raw.githubusercontent.com/custom-cards/information/master/repos.json
+    - https://raw.githubusercontent.com/kuuji/button-card/master/tracker.json
   component_urls:
     - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
     - https://raw.githubusercontent.com/robmarkcole/Hue-sensors-HASS/master/custom_updater.json

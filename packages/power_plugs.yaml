@@ -393,11 +393,11 @@ automation:
   - alias: "Kerst Ritual"
     trigger:
     - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
+      entity_id: sensor.motion_hal
+      to: 'on'
     - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'True'
+      entity_id: sensor.motion_woonkamer
+      to: 'on'
     condition:
     - condition: state
       entity_id: input_boolean.automation_mode

@@ -74,11 +74,11 @@ automation:
   - alias: 'Motion Detection - Alert Start'
     trigger:
     - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'True'
+      entity_id: sensor.motion_woonkamer
+      to: 'on'
     - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
+      entity_id: sensor.motion_hal
+      to: 'on'
     condition:
     - condition: state
       entity_id: input_boolean.vacation_mode
@@ -93,13 +93,13 @@ automation:
   - alias: 'Motion Detection - Alert Stop'
     trigger:
     - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'False'
+      entity_id: sensor.motion_woonkamer
+      to: 'off'
       for:
         minutes: 1
     - platform: state
-      entity_id: sensor.hal_motion
-      to: 'False'
+      entity_id: sensor.motion_hal
+      to: 'off'
       for:
         minutes: 1
     condition:

@@ -17,6 +17,8 @@ homeassistant:
     script.hal_en_overlopen_off:
       friendly_name: Hal en Overlopen
       icon: mdi:flashlight-off
+    group.buiten:
+      friendly_name: Buiten
     script.buiten_off:
       friendly_name: Buiten
       icon: mdi:flashlight-off
@@ -35,89 +37,18 @@ homeassistant:
     script.woonkamer:
       friendly_name: Woonkamer
       icon: mdi:flashlight
-    script.woonkamer_nightlight:
-      friendly_name: Woonkamer NL
-      icon: mdi:flashlight
-    script.woonkamer_bright:
-      friendly_name: Woonkamer B
-      icon: mdi:flashlight
-    script.woonkamer_super_bright:
-      friendly_name: Woonkamer SB
-      icon: mdi:flashlight
     script.keuken:
       friendly_name: Keuken
-      icon: mdi:flashlight
-    script.keuken_bright:
-      friendly_name: Keuken B
-      icon: mdi:flashlight
-    script.keuken_super_bright:
-      friendly_name: Keuken SB
-      icon: mdi:flashlight
-    script.hal_en_overlopen:
-      friendly_name: Hal & Overlopen
-      icon: mdi:flashlight
-    script.hal_en_overlopen_nightlight:
-      friendly_name: Hal & Overlopen NL
-      icon: mdi:flashlight
-    script.hal_en_overlopen_bright:
-      friendly_name: Hal & Overlopen B
-      icon: mdi:flashlight
-    script.hal_en_overlopen_super_bright:
-      friendly_name: Hal & Overlopen SB
       icon: mdi:flashlight
     script.buiten:
       friendly_name: Buiten
       icon: mdi:flashlight
-    script.buiten_bright:
-      friendly_name: Buiten B
-      icon: mdi:flashlight
-    script.buiten_super_bright:
-      friendly_name: Buiten SB
-      icon: mdi:flashlight
-    sensor.woonkamer_motion:
+    sensor.motion_woonkamer:
       friendly_name: Woonkamer Motion
       icon: mdi:run-fast
-    sensor.woonkamer_lux:
-      friendly_name: Woonkamer Lux
-      icon: mdi:theme-light-dark
-    sensor.woonkamer_battery:
-      friendly_name: Woonkamer Battery
-      icon: mdi:battery
-    sensor.hal_motion:
+    sensor.motion_hal:
       friendly_name: Hal Motion
       icon: mdi:run-fast
-    sensor.hal_lux:
-      friendly_name: Hal Lux
-      icon: mdi:theme-light-dark
-    sensor.hal_battery:
-      friendly_name: Hal Battery
-      icon: mdi:battery
-    sensor.switch_hal:
-      friendly_name: Switch Hal
-    sensor.switch_woonkamer:
-      friendly_name: Switch Woonkamer
-    sensor.hue_remote_1_state:
-      friendly_name: Remote 1 State
-      icon: mdi:remote
-      persistence: false
-    sensor.hue_remote_1_last_update:
-      friendly_name: Remote 1 Last Update
-      icon: mdi:clock
-    sensor.hue_remote_1_battery:
-      friendly_name: Remote 1 Battery
-      icon: mdi:battery
-    sensor.hue_remote_2_state:
-      friendly_name: Remote 2 State
-      icon: mdi:remote
-      persistence: false
-    sensor.hue_remote_2_last_update:
-      friendly_name: Remote 2 Last Update
-      icon: mdi:clock
-    sensor.hue_remote_2_battery:
-      friendly_name: Remote 2 Battery
-      icon: mdi:battery
-    input_number.keuken_hanglamp_brightness:
-      friendly_name: Keuken Hanglamp
 
 ################################################
 ## Hue
@@ -133,10 +64,11 @@ hue:
 ################################################
 input_number:
   keuken_hanglamp_brightness:
-    initial: 127
+    initial: 0
     min: 0
-    max: 255
-    step: 1
+    max: 100
+    step: 5
+    icon: mdi:brightness-auto
 
 input_boolean:
   automation_mode:
@@ -164,129 +96,40 @@ sensor:
     ip_address: !secret philips_hue_host
     token: !secret philips_hue_token
 
-  - platform: rest
-    resource: !secret hue_woonkamer_battery_sensor
-    value_template: '{{ value_json.config.battery }}'
-    scan_interval: 1800
-    unit_of_measurement: '%'
-    name: 'woonkamer_battery'
-  - platform: rest
-    resource: !secret hue_woonkamer_motion_sensor
-    value_template: '{{ value_json.state.presence }}'
-    scan_interval: 1
-    name: 'woonkamer_motion'
-  - platform: rest
-    resource: !secret hue_woonkamer_lux_sensor
-  #  value_template: '{{(10 ** (float (value_json.state.lightlevel) / 10000) -1) | round (1)}}'
-    value_template: '{{ value_json.state.lightlevel }}'
-    scan_interval: 30
-    unit_of_measurement: 'Lux'
-    name: 'woonkamer_lux'
-
-  # Philips HUE - Sensors - Hal en Overlopen
-  - platform: rest
-    resource: !secret hue_hal_battery_sensor
-    value_template: '{{ value_json.config.battery }}'
-    scan_interval: 1800
-    unit_of_measurement: '%'
-    name: 'hal_battery'
-  - platform: rest
-    resource: !secret hue_hal_motion_sensor
-    value_template: '{{ value_json.state.presence }}'
-    scan_interval: 1
-    name: 'hal_motion'
-  - platform: rest
-    resource: !secret hue_hal_lux_sensor
-    value_template: '{{ value_json.state.lightlevel }}'
-    scan_interval: 30
-    unit_of_measurement: 'Lux'
-    name: 'hal_lux'
-
-  # Philips HUE - Remote 1
-  - platform: rest
-    resource: !secret hue_remote_1
-    value_template: '{{ value_json.config.battery }}'
-    unit_of_measurement: '%'
-    scan_interval: 1800
-    name: 'hue_remote_1_battery'
-  - platform: rest
-    resource: !secret hue_remote_1
-    value_template: '{{ value_json.state.buttonevent }}'
-    scan_interval: 1
-    name: 'hue_remote_1_state'
   - platform: template
     sensors:
-      hue_remote_1_state:
-        friendly_name: 'hue_remote_1_state'
-        value_template: >-
-          {%- if states('sensor.hue_remote_1_state_2')[0] == "1" -%} On
-          {%- elif states('sensor.hue_remote_1_state_2')[0] == "2" -%} Dim Up
-          {%- elif states('sensor.hue_remote_1_state_2')[0] == "3" -%} Dim Down
-          {%- elif states('sensor.hue_remote_1_state_2')[0] == "4" -%} Off
-          {%- else -%} None
-          {%- endif -%}
-  - platform: rest
-    resource: !secret hue_remote_1
-    value_template: '{{ value_json.state.lastupdated }}'
-    scan_interval: 10
-    name: 'hue_remote_1_last_update'
-  - platform: template
-    sensors:
-      hue_remote_1_last_update:
-        friendly_name: 'hue_remote_1_last_used'
-        value_template: >-
-          {{ as_timestamp(strptime(states('sensor.hue_remote_1_last_update_2')[:19], "%Y-%m-%dT%X"))|timestamp_custom("%a, %B %d")}}
-
-  # Philips HUE - Remote 2
-  - platform: rest
-    resource: !secret hue_remote_2
-    value_template: '{{ value_json.config.battery }}'
-    unit_of_measurement: '%'
-    scan_interval: 1800
-    name: 'hue_remote_2_battery'
-  - platform: rest
-    resource: !secret hue_remote_2
-    value_template: '{{ value_json.state.buttonevent }}'
-    scan_interval: 1
-    name: 'hue_remote_2_state'
-  - platform: template
-    sensors:
-      hue_remote_2_state:
-        friendly_name: 'hue_remote_2_state'
-        value_template: >-
-          {%- if states('sensor.hue_remote_2_state_2')[0] == "1" -%} On
-          {%- elif states('sensor.hue_remote_2_state_2')[0] == "2" -%} Dim Up
-          {%- elif states('sensor.hue_remote_2_state_2')[0] == "3" -%} Dim Down
-          {%- elif states('sensor.hue_remote_2_state_2')[0] == "4" -%} Off
-          {%- else -%} None
-          {%- endif -%}
-  - platform: rest
-    resource: !secret hue_remote_2
-    value_template: '{{ value_json.state.lastupdated }}'
-    scan_interval: 10
-    name: 'hue_remote_2_last_update'
-  - platform: template
-    sensors:
-      hue_remote_2_last_update:
-        friendly_name: 'hue_remote_2_last_used'
-        value_template: >-
-          {{ as_timestamp(strptime(states('sensor.hue_remote_2_last_update_2')[:19], "%Y-%m-%dT%X"))|timestamp_custom("%a, %B %d")}}
+      woonkamer_temperature:
+        friendly_name: 'Woonkamer temperatuur'
+        value_template: '{{states.sensor.motion_woonkamer.attributes.temperature}}'
+        unit_of_measurement: °C
+      woonkamer_lux:
+        friendly_name: 'Woonkamer Lux'
+        value_template: '{{states.sensor.motion_woonkamer.attributes.lx}}'
+        unit_of_measurement: lux
+      hal_temperature:
+        friendly_name: 'Hal temperatuur'
+        value_template: '{{states.sensor.motion_hal.attributes.temperature}}'
+        unit_of_measurement: °C
+      hal_lux:
+        friendly_name: 'Hal Lux'
+        value_template: '{{states.sensor.motion_hal.attributes.lx}}'
+        unit_of_measurement: lux
 
   - platform: template
     sensors:
       keuken_hanglamp_brightness:
+        friendly_name: 'Keuken Hanglamp'
         value_template: >-
           {%- if is_state('light.keuken_hanglamp', 'on') -%}
-            {{ states.light.keuken_hanglamp.attributes.brightness | int }}
-          {%- else -%}
-            127
+            {{ states.light.keuken_hanglamp.attributes.brightness | int / 2.55 }}
           {%- endif -%}
-      switch_hal:
+        unit_of_measurement: '%'
+      switch_hal_lux:
         value_template: >-
           {%- if states('sensor.hal_lux') | int < 6000 -%} on
           {%- else -%} off
           {%- endif -%}
-      switch_woonkamer:
+      switch_woonkamer_lux:
         value_template: >-
           {%- if states('sensor.woonkamer_lux') | int < 12000 -%} on
           {%- else -%} off
@@ -313,7 +156,12 @@ automation:
     - service: input_number.set_value
       data_template:
         entity_id: input_number.keuken_hanglamp_brightness
-        value: "{{ states.light.keuken_hanglamp.attributes.brightness | int }}"
+        value: >-
+          {%- if states.light.keuken_hanglamp.attributes.brightness is defined -%}
+            {{ trigger.to_state.state | int }}
+          {%- else -%}
+            0
+          {%- endif -%}
 
   - alias: "Switch - Keuken - Hanglamp - On"
     trigger:
@@ -352,10 +200,10 @@ automation:
     - service: scene.turn_on
       data_template:
         entity_id: >-
-          {%- if is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') or is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') -%}
+          {%- if is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') -%}
           scene.buiten_bright
           {%- else -%}
-          script.off
+          script.buiten_off
           {%- endif -%}
 
   # GENERAL
@@ -365,23 +213,23 @@ automation:
       minutes: '/10'
       seconds: 00
     - platform: state
-      entity_id: sensor.switch_woonkamer
+      entity_id: sensor.switch_woonkamer_lux
       from: 'off'
       to: 'on'
       for:
         minutes: 5
     - platform: state
-      entity_id: sensor.switch_woonkamer
+      entity_id: sensor.switch_woonkamer_lux
       from: 'on'
       to: 'off'
       for:
         minutes: 5
     - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
+      entity_id: sensor.motion_hal
+      to: 'on'
     - platform: state
-      entity_id: sensor.woonkamer_motion
-      to: 'True'
+      entity_id: sensor.motion_woonkamer
+      to: 'on'
     condition:
     - condition: state
       entity_id: input_boolean.automation_mode
@@ -390,15 +238,15 @@ automation:
     - service: script.turn_on
       data_template:
         entity_id: >-
-          {%- if (is_state('sensor.switch_woonkamer', 'on') and is_state('sensor.switch_hal', 'on')) and states('sensor.time_of_day_short') in ['daytime'] -%}
+          {%- if (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['daytime'] -%}
           script.woonkamer, script.keuken
-          {%- elif (is_state('sensor.switch_woonkamer', 'on') and is_state('sensor.switch_hal', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
-          script.woonkamer, script.keuken,script.buiten
-          #{%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
+          {%- elif (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
+          script.woonkamer, script.keuken, script.buiten
+          #{%- elif (is_state('sensor.motion_woonkamer', 'on') or is_state('sensor.motion_hal', 'on')) and states('sensor.time_of_day_short') in ['night'] -%}
           #script.woonkamer, script.keuken
           {%- elif is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
           script.all_off
-          {%- elif is_state('sensor.switch_woonkamer', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
+          {%- elif is_state('sensor.switch_woonkamer_lux', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
           script.all_off
           {%- endif -%}
 
@@ -406,18 +254,18 @@ automation:
   - alias: "Hal en overlopen On/Off"
     trigger:
     - platform: state
-      entity_id: sensor.hal_motion
-      to: 'True'
+      entity_id: sensor.motion_hal
+      to: 'on'
     - platform: state
-      entity_id: sensor.hal_motion
-      to: 'False'
+      entity_id: sensor.motion_hal
+      to: 'off'
       for:
         minutes: 10
     action:
     - service: script.turn_on
       data_template:
         entity_id: >-
-          {%- if is_state('sensor.switch_hal', 'on') and is_state('sensor.hal_motion', 'True')-%}
+          {%- if is_state('sensor.switch_hal_lux', 'on') and is_state('sensor.motion_hal', 'on')-%}
           script.hal_en_overlopen
           {%- else -%}
           script.hal_en_overlopen_off
@@ -469,6 +317,8 @@ script:
       entity_id: scene.woonkamer_general
     - service: scene.turn_on
       entity_id: scene.keuken_general
+    - service: scene.turn_on
+      entity_id: scene.buiten_general
 
   all_on_bright:
     sequence:
@@ -546,10 +396,9 @@ script:
   buiten:
     sequence:
     - service: scene.turn_on
-      data_template:
-        entity_id: scene.buiten_general
+      entity_id: scene.buiten_general
 
   buiten_off:
     sequence:
-    - service: light.turn_off
+    - service: homeassistant.turn_off
       entity_id: group.buiten

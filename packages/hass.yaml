@@ -29,7 +29,7 @@ sensor:
 ################################################
 automation:
   - alias: Login Failure
-    hide_entity: True
+    hide_entity: true
     trigger:
     - platform: template
       value_template: "{{ states('persistent_notification.httplogin') != 'authentication' }}"

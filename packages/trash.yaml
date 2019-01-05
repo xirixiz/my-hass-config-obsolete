@@ -7,6 +7,9 @@ homeassistant:
       friendly_name: Vandaag
     sensor.trash_tomorrow:
       friendly_name: Morgen
+    sensor.trash_next_in_days:
+      friendly_name: Next pickup in days
+
     sensor.trash_gft:
       friendly_name: GFT
       entity_picture: /local/mijnafvalwijzer/gft3.png
@@ -28,6 +31,7 @@ homeassistant:
       entity_picture: /local/mijnafvalwijzer/plastic3.png
     sensor.trash_restafval_formatted:
       entity_picture: /local/mijnafvalwijzer/rest3.png
+    
 
 ################################################
 ## Input Boolean

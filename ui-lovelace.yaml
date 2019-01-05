@@ -3,6 +3,32 @@ resources:
     type: js
   - url: /local/custom-lovelace/tracker-card/tracker-card.js?v=0.1.5
     type: js
+  - url: /local/custom-lovelace/button-card/button-card.js?v=0.0.3
+    type: module
+  - url: /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=0.2.6
+    type: js
+
+x-compact-header: &compact-header
+- type: custom:compact-custom-header
+  header: true
+  menu: true
+  notification: true
+  voice: false
+  options: true
+  tabs: true
+  clock: notification
+  clock_format: 24
+  clock_am_pm: false
+  disable: true
+  yaml_mode: true
+
+x-afval-images: &afval-images
+- state_image:
+    'gft': /local/mijnafvalwijzer/gft3.png
+    'papier': /local/mijnafvalwijzer/papier3.png
+    'restafval': /local/mijnafvalwijzer/rest3.png
+    'pmd': /local/mijnafvalwijzer/plastic3.png
+    'Geen': /local/mijnafvalwijzer/kliko3.png
 
 name: Home
 views:
@@ -13,20 +39,27 @@ views:
     icon: mdi:home-assistant
     title: Home
     cards:
+#      - type: markdown
+#        content: >
+#        ## Living room TV
+      - <<: *compact-header
       - id: 634f213a3d2f480faf0e4172ae4c0e4e  # Automatically created id
         type: entities
+        show_header_toggle: false
         entities:
           - device_tracker.taipan5g
           - device_tracker.lieke_iphone
 
       - id: aedc813edd634881b238ec562b68643b  # Automatically created id
         type: entities
+        show_header_toggle: false
         entities:
           - input_boolean.vacation_mode
           - input_boolean.automation_mode
 
       - id: 831a7ae69913420388b01fa8b4b3a77f  # Automatically created id
         type: entities
+        show_header_toggle: false
         entities:
           - script.all_on
           - script.all_on_bright
@@ -50,13 +83,12 @@ views:
               margin-right: auto
               background: '#62717b'
           - input_number.keuken_hanglamp_brightness
-          - group.kerstmis
-          - switch.smartplug2
+          #- group.kerstmis
+          - group.buiten
+          #- switch.smartplug2
           - switch.smartplug4
           - switch.smartplug7
 
-      #- type: thermostat
-      #  entity: climate.living_room
       - type: vertical-stack
         cards:
         - type: horizontal-stack
@@ -69,9 +101,13 @@ views:
             name: Luchtvochtigheid
         - id: dcb17306a9af4348ac01a6969ccb5ebe  # Automatically created id
           type: entities
+          show_header_toggle: false
           entities:
             - input_number.woonkamer_nest_thermostat_temperature
             - climate.living_room
+            - sensor.hal_temperature
+            - sensor.woonkamer_temperature
+            - sensor.slaapkamer_boris_temperature
 
       - type: vertical-stack
         cards:
@@ -89,6 +125,7 @@ views:
             name: Droger
         - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
           type: entities
+          show_header_toggle: false
           entities:
             - sensor.smartplug2_watts
             - type: divider
@@ -125,21 +162,12 @@ views:
                 - type: picture-entity
                   entity: sensor.trash_today
                   name: Vandaag
-                  state_image:
-                    'gft': /local/mijnafvalwijzer/gft3.png
-                    'papier': /local/mijnafvalwijzer/papier3.png
-                    'restafval': /local/mijnafvalwijzer/rest3.png
-                    'pmd': /local/mijnafvalwijzer/plastic3.png
-                    'Geen': /local/mijnafvalwijzer/kliko3.png
+                  <<: *afval-images
                 - type: picture-entity
                   entity: sensor.trash_tomorrow
                   name: Morgen
-                  state_image:
-                    'gft': /local/mijnafvalwijzer/gft3.png
-                    'papier': /local/mijnafvalwijzer/papier3.png
-                    'restafval': /local/mijnafvalwijzer/rest3.png
-                    'pmd': /local/mijnafvalwijzer/plastic3.png
-                    'Geen': /local/mijnafvalwijzer/kliko3.png
+                  <<: *afval-images
+
             - type: glance
               entities:
                - entity: sensor.trash_gft_formatted
@@ -151,67 +179,19 @@ views:
                - entity: sensor.trash_restafval_formatted
                  name: Restafval
 
-#      - id: 294517673fc146a4971cd37ef41fcbe1  # Automatically created id
-#        type: entities
-#        entities:
-#          - sensor.trash_today
-#          - sensor.trash_tomorrow
-#          - type: divider
-#            style:
-#              height: 1px
-#              margin-left: auto
-#              margin-right: auto
-#              background: '#62717b'
-#          - sensor.trash_gft
-#          - sensor.trash_restafval
-#          - sensor.trash_papier
-#          - sensor.trash_pmd
-#          - type: divider
-#            style:
-#              height: 1px
-#              margin-left: auto
-#              margin-right: auto
-#              background: '#62717b'
-#          - input_boolean.trash_moved
-#          - input_boolean.trash_reminder
+            - type: entities
+              show_header_toggle: false
+              entities:
+                - sensor.trash_next_in_days
+                - input_boolean.trash_moved
+                - input_boolean.trash_reminder
 
       - id: 274799b9eb634da6985a9cedd0d83017  # Automatically created id
         type: entities
+        show_header_toggle: false
         entities:
           - input_boolean.meds_taken
           - input_boolean.meds_reminder
-
-
-  ################################################
-  ## WEATHER
-  ################################################
-  - id: 1  # Automatically created id
-    icon: mdi:weather-cloudy
-    title: Weather
-    cards:
-      - id: a98182cd273c467b821cc203c6b7faeb  # Automatically created id
-        type: entities
-        title: Thermostats
-        entities:
-          - input_number.woonkamer_nest_thermostat_temperature
-          - sensor.hal_temperature
-          - sensor.woonkamer_temperature
-          - sensor.slaapkamer_boris_temperature
-          - sensor.living_room_thermostat_temperature
-          - sensor.living_room_thermostat_target
-          - sensor.living_room_thermostat_operation_mode
-          - sensor.living_room_thermostat_humidity
-
-      - id: 5221011e50c1439281a9312c7af145b2  # Automatically created id
-        type: weather-forecast
-        title: Weather
-        entity: weather.yweather
-
-      - id: 911ad6f392ca4ff5b2b1b0c5d335f2ea  # Automatically created id
-        type: iframe
-        aspect_ratio: 88%
-        url: https://embed.windy.com/embed2.html?rainAccu,50.912,5.067,7
-
 
   ################################################
   ## CAMERAS/SECURITY
@@ -220,6 +200,8 @@ views:
     icon: mdi:cctv
     title: Cameras
     cards:
+      - <<: *compact-header
+
       - type: vertical-stack
         cards:
           - id: d8ccc6c98f794edab22d64dff6c78522  # Automatically created id
@@ -245,9 +227,12 @@ views:
     icon: mdi:play-circle-outline
     title: Media
     cards:
+      - <<: *compact-header
+
       - type: vertical-stack
         cards:
           - type: entities
+            show_header_toggle: false
             entities:
               - sensor.livingroom_tv_this_week
               - sensor.percent_livingroom_tv_weekly
@@ -260,6 +245,7 @@ views:
       - type: vertical-stack
         cards:
           - type: entities
+            show_header_toggle: false
             entities:
               - sensor.bedroom_tv_this_week
               - sensor.percent_bedroom_tv_weekly
@@ -271,6 +257,7 @@ views:
 
       - id: 181bd7fa7ff4473db8188d295eea08a7  # Automatically created id
         type: entities
+        show_header_toggle: false
         title: Plex Activity
         entities:
           - sensor.plex_activity
@@ -282,6 +269,8 @@ views:
     icon: mdi:power-plug
     title: Energy
     cards:
+      - <<: *compact-header
+
       - type: sensor
         entity: sensor.electricity_currently_delivered
         name: DSMR - Huidig
@@ -298,33 +287,28 @@ views:
         type: custom:monster-card
         card:
           type: entities
+          show_header_toggle: false
           title: Huidige Energie Verbruikers
         filter:
           include:
             - domain: light
-              state: on
+              state: 'on'
 
       - id: 52332e8847ee451e82d59429353094df  # Automatically created id
         type: entities
+        show_header_toggle: false
         title: HUE Sensors
         entities:
-          - sensor.hue_remote_1_state
-          - sensor.hue_remote_1_last_update
-          - sensor.hue_remote_1_battery
-          - sensor.hue_remote_2_state
-          - sensor.hue_remote_2_last_update
-          - sensor.hue_remote_2_battery
-          - sensor.woonkamer_motion
-          - sensor.switch_woonkamer
+          - sensor.motion_woonkamer
+          - sensor.switch_woonkamer_lux
           - sensor.woonkamer_lux
-          - sensor.woonkamer_battery
-          - sensor.hal_motion
-          - sensor.switch_hal
+          - sensor.motion_hal
+          - sensor.switch_hal_lux
           - sensor.hal_lux
-          - sensor.hal_battery
 
       - id: 8fc7f03aadb4410c9fbcf1ce1baec60f  # Automatically created id
         type: entities
+        show_header_toggle: false
         title: Nest Protect
         entities:
           - sensor.living_room_nest_protect_co_status
@@ -339,6 +323,7 @@ views:
 
       - id: 2f8e283fb9fc445cb3f5deaf3e33cf59  # Automatically created id
         type: entities
+        show_header_toggle: false
         title: Nest Hello
         entities:
           - binary_sensor.front_door_camera_voordeur_online
@@ -353,8 +338,11 @@ views:
     icon: mdi:network
     title: Network
     cards:
+      - <<: *compact-header
+
       - id: 3fe5628fb1af4581ac183ca52e110db9  # Automatically created id
         type: entities
+        show_header_toggle: false
         title: Pi-Hole
         entities:
           - sensor.pihole_status
@@ -377,6 +365,7 @@ views:
           - sensor.custom_component_tracker
 
       - type: entities
+        show_header_toggle: false
         title: HASS
         entities:
           - sensor.uptime
@@ -384,6 +373,7 @@ views:
           - sensor.ha_current_version
 
       - type: entities
+        show_header_toggle: false
         title: Synology
         entities:
           - sensor.cpu_load_total
@@ -399,6 +389,7 @@ views:
 
       - id: 46c741ff7cfc4491a6b3712909c80469  # Automatically created id
         type: entities
+        show_header_toggle: false
         title: Internet
         entities:
           - sensor.external_ip
@@ -408,6 +399,7 @@ views:
 
       - id: a9b870b423a14aabaab904e4b37d6fc4  # Automatically created id
         type: entities
+        show_header_toggle: false
         title: Printer
         entities:
           - sensor.samsung_printer
@@ -422,8 +414,11 @@ views:
     icon: mdi:settings
     title: Settings
     cards:
+      - <<: *compact-header
+
       - id: 7b93b97d36d449729c9e45775313200b  # Automatically created id
         type: entities
+        show_header_toggle: false
         entities:
           - input_select.current_theme
 
@@ -431,8 +426,9 @@ views:
         type: custom:monster-card
         card:
           type: entities
+          show_header_toggle: false
           title: All Automations
         filter:
           include:
             - domain: automation
-              state: on
+              state: 'on'

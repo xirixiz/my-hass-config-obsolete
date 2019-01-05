@@ -33,7 +33,7 @@ camera:
     username: !secret synology_surveillance_username
     password: !secret synology_surveillance_password
     timeout: 60
-    verify_ssl: False
+    verify_ssl: false
 
 ################################################
 ## Sensor

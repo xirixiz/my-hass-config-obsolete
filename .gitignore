@@ -16,3 +16,5 @@ entity_registry.yaml
 home-assistant_v2*.*
 .config_entries.json
 .storage/
+.DS_Store
+@eaDir

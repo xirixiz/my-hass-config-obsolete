@@ -12,10 +12,6 @@ homeassistant:
     sensor.living_room_thermostat_humidity:
       friendly_name: Luchtvochtigheid Nest
       icon: mdi:water-percent
-    sensor.woonkamer_temperature:
-      friendly_name: "Temperatuur Woonkamer (HUE)"
-    sensor.hal_temperature:
-      friendly_name: "Temperatuur Hal (HUE)"
     input_number.woonkamer_nest_thermostat_temperature:
       friendly_name: "Temperatuur Woonkamer Nest"
 
@@ -38,20 +34,6 @@ input_number:
 ## Sensor
 ################################################
 sensor:
-  - platform: rest
-    resource: !secret hue_woonkamer_temperature_sensor
-    value_template: '{{ value_json.state.temperature | float / 100 }}'
-    scan_interval: 300
-    unit_of_measurement: '°C'
-    name: 'woonkamer_temperature'
-
-  - platform: rest
-    resource: !secret hue_hal_temperature_sensor
-    value_template: '{{ value_json.state.temperature | float / 100 }}'
-    scan_interval: 300
-    unit_of_measurement: '°C'
-    name: 'hal_temperature'
-
   - platform: nest
     monitored_conditions:
       - 'temperature'
