@@ -28,6 +28,7 @@ x-afval-images: &afval-images
     'papier': /local/mijnafvalwijzer/papier3.png
     'restafval': /local/mijnafvalwijzer/rest3.png
     'pmd': /local/mijnafvalwijzer/plastic3.png
+    'kerstbomen': /local/mijnafvalwijzer/kliko3.png
     'Geen': /local/mijnafvalwijzer/kliko3.png
 
 name: Home
