@@ -4,6 +4,8 @@
 """
 from datetime import datetime, timedelta, date
 import requests
+import sys
+from requests.exceptions import ConnectionError
 import logging
 import json
 
@@ -21,41 +23,82 @@ CONST_TOEVOEGING = "toevoeging"
 SCAN_INTERVAL = timedelta(seconds=30)
 MIN_TIME_BETWEEN_UPDATES = timedelta(seconds=900)
 
-url = ("http://json.mijnafvalwijzer.nl/?method=postcodecheck& \
-         postcode=5685HE&street=&huisnummer=16& \
-         platform=phone&langs=nl&")
+# TESTDATA
+url = ("http://json.mijnafvalwijzer.nl/?method=postcodecheck&postcode=5685HE&street=&huisnummer=16&platform=phone&langs=nl&")
+url = ("http://json.mijnafvalwijzer.nl/?method=postcodecheck&postcode=5146EF&street=&huisnummer=1&platform=phone&langs=nl&")
 
-response = requests.get(url)
+try:
+    response = requests.get(url, timeout=10)
+except ConnectionError as e:
+    print ('\nNo response from server:', url)
+    sys.exit(1)
+
 json_obj = response.json()
 json_data = (json_obj['data']['ophaaldagen']['data'] + json_obj['data']['ophaaldagenNext']['data'])
-
-trashTotal = [{1: 'today'}, {2: 'tomorrow'}, {3: 'next'} ]
-countType = len(trashTotal) + 1
-trashType = {}
-devices = []
-
-for item in json_data:
-    name = item["nameType"]
-    if name not in trashType:
-        trash = {}
-        trashType[name] = item["nameType"]
-        trash[countType] = item["nameType"]
-        countType += 1
-        trashTotal.append(trash)
-
-#print("trashTotal:",trashTotal)
-
 today = datetime.today().strftime("%Y-%m-%d")
 dateConvert = datetime.strptime(today, "%Y-%m-%d") + timedelta(days=1)
 tomorrow = datetime.strftime(dateConvert, "%Y-%m-%d")
 
-today = '2018-07-06'
-trash = {}
-trashType = {}
+today = '2019-01-08'
+tomorrow = '2019-01-09'
+
+print ('Today set to:', today)
+print ('Tomorrow set to:', tomorrow)
+
+# Remove unused elements from json object
+for x in json_data:
+    if 'type' in x:
+        del x['type']
+
+# Select Trash
+size=len(json_data)
+uniqueNames = []
+trashSchedule = []
+
+for i in range(0,size,1):
+    if(json_data[i]['nameType'] not in uniqueNames):
+         if json_data[i]['date'] >= today:
+           uniqueNames.append(json_data[i]['nameType'])
+           trashSchedule.append(json_data[i])
+
+
+# Append Today data
 trashToday = {}
+multiTrashToday = []
+today_out = [x for x in trashSchedule if x['date'] == today]
+
+if len(today_out) == 0:
+    trashToday['nameType'] = 'today'
+    trashToday['date'] = 'None'
+    trashSchedule.append(trashToday)
+else:
+    for x in today_out:
+        trashToday['nameType'] = 'today'
+        multiTrashToday.append(x['nameType'])
+    trashSchedule.append(trashToday)
+    trashToday['date'] = ', '.join(multiTrashToday)
+
+
+# Append Tomorrow data
 trashTomorrow = {}
-trashInDays = {}
-tschedule = []
+multiTrashTomorrow = []
+tomorrow_out = [x for x in trashSchedule if x['date'] == tomorrow]
+
+if len(tomorrow_out) == 0:
+    trashTomorrow['nameType'] = 'tomorrow'
+    trashTomorrow['date'] = 'None'
+    trashSchedule.append(trashTomorrow)
+else:
+    for x in tomorrow_out:
+        trashTomorrow['nameType'] = 'tomorrow'
+        multiTrashTomorrow.append(x['nameType'])
+    trashSchedule.append(trashTomorrow)
+    trashTomorrow['date'] = ', '.join(multiTrashTomorrow)
+
+
+# Append next pickup in days
+trashNext = {}
+next_out = [x for x in trashSchedule if x['date'] > today]
 
 def d(s):
     [year, month, day] = map(int, s.split('-'))
@@ -63,74 +106,18 @@ def d(s):
 def days(start, end):
     return (d(end) - d(start)).days
 
-for name in trashTotal:
-    for item in json_data:
-        name = item["nameType"]
-        dateFormat = datetime.strptime(item['date'], "%Y-%m-%d")
-        dateConvert = dateFormat.strftime("%Y-%m-%d")
+if len(next_out) == 0:
+   trashNext['nameType'] = 'days'
+   trashNext['date'] = 'None'
+   trashSchedule.append(trashNext)
+else:
+    dateFormat = datetime.strptime(next_out[0]['date'], "%Y-%m-%d")
+    dateConvert = dateFormat.strftime("%Y-%m-%d")
+    if len(trashNext) == 0:
+        trashNext['nameType'] = 'days'
+        trashNext['date'] = (days(today, dateConvert))
+        trashSchedule.append(trashNext)
 
-        if name not in trashType:
-            if item['date'] == today:
-                trashToday = {}
-                trashType[name] = today
-                trashToday['key'] = "today"
-                trashToday['value'] = item['nameType']
-                tschedule.append(trashToday)
-
-            if item['date'] == tomorrow:
-                trashTomorrow = {}
-                trashType[name] = "tomorrow"
-                trashTomorrow['key'] = "tomorrow"
-                trashTomorrow['value'] = item['nameType']
-                tschedule.append(trashTomorrow)
-
-            if item['date'] >= today:
-                trash = {}
-                trashType[name] = item["nameType"]
-                trash['key'] = item['nameType']
-                trash['value'] = dateConvert
-                tschedule.append(trash)
-
-            if item['date'] > today:
-                if len(trashInDays) == 0:
-                    trashType[name] = "next"
-                    trashInDays['key'] = 'next'
-                    trashInDays['value'] = (days(today, dateConvert))
-                    tschedule.append(trashInDays)
-
-
-#if trashToday['key'] = "today":
-#    trashToday['value'] = item['nameType']
-
-if len(trashToday) == 0:
-   trashToday = {}
-   trashType[name] = "today"
-   trashToday['key'] = "today"
-   trashToday['value'] = "None"
-   tschedule.append(trashToday)
-
-if len(trashTomorrow) == 0:
-   trashTomorrow = {}
-   trashType[name] = "tomorrow"
-   trashTomorrow['key'] = "tomorrow"
-   trashTomorrow['value'] = "None"
-   tschedule.append(trashTomorrow)
-
-for item in json_data:
-     name = item["nameType"]
-     if name not in trashType:
-         trash = {}
-         trashType[name] = item["nameType"]
-         trash['key'] = item['nameType']
-         trash['value'] = "None"
-         tschedule.append(trash)
-
-print(tschedule)
-
-
-
-#list = ['350882 348521 350166\r\n']
-#id = 348522
-#if id not in [int(y) for x in list for y in x.split()]:
-#    list.append(id)
-#print (list)
+print(trashToday)
+print(trashTomorrow)
+print(trashSchedule)
