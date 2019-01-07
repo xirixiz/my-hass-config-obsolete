@@ -34,11 +34,15 @@ logbook:
 config:
 conversation:
 history:
-#map:
+map:
 zeroconf:
+
 tts:
   - platform: google
-    base_url: !secret http_url
+    cache: true
+    cache_dir: /tmp/tts
+    time_memory: 300
+    base_url: http://192.168.0.15:8123
 
 lovelace:
   mode: yaml

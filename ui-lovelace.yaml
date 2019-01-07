@@ -5,7 +5,7 @@ resources:
     type: js
   - url: /local/custom-lovelace/button-card/button-card.js?v=0.0.3
     type: module
-  - url: /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=0.2.6
+  - url: /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=0.2.7
     type: js
 
 x-compact-header: &compact-header

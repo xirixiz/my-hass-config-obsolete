@@ -371,79 +371,41 @@ sensor:
 ################################################
 automation:
 # KERSTMIS
-  - alias: Remote Hue 1
-    trigger:
-    - platform: state
-      entity_id: sensor.hue_remote_1_state
-    action:
-    - service_template: >-
-        {%- if trigger.to_state.state | lower == "on" -%}
-        homeassistant.turn_on
-        {%- elif trigger.to_state.state | lower == 'off' -%}
-        homeassistant.turn_off
-        {%- endif -%}
-      data_template:
-        entity_id: >-
-          {%- if trigger.to_state.state | lower == "on" -%}
-          group.kerstmis
-          {%- else -%}
-          group.kerstmis
-          {%- endif -%}
+  # - alias: "Kerst Ritual"
+  #   trigger:
+  #   - platform: state
+  #     entity_id: sensor.motion_hal
+  #     to: 'on'
+  #   - platform: state
+  #     entity_id: sensor.motion_woonkamer
+  #     to: 'on'
+  #   condition:
+  #   - condition: state
+  #     entity_id: input_boolean.automation_mode
+  #     state: 'off'
+  #   action:
+  #   - service: homeassistant.turn_on
+  #     data_template:
+  #       entity_id: >-
+  #         {%- if states('sensor.time_of_day_short') in ['daytime'] -%}
+  #         group.kerstmis
+  #         {%- endif -%}
 
-  - alias: "Kerst Ritual"
-    trigger:
-    - platform: state
-      entity_id: sensor.motion_hal
-      to: 'on'
-    - platform: state
-      entity_id: sensor.motion_woonkamer
-      to: 'on'
-    condition:
-    - condition: state
-      entity_id: input_boolean.automation_mode
-      state: 'off'
-    action:
-    - service: homeassistant.turn_on
-      data_template:
-        entity_id: >-
-          {%- if states('sensor.time_of_day_short') in ['daytime'] -%}
-          group.kerstmis
-          {%- endif -%}
-
-  - alias: 'Kerst Ritual 2'
-    trigger:
-    - platform: time
-      at: '09:30:00'
-    condition:
-    - condition: time
-      weekday:
-        - mon
-        - tue
-        - wed
-        - thu
-        - fri
-    action:
-    - service: homeassistant.turn_off
-      entity_id: group.kerstmis
-
-
-#   - alias: Alias
-#     initial_state: true
-#     hide_entity: true
-#     trigger:
-#       platform: state
-#       entity_id: 
-#         - sensor.switch_one
-#         - sensor.switch_two
-#     action:
-#       - service_template: >
-#           {%- if trigger.to_state.state | lower == "on" -%}
-#               homeassistant.turn_on
-#           {%- else -%}
-#               homeassistant.turn_off
-#           {%- endif -%}
-#         data_template:
-#           entity_id: 'switch.switch_{{ trigger.entity_id.split(".")[1].split("_")[2]}}'
+  # - alias: 'Kerst Ritual 2'
+  #   trigger:
+  #   - platform: time
+  #     at: '09:30:00'
+  #   condition:
+  #   - condition: time
+  #     weekday:
+  #       - mon
+  #       - tue
+  #       - wed
+  #       - thu
+  #       - fri
+  #   action:
+  #   - service: homeassistant.turn_off
+  #     entity_id: group.kerstmis
 
 
 # WASMACHINE
@@ -466,6 +428,14 @@ automation:
       data_template:
         title: 'Wasmachine:'
         message: "Wasprogramma gestart."
+    # - service: media_player.volume_set
+    #   data:
+    #     entity_id: media_player.living_room
+    #     volume_level: '0.50'
+    # - service: tts.google_say
+    #   entity_id: media_player.living_room
+    #   data_template:
+    #     message: 'De wasmachine is gestart!'
 
   - alias: Action - Set wasmachine as finished
     trigger:
@@ -489,6 +459,15 @@ automation:
         message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh."
     - service: homeassistant.turn_off
       entity_id: input_boolean.wasmachine
+    # - service: media_player.volume_set
+    #   data:
+    #     entity_id: media_player.living_room
+    #     volume_level: '0.50'
+    # - service: tts.google_say
+    #   entity_id: media_player.living_room
+    #   data_template:
+    #     message: 'De wasmachine is klaar!'
+
 
 # DROGER
   - alias: Action - Set droger to running
@@ -510,6 +489,14 @@ automation:
       data_template:
         title: 'Droger:'
         message: "Droger gestart."
+    # - service: media_player.volume_set
+    #   data:
+    #     entity_id: media_player.living_room
+    #     volume_level: '0.50'
+    # - service: tts.google_say
+    #   entity_id: media_player.living_room
+    #   data_template:
+    #     message: 'De droger is gestart!'
 
   - alias: Action - Set droger as finished
     trigger:
@@ -533,3 +520,38 @@ automation:
         message: "Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh."
     - service: homeassistant.turn_off
       entity_id: input_boolean.droger
+    # - service: media_player.volume_set
+    #   data:
+    #     entity_id: media_player.living_room
+    #     volume_level: '0.50'
+    # - service: tts.google_say
+    #   entity_id: media_player.living_room
+    #   data_template:
+    #     message: 'De droger is klaar!'
+
+
+  # - alias: "TTS test"
+  #   initial_state: 'on'
+  #   trigger:
+  #   - platform: time
+  #     minutes: '/1'
+  #     seconds: 00
+  #   - platform: homeassistant
+  #     event: start
+  #   action:
+  #   - service: media_player.turn_on
+  #     entity_id: media_player.shield
+  #   # - service: media_player.select_source
+  #   #   entity_id: media_player.living_room
+  #   - service: media_player.volume_set
+  #     data:
+  #       entity_id: media_player.living_room
+  #       volume_level: '0.50'
+  #   - delay:
+  #       seconds: 10
+  #   - service: tts.google_say
+  #     entity_id: media_player.shield
+  #     data_template:
+  #       message: 'Bram is de beste en Floris en Lex hebben dikke billen!'
+  #   # - service: media_player.turn_off
+  #   #   entity_id: media_player.shield

@@ -64,11 +64,10 @@ hue:
 ################################################
 input_number:
   keuken_hanglamp_brightness:
-    initial: 0
+    initial: 127
     min: 0
-    max: 100
-    step: 5
-    icon: mdi:brightness-auto
+    max: 255
+    step: 1
 
 input_boolean:
   automation_mode:
@@ -104,7 +103,7 @@ sensor:
         unit_of_measurement: °C
       woonkamer_lux:
         friendly_name: 'Woonkamer Lux'
-        value_template: '{{states.sensor.motion_woonkamer.attributes.lx}}'
+        value_template: '{{states.sensor.motion_woonkamer.attributes.light_level}}'
         unit_of_measurement: lux
       hal_temperature:
         friendly_name: 'Hal temperatuur'
@@ -112,8 +111,9 @@ sensor:
         unit_of_measurement: °C
       hal_lux:
         friendly_name: 'Hal Lux'
-        value_template: '{{states.sensor.motion_hal.attributes.lx}}'
+        value_template: '{{states.sensor.motion_hal.attributes.light_level}}'
         unit_of_measurement: lux
+
 
   - platform: template
     sensors:
@@ -121,9 +121,10 @@ sensor:
         friendly_name: 'Keuken Hanglamp'
         value_template: >-
           {%- if is_state('light.keuken_hanglamp', 'on') -%}
-            {{ states.light.keuken_hanglamp.attributes.brightness | int / 2.55 }}
+            {{ states.light.keuken_hanglamp.attributes.brightness | int }}
+          {%- else -%}
+            127
           {%- endif -%}
-        unit_of_measurement: '%'
       switch_hal_lux:
         value_template: >-
           {%- if states('sensor.hal_lux') | int < 6000 -%} on
@@ -156,12 +157,7 @@ automation:
     - service: input_number.set_value
       data_template:
         entity_id: input_number.keuken_hanglamp_brightness
-        value: >-
-          {%- if states.light.keuken_hanglamp.attributes.brightness is defined -%}
-            {{ trigger.to_state.state | int }}
-          {%- else -%}
-            0
-          {%- endif -%}
+        value: "{{ states.light.keuken_hanglamp.attributes.brightness | int }}"
 
   - alias: "Switch - Keuken - Hanglamp - On"
     trigger:
@@ -195,8 +191,11 @@ automation:
     condition:
     - condition: time
       before: '05:00:00'
-      after: '00:00:00'
+      after: '22:00:00'
     action:
+    - service: notify.bram
+      data_template:
+        message: '{{ trigger.to_state.attributes.friendly_name }} triggerd to {{ trigger.to_state.state }} at {{ states("sensor.time") }}!'
     - service: script.turn_on
       data_template:
         entity_id: >-
@@ -210,20 +209,8 @@ automation:
   - alias: "General lights On/Off"
     trigger:
     - platform: time
-      minutes: '/10'
+      minutes: '/5'
       seconds: 00
-    - platform: state
-      entity_id: sensor.switch_woonkamer_lux
-      from: 'off'
-      to: 'on'
-      for:
-        minutes: 5
-    - platform: state
-      entity_id: sensor.switch_woonkamer_lux
-      from: 'on'
-      to: 'off'
-      for:
-        minutes: 5
     - platform: state
       entity_id: sensor.motion_hal
       to: 'on'
@@ -403,7 +390,6 @@ script:
           {%- elif states('sensor.time_of_day_short') in ['night'] -%}night
           {%- else -%}general
           {%- endif -%}
-
 
   buiten_off:
     sequence:

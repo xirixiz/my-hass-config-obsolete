@@ -77,7 +77,7 @@ cast:
 input_boolean:
   tv_status_woonkamer:
     name: "TV Status - Woonkamer"
-    initial: off
+    initial: 'off'
 
 ################################################
 ## Sensor

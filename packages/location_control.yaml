@@ -160,6 +160,20 @@ automation:
             latitude: "{{ trigger.to_state.attributes.latitude }}"
             longitude: "{{ trigger.to_state.attributes.longitude }}"
 
+  - alias: "Commute - Update sensor"
+    initial_state: 'on'
+    trigger:
+    - platform: time
+      minutes: '/1'
+      seconds: 00
+    condition:
+    - condition: state
+      entity_id: 'device_tracker.lieke_iphone'
+      state: 'not_home'
+    action:
+    - service: sensor.google_travel_sensor_update
+      data:
+        entity_id: sensor.lieke_distance_to_home
 
 #        value_template: >-
 #          {%- if is_state('states.sensor.lieke_distance_to_home', 'unknown') -%}
