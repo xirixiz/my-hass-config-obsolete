@@ -9,8 +9,12 @@ homeassistant:
 logger:
   default: warn
   logs:
+    #custom_components.sensor.mijnafvalwijzer: debug
     homeassistant.components.device_tracker: critical
+    homeassistant.components.device_tracker.unifi: critical
+    requests.packages.urllib3.connectionpool: critical
     urllib3.connectionpool: critical
+    py.warnings: critical
 
 # system_log:
 #   max_entries: 0

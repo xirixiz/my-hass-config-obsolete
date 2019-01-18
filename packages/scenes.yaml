@@ -135,14 +135,12 @@ scene:
     entities:
       light.hal_en_overlopen:
         state: true
-        transition: 3
         color_temp: 451
         brightness_pct: 40
   - name: hal_en_overlopen_super_bright
     entities:
       light.hal_en_overlopen:
         state: true
-        transition: 3
         color_temp: 451
         brightness_pct: 90
 

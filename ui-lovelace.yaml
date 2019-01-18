@@ -3,7 +3,7 @@ resources:
     type: js
   - url: /local/custom-lovelace/tracker-card/tracker-card.js?v=0.1.5
     type: js
-  - url: /local/custom-lovelace/button-card/button-card.js?v=0.0.3
+  - url: /local/custom-lovelace/button-card/button-card.js?v=0.0.4
     type: module
   - url: /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=0.2.7
     type: js
@@ -183,7 +183,7 @@ views:
             - type: entities
               show_header_toggle: false
               entities:
-                - sensor.trash_next_in_days
+                - sensor.trash_next
                 - input_boolean.trash_moved
                 - input_boolean.trash_reminder
 
@@ -300,10 +300,10 @@ views:
         show_header_toggle: false
         title: HUE Sensors
         entities:
-          - sensor.motion_woonkamer
+          - sensor.woonkamer_motion
           - sensor.switch_woonkamer_lux
           - sensor.woonkamer_lux
-          - sensor.motion_hal
+          - sensor.hal_motion
           - sensor.switch_hal_lux
           - sensor.hal_lux
 
@@ -349,15 +349,15 @@ views:
           - sensor.pihole_status
           - script.enable_pihole
           - input_select.pihole_time
-          - sensor.pihole_ads_blocked_today
-          - sensor.pihole_ads_percentage_blocked_today
-          - sensor.pihole_dns_queries_cached
-          - sensor.pihole_dns_queries_forwarded
-          - sensor.pihole_dns_queries_today
-          - sensor.pihole_dns_unique_clients
-          - sensor.pihole_dns_unique_domains
-          - sensor.pihole_domains_blocked
-          - sensor.pihole_seen_clients
+          - sensor.pi_hole_ads_blocked_today
+          - sensor.pi_hole_ads_percentage_blocked_today
+          - sensor.pi_hole_dns_queries_cached
+          - sensor.pi_hole_dns_queries_forwarded
+          - sensor.pi_hole_dns_queries_today
+          - sensor.pi_hole_dns_unique_clients
+          - sensor.pi_hole_dns_unique_domains
+          - sensor.pi_hole_domains_blocked
+          - sensor.pi_hole_seen_clients
 
       - type: custom:tracker-card
         title: Custom Card Updates
