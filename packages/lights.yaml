@@ -104,9 +104,8 @@ input_boolean:
 ################################################
 sensor:
   - platform: hue
-    ip_address: !secret philips_hue_host
-    token: !secret philips_hue_token
-
+#    ip_address: !secret philips_hue_host
+#    token: !secret philips_hue_token
 
   - platform: rest
     resource: !secret hue_woonkamer_temperature_sensor
@@ -264,15 +263,15 @@ automation:
       data_template:
         entity_id: >-
           {%- if is_state('binary_sensor.front_door_camera_voordeur_motion_detected', 'on') -%}
-          script.buiten
+            script.buiten
           {%- else -%}
-          script.buiten_off
+            script.buiten_off
           {%- endif -%}
 
   # GENERAL
   - alias: "General lights On/Off"
     trigger:
-    - platform: time
+    - platform: time_pattern
       minutes: '/5'
       seconds: 00
     - platform: state
@@ -290,15 +289,15 @@ automation:
       data_template:
         entity_id: >-
           {%- if (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['daytime'] -%}
-          script.woonkamer, script.keuken, script.buiten
+            script.woonkamer, script.keuken, script.buiten
           {%- elif (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
-          script.woonkamer, script.keuken, script.buiten
+            script.woonkamer, script.keuken, script.buiten
           #{%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
-          #script.woonkamer, script.keuken
+            #script.woonkamer, script.keuken
           {%- elif is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
-          script.all_off
+            script.all_off
           {%- elif is_state('sensor.switch_woonkamer_lux', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
-          script.all_off
+            script.all_off
           {%- endif -%}
 
   # HAL & OVERLOPEN
@@ -317,9 +316,9 @@ automation:
       data_template:
         entity_id: >-
           {%- if is_state('sensor.switch_hal_lux', 'on') and is_state('sensor.hal_motion', 'True')-%}
-          script.hal_en_overlopen
+            script.hal_en_overlopen
           {%- else -%}
-          script.hal_en_overlopen_off
+            script.hal_en_overlopen_off
           {%- endif -%}
 
 # KIDS NACHTLAMP
@@ -334,9 +333,9 @@ automation:
     action:
     - service_template: >-
         {%- if trigger.event == "sunset" -%}
-        homeassistant.turn_on
+          homeassistant.turn_on
         {%- elif trigger.event == "sunrise" -%}
-        homeassistant.turn_off
+          homeassistant.turn_off
         {%- endif -%}
       entity_id: group.kinderen
 
@@ -347,13 +346,13 @@ group:
   buiten:
     - light.buitenachter
     - light.buitenvoor
-    - switch.smartplug2
+    - switch.tuin
   beneden:
     - light.woonkamer
     - light.keuken
   kinderen:
-    - switch.smartplug4
-    - switch.smartplug7
+    - switch.lex
+    - switch.boris
   hal_en_overlopen:
     - light.hal_en_overlopen
 
@@ -455,9 +454,12 @@ script:
           {%- else -%}general
           {%- endif -%}
     - service_template: >-
-        {%- if states('sensor.time_of_day_short') in ['early evening','evening'] -%}homeassistant.turn_on
+        {%- if states('sensor.time_of_day_short') in ['early evening','evening'] -%}
+          homeassistant.turn_on
+        {%- else -%}
+          homeassistant.turn_off
         {%- endif -%}
-      entity_id: switch.smartplug2
+      entity_id: switch.tuin
 
   buiten_off:
     sequence:

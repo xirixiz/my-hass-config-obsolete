@@ -9,7 +9,7 @@ homeassistant:
 logger:
   default: warn
   logs:
-    #custom_components.sensor.mijnafvalwijzer: debug
+    #custom_components.sensor.mijnafvalwijzer: warn
     homeassistant.components.device_tracker: critical
     homeassistant.components.device_tracker.unifi: critical
     requests.packages.urllib3.connectionpool: critical

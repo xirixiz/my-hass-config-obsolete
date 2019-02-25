@@ -1,26 +1,26 @@
 resources:
   - url: /local/custom-lovelace/monster-card/monster-card.js?v=0.2.3
     type: js
-  - url: /local/custom-lovelace/tracker-card/tracker-card.js?v=0.1.5
+  - url: /local/custom-lovelace/tracker-card/tracker-card.js?v=0.3.2
     type: js
-  - url: /local/custom-lovelace/button-card/button-card.js?v=0.0.4
+  - url: /local/custom-lovelace/button-card/button-card.js?v=0.0.5
     type: module
-  - url: /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=0.2.7
-    type: js
+  #- url: /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=1.0.0b6
+    #type: js
 
-x-compact-header: &compact-header
-- type: custom:compact-custom-header
-  header: true
-  menu: true
-  notification: true
-  voice: false
-  options: true
-  tabs: true
-  clock: notification
-  clock_format: 24
-  clock_am_pm: false
-  disable: true
-  yaml_mode: true
+#x-compact-header: &compact-header
+#- type: custom:compact-custom-header
+#  header: true
+#  menu: true
+#  notification: true
+#  voice: false
+#  options: true
+#  tabs: true
+#  clock: notification
+#  clock_format: 24
+#  clock_am_pm: false
+#  disable: true
+#  yaml_mode: true
 
 x-afval-images: &afval-images
 - state_image:
@@ -43,7 +43,7 @@ views:
 #      - type: markdown
 #        content: >
 #        ## Living room TV
-      - <<: *compact-header
+      #- <<: *compact-header
       - id: 634f213a3d2f480faf0e4172ae4c0e4e  # Automatically created id
         type: entities
         show_header_toggle: false
@@ -86,9 +86,9 @@ views:
           - input_number.keuken_hanglamp_brightness
           #- group.kerstmis
           - group.buiten
-          #- switch.smartplug2
-          - switch.smartplug4
-          - switch.smartplug7
+          #- switch.tuin
+          - switch.lex
+          - switch.boris
 
       - type: vertical-stack
         cards:
@@ -119,23 +119,23 @@ views:
         - type: horizontal-stack
           cards:
           - type: sensor
-            entity: sensor.smartplug1_watts
+            entity: sensor.wasmachine_watts
             name: Wasmachine
           - type: sensor
-            entity: sensor.smartplug3_watts
+            entity: sensor.droger_watts
             name: Droger
         - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
           type: entities
           show_header_toggle: false
           entities:
-            - sensor.smartplug2_watts
+            - sensor.tuin_watts
             - type: divider
               style:
                 height: 1px
                 margin-left: auto
                 margin-right: auto
                 background: '#62717b'
-            #- sensor.smartplug1_watts
+            #- sensor.wasmachine_watts
             #- sensor.wasmachine_this_week
             #- sensor.percent_wasmachine_weekly
             #- sensor.wasmachine_this_month
@@ -148,7 +148,7 @@ views:
                 margin-left: auto
                 margin-right: auto
                 background: '#62717b'
-            #- sensor.smartplug3_watts
+            #- sensor.droger_watts
             #- sensor.droger_this_week
             #- sensor.percent_droger_weekly
             #- sensor.droger_this_month
@@ -201,7 +201,7 @@ views:
     icon: mdi:cctv
     title: Cameras
     cards:
-      - <<: *compact-header
+      #- <<: *compact-header
 
       - type: vertical-stack
         cards:
@@ -228,7 +228,7 @@ views:
     icon: mdi:play-circle-outline
     title: Media
     cards:
-      - <<: *compact-header
+      #- <<: *compact-header
 
       - type: vertical-stack
         cards:
@@ -270,7 +270,7 @@ views:
     icon: mdi:power-plug
     title: Energy
     cards:
-      - <<: *compact-header
+      #- <<: *compact-header
 
       - type: sensor
         entity: sensor.electricity_currently_delivered
@@ -339,7 +339,7 @@ views:
     icon: mdi:network
     title: Network
     cards:
-      - <<: *compact-header
+      #- <<: *compact-header
 
       - id: 3fe5628fb1af4581ac183ca52e110db9  # Automatically created id
         type: entities
@@ -415,7 +415,7 @@ views:
     icon: mdi:settings
     title: Settings
     cards:
-      - <<: *compact-header
+      #- <<: *compact-header
 
       - id: 7b93b97d36d449729c9e45775313200b  # Automatically created id
         type: entities

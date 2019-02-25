@@ -29,13 +29,15 @@ homeassistant:
 ## Device Tracker
 ################################################
 device_tracker:
-  - platform: unifi
-    host: !secret ap_host
+  - platform: unifi_direct
+    host: !secret ap1_host
     username: !secret ap_username
     password: !secret ap_password
-    port: 8443
-    verify_ssl: false
-    #track_new_devices: yes
+
+  - platform: unifi_direct
+    host: !secret ap2_host
+    username: !secret ap_username
+    password: !secret ap_password
 
   - platform: nmap_tracker
     hosts:
@@ -163,7 +165,7 @@ automation:
   - alias: "Commute - Update sensor"
     initial_state: 'on'
     trigger:
-    - platform: time
+    - platform: time_pattern
       minutes: '/1'
       seconds: 00
     condition:

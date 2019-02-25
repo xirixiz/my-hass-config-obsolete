@@ -3,29 +3,24 @@
 ################################################
 homeassistant:
   customize:
-    switch.smartplug1:
+    switch.wasmachine:
       friendly_name: Wasmachine
-    switch.smartplug2:
+    switch.tuin:
       friendly_name: Tuinverlichting
-    switch.smartplug3:
+    switch.droger:
       friendly_name: Droger
-    switch.smartplug4:
+    switch.lex:
       friendly_name: Verlichting Lex
-    switch.smartplug5:
+    switch.tv_woonkamer:
       friendly_name: TV Kast
-    switch.smartplug6:
-      friendly_name: Kerstboom
-    switch.smartplug7:
+    switch.boris:
       friendly_name: Verlichting Boris
-    switch.smartplug8:
-      friendly_name: Kerstmis1
-    switch.smartplug9:
-      friendly_name: Kerstmis2
 
-    sensor.smartplug1_watts:
+
+    sensor.wasmachine_watts:
       friendly_name: Huidig verbruik wasmachine
       icon: mdi:washing-machine
-    sensor.smartplug3_watts:
+    sensor.droger_watts:
       friendly_name: Huidig verbruik droger
       icon: mdi:tumble-dryer
 
@@ -101,19 +96,12 @@ group:
     entities:
       - device_tracker.taipan5g
       - device_tracker.lieke_iphone
-  kerstmis:
-    name: Kerstverlichting
-    entities:
-      - switch.smartplug6
-      - switch.smartplug8
-      - switch.smartplug9
   powerplugs:
      name: PowerPlugs
      entities:
       - group.kerstmis
-      - switch.smartplug1
-      - switch.smartplug3
-      - switch.smartplug5
+      - switch.wasmachine
+      - switch.droger
 
 ################################################
 ## Inputs
@@ -153,73 +141,73 @@ sensor:
 # SLAAPKAMER LEX
   - platform: template
     sensors:
-      smartplug4_watts:
+      lex_watts:
         friendly_name: "Huidig verbruik Lex"
-        value_template: '{{ states.switch.smartplug4.attributes["current_power_w"] | replace(" W", "") | float }}'
+        value_template: '{{ states.switch.lex.attributes["current_power_w"] | replace(" W", "") | float }}'
         unit_of_measurement: 'W'
-      smartplug4_kw:
+      lex_kw:
         friendly_name: "Current KiloWatts"
-        value_template: '{{ states.switch.smartplug4.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.lex.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug4_amps:
+      lex_amps:
         friendly_name: "Amps"
-        value_template: '{{ states.switch.smartplug4.attributes["current_a"] | replace(" A", "") | float }}'
+        value_template: '{{ states.switch.lex.attributes["current_a"] | replace(" A", "") | float }}'
         unit_of_measurement: 'A'
-      smartplug4_kw_today:
+      lex_kw_today:
         friendly_name: "Today's KiloWatts"
-        value_template: '{{ states.switch.smartplug4.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.lex.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug4_volts:
+      lex_volts:
         friendly_name: "Current Voltage"
-        value_template: '{{ states.switch.smartplug4.attributes["voltage"] | replace(" V", "") | float }}'
+        value_template: '{{ states.switch.lex.attributes["voltage"] | replace(" V", "") | float }}'
         unit_of_measurement: 'V'
 
 # TUIN
   - platform: template
     sensors:
-      smartplug2_watts:
+      tuin_watts:
         friendly_name: "Huidig verbruik tuin"
-        value_template: '{{ states.switch.smartplug2.attributes["current_power_w"] | replace(" W", "") | float }}'
+        value_template: '{{ states.switch.tuin.attributes["current_power_w"] | replace(" W", "") | float }}'
         unit_of_measurement: 'W'
-      smartplug2_kw:
+      tuin_kw:
         friendly_name: "Current KiloWatts"
-        value_template: '{{ states.switch.smartplug2.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.tuin.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug2_amps:
+      tuin_amps:
         friendly_name: "Amps"
-        value_template: '{{ states.switch.smartplug2.attributes["current_a"] | replace(" A", "") | float }}'
+        value_template: '{{ states.switch.tuin.attributes["current_a"] | replace(" A", "") | float }}'
         unit_of_measurement: 'A'
-      smartplug2_kw_today:
+      tuin_kw_today:
         friendly_name: "Today's KiloWatts"
-        value_template: '{{ states.switch.smartplug2.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.tuin.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug2_volts:
+      tuin_volts:
         friendly_name: "Current Voltage"
-        value_template: '{{ states.switch.smartplug2.attributes["voltage"] | replace(" V", "") | float }}'
+        value_template: '{{ states.switch.tuin.attributes["voltage"] | replace(" V", "") | float }}'
         unit_of_measurement: 'V'
 
 # WASMACHINE
   - platform: template
     sensors:
-      smartplug1_watts:
+      wasmachine_watts:
         friendly_name: "Huidig verbruik wasmachine"
-        value_template: '{{ states.switch.smartplug1.attributes["current_power_w"] | replace(" W", "") | float }}'
+        value_template: '{{ states.switch.wasmachine.attributes["current_power_w"] | replace(" W", "") | float }}'
         unit_of_measurement: 'W'
-      smartplug1_kw_today:
+      wasmachine_kw_today:
         friendly_name: "Today's KiloWatts"
-        value_template: '{{ states.switch.smartplug1.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.wasmachine.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug1_amps:
+      wasmachine_amps:
         friendly_name: "Amps"
-        value_template: '{{ states.switch.smartplug1.attributes["current_a"] | replace(" A", "") | float }}'
+        value_template: '{{ states.switch.wasmachine.attributes["current_a"] | replace(" A", "") | float }}'
         unit_of_measurement: 'A'
-      smartplug1_kw:
+      wasmachine_kw:
         friendly_name: "Current KiloWatts"
-        value_template: '{{ states.switch.smartplug1.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.wasmachine.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug1_volts:
+      wasmachine_volts:
         friendly_name: "Current Voltage"
-        value_template: '{{ states.switch.smartplug1.attributes["voltage"] | replace(" V", "") | float }}'
+        value_template: '{{ states.switch.wasmachine.attributes["voltage"] | replace(" V", "") | float }}'
         unit_of_measurement: 'V'
 
   - platform: template
@@ -250,7 +238,7 @@ sensor:
 
   - platform: statistics
     name: Wasmachine statistics
-    entity_id: sensor.smartplug1_watts
+    entity_id: sensor.wasmachine_watts
 
   # HISTORY WASMACHINE
   - platform: history_stats
@@ -285,25 +273,25 @@ sensor:
 # DROGER
   - platform: template
     sensors:
-      smartplug3_watts:
+      droger_watts:
         friendly_name: "Huidig verbruik droger"
-        value_template: '{{ states.switch.smartplug3.attributes["current_power_w"] | replace(" W", "") | float }}'
+        value_template: '{{ states.switch.droger.attributes["current_power_w"] | replace(" W", "") | float }}'
         unit_of_measurement: 'W'
-      smartplug3_kw:
+      droger_kw:
         friendly_name: "Current KiloWatts"
-        value_template: '{{ states.switch.smartplug3.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.droger.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug3_amps:
+      droger_amps:
         friendly_name: "Amps"
-        value_template: '{{ states.switch.smartplug3.attributes["current_a"] | replace(" A", "") | float }}'
+        value_template: '{{ states.switch.droger.attributes["current_a"] | replace(" A", "") | float }}'
         unit_of_measurement: 'A'
-      smartplug3_kw_today:
+      droger_kw_today:
         friendly_name: "Today's KiloWatts"
-        value_template: '{{ states.switch.smartplug3.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.droger.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      smartplug3_volts:
+      droger_volts:
         friendly_name: "Current Voltage"
-        value_template: '{{ states.switch.smartplug3.attributes["voltage"] | replace(" V", "") | float }}'
+        value_template: '{{ states.switch.droger.attributes["voltage"] | replace(" V", "") | float }}'
         unit_of_measurement: 'V'
 
   - platform: template
@@ -334,7 +322,7 @@ sensor:
 
   - platform: statistics
     name: Droger statistics
-    entity_id: sensor.smartplug3_watts
+    entity_id: sensor.droger_watts
 
   # HISTORY DROGER
   - platform: history_stats
@@ -423,7 +411,7 @@ automation:
     - service: input_number.set_value
       data_template:
         entity_id: input_number.wasmachine_start
-        value: "{{ states.sensor.smartplug1_kw_today.state }}"
+        value: "{{ states.sensor.wasmachine_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Wasmachine:'
@@ -452,7 +440,7 @@ automation:
     - service: input_number.set_value
       data_template:
         entity_id: input_number.wasmachine_stop
-        value: "{{ states.sensor.smartplug1_kw_today.state }}"
+        value: "{{ states.sensor.wasmachine_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Wasmachine:'
@@ -484,7 +472,7 @@ automation:
     - service: input_number.set_value
       data_template:
         entity_id: input_number.wasmachine_start
-        value: "{{ states.sensor.smartplug3_kw_today.state }}"
+        value: "{{ states.sensor.droger_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Droger:'
@@ -513,7 +501,7 @@ automation:
     - service: input_number.set_value
       data_template:
         entity_id: input_number.wasmachine_stop
-        value: "{{ states.sensor.smartplug3_kw_today.state }}"
+        value: "{{ states.sensor.droger_kw_today.state }}"
     - service: notify.family
       data_template:
         title: 'Droger:'
@@ -533,7 +521,7 @@ automation:
   # - alias: "TTS test"
   #   initial_state: 'on'
   #   trigger:
-  #   - platform: time
+  #   - platform: time_pattern
   #     minutes: '/1'
   #     seconds: 00
   #   - platform: homeassistant

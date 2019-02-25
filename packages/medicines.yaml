@@ -44,7 +44,7 @@ automation:
 
   - alias: Meds have not been taken
     trigger:
-      platform: time
+      platform: time_pattern
       minutes: '/30'
       seconds: 00
     condition:

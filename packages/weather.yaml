@@ -68,5 +68,3 @@ sensor:
       - daily_summary
       - pressure
       - visibility
-    update_interval:
-      minutes: 5

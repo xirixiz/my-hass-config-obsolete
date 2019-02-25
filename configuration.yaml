@@ -11,11 +11,11 @@ homeassistant:
   packages: !include_dir_named packages
   auth_providers:
    - type: homeassistant
-   - type: trusted_networks
-   - type: legacy_api_password
+   #- type: trusted_networks
+   #- type: legacy_api_password
 
 http:
-  api_password: !secret http_password
+#  api_password: !secret http_password
 #  ssl_certificate: !secret ssl_certificate
 #  ssl_key: !secret ssl_key
   use_x_forwarded_for: true
@@ -30,12 +30,22 @@ http:
     - 192.168.1.0/24
     - fd00::/8
 
+auth:
 logbook:
 config:
 conversation:
 history:
 map:
 zeroconf:
+system_health:
+
+speedtestdotnet:
+  scan_interval:
+    hours: 1
+  monitored_conditions:
+    - ping
+    - download
+    - upload
 
 tts:
   - platform: google

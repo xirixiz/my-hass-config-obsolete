@@ -40,7 +40,7 @@ sensor:
     sensors:
       time_of_day:
         friendly_name: 'Time of Day'
-        entity_id: sensor.time__date
+        entity_id: sensor.time_date
         value_template: >-
           {% if   now().strftime("%H:%M") < "06:00" %} late night
           {% elif now().strftime("%H:%M") < "08:00" %} early morning
@@ -53,7 +53,7 @@ sensor:
           {% endif %}
       time_of_day_short:
         friendly_name: 'Time of Day Short'
-        entity_id: sensor.time__date
+        entity_id: sensor.time_date
         value_template: >-
           {% if   now().strftime("%H:%M") < "06:00" %} night
           {% elif now().strftime("%H:%M") < "18:00" %} daytime
@@ -62,11 +62,11 @@ sensor:
           {% endif %}
       day_of_year:
         friendly_name: "Day Number"
-        entity_id: sensor.time__date
+        entity_id: sensor.time_date
         value_template: '{{ now().strftime("%j") }}'
       week_of_year:
         friendly_name: "Week Number"
-        entity_id: sensor.time__date
+        entity_id: sensor.time_date
         value_template: '{{ now().strftime("%U") }}'
 
 
