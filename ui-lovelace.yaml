@@ -318,9 +318,9 @@ views:
           - sensor.entryway_nest_protect_co_status
           - sensor.entryway_nest_protect_smoke_status
           - sensor.entryway_nest_protect_battery_health
-          - sensor.upstairs_nest_protect_co_status
-          - sensor.upstairs_nest_protect_smoke_status
-          - sensor.upstairs_nest_protect_battery_health
+          - sensor.hallway_nest_protect_co_status
+          - sensor.hallway_nest_protect_smoke_status
+          - sensor.hallway_nest_protect_battery_health
 
       - id: 2f8e283fb9fc445cb3f5deaf3e33cf59  # Automatically created id
         type: entities

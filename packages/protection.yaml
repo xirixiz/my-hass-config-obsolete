@@ -19,12 +19,12 @@ homeassistant:
     sensor.entryway_nest_protect_battery_health:
       friendly_name: Battery status - HAL
       icon: mdi:battery
-    sensor.upstairs_nest_protect_co_status:
+    sensor.hallway_nest_protect_co_status:
       friendly_name: CO status - Overloop
-    sensor.upstairs_nest_protect_smoke_status:
+    sensor.hallway_nest_protect_smoke_status:
       friendly_name: Smoke status - Overloop
       icon: mdi:fire
-    sensor.upstairs_nest_protect_battery_health:
+    sensor.hallway_nest_protect_battery_health:
       friendly_name: Battery status - Overloop
       icon: mdi:battery
 
@@ -47,8 +47,8 @@ automation:
         - sensor.living_room_nest_protect_smoke_status
         - sensor.entryway_nest_protect_co_status
         - sensor.entryway_nest_protect_smoke_status
-        - sensor.upstairs_nest_protect_co_status
-        - sensor.upstairs_nest_protect_smoke_status
+        - sensor.hallway_nest_protect_co_status
+        - sensor.hallway_nest_protect_smoke_status
       to: 'Emergency'
     action:
     - service: notify.family
@@ -62,7 +62,7 @@ automation:
       entity_id:
         - binary_sensor.living_room_nest_protect_online
         - binary_sensor.entryway_nest_protect_online
-        - binary_sensor.upstairs_nest_protect_online
+        - binary_sensor.hallway_nest_protect_online
       from: 'on'
     action:
     - service: notify.family
