@@ -343,9 +343,10 @@ automation:
 ## Group
 ################################################
 group:
-  buiten:
+  buiten_lights:
     - light.buitenachter
     - light.buitenvoor
+  buiten_switches:
     - switch.tuin
   beneden:
     - light.woonkamer
@@ -459,9 +460,9 @@ script:
         {%- else -%}
           homeassistant.turn_off
         {%- endif -%}
-      entity_id: switch.tuin
+      entity_id: group.buiten_switches
 
   buiten_off:
     sequence:
     - service: homeassistant.turn_off
-      entity_id: group.buiten
+      entity_id: group.buiten_lights, group.buiten_switches

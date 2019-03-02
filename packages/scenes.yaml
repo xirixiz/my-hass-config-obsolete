@@ -147,33 +147,33 @@ scene:
 # BUITEN
   - name: buiten_general
     entities:
-      group.buiten:
+      group.buiten_lights:
         state: true
         color_temp: 451
         transition: 3
         brightness_pct: 30
   - name: buiten_evening
     entities:
-      light.hal_en_overlopen:
+      group.buiten_lights:
         state: true
         color_temp: 451
         brightness_pct: 40
   - name: buiten_night
     entities:
-      light.hal_en_overlopen:
+      group.buiten_lights:
         state: true
         color_temp: 451
         brightness_pct: 100
   - name: buiten_bright
     entities:
-      group.buiten:
+      group.buiten_lights:
         state: true
         color_temp: 451
         transition: 3
         brightness_pct: 40
   - name: buiten_super_bright
     entities:
-      group.buiten:
+      group.buiten_lights:
         state: true
         color_temp: 451
         transition: 3
