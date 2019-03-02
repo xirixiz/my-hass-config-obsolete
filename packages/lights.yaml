@@ -19,6 +19,8 @@ homeassistant:
       icon: mdi:flashlight-off
     group.buiten:
       friendly_name: Buiten
+    group.buiten_lights:
+      friendly_name: Buiten Lights
     script.buiten_off:
       friendly_name: Buiten
       icon: mdi:flashlight-off
@@ -40,8 +42,8 @@ homeassistant:
     script.keuken:
       friendly_name: Keuken
       icon: mdi:flashlight
-    script.buiten:
-      friendly_name: Buiten
+    script.buiten_switches:
+      friendly_name: Buiten Switches
       icon: mdi:flashlight
     sensor.woonkamer_motion:
       friendly_name: Woonkamer Motion
@@ -343,6 +345,9 @@ automation:
 ## Group
 ################################################
 group:
+  buiten:
+    - group.buiten_lights
+    - group.buiten_switches    
   buiten_lights:
     - light.buitenachter
     - light.buitenvoor

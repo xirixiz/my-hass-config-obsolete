@@ -28,7 +28,8 @@ scene:
     entities:
       light.woonkamer: off
       light.keuken: off
-      group.buiten: off
+      group.buiten_lights: off
+      group.buiten_switches: off      
 
 # SLAAPKAMER
   - name: slaapkamer_general
