@@ -296,6 +296,10 @@ automation:
             script.woonkamer, script.keuken, script.buiten
           #{%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
             #script.woonkamer, script.keuken
+          {%- elif is_state('sensor.woonkamer_motion', 'True') and is_state('switch.tv_woonkamer', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening','evening'] -%}
+            script.woonkamer_switch_on
+          {%- elif is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening', 'night'] -%}
+            script.woonkamer_switch_off
           {%- elif is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
             script.all_off
           {%- elif is_state('sensor.switch_woonkamer_lux', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
@@ -335,9 +339,9 @@ automation:
     action:
     - service_template: >-
         {%- if trigger.event == "sunset" -%}
-          homeassistant.turn_on
+          switch.turn_on
         {%- elif trigger.event == "sunrise" -%}
-          homeassistant.turn_off
+          switch.turn_off
         {%- endif -%}
       entity_id: group.kinderen
 
@@ -347,7 +351,7 @@ automation:
 group:
   buiten:
     - group.buiten_lights
-    - group.buiten_switches    
+    - group.buiten_switches
   buiten_lights:
     - light.buitenachter
     - light.buitenvoor
@@ -415,6 +419,23 @@ script:
     - service: light.turn_off
       entity_id: light.woonkamer
 
+  # woonkamer_switch:
+  #   sequence:
+  #   - service_template: >-
+  #         {%- if states('sensor.time_of_day_short') in ['daytime','evening','night'] -%}switch.turn_on
+  #         {%- elif states('sensor.time_of_day_short') in ['evening','night'] -%}switch.turn_off
+  #     entity_id: switch.tv_woonkamer
+
+  woonkamer_switch_on:
+    sequence:
+    - service: switch.turn_on
+      entity_id: switch.tv_woonkamer
+
+  woonkamer_switch_off:
+    sequence:
+    - service: switch.turn_off
+      entity_id: switch.tv_woonkamer
+
 # KEUKEN
   keuken:
     sequence:
@@ -461,9 +482,9 @@ script:
           {%- endif -%}
     - service_template: >-
         {%- if states('sensor.time_of_day_short') in ['early evening','evening'] -%}
-          homeassistant.turn_on
+          switch.turn_on
         {%- else -%}
-          homeassistant.turn_off
+          switch.turn_off
         {%- endif -%}
       entity_id: group.buiten_switches
 

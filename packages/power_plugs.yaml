@@ -16,7 +16,6 @@ homeassistant:
     switch.boris:
       friendly_name: Verlichting Boris
 
-
     sensor.wasmachine_watts:
       friendly_name: Huidig verbruik wasmachine
       icon: mdi:washing-machine
@@ -185,6 +184,34 @@ sensor:
         friendly_name: "Current Voltage"
         value_template: '{{ states.switch.tuin.attributes["voltage"] | replace(" V", "") | float }}'
         unit_of_measurement: 'V'
+
+# TV
+  - platform: template
+    sensors:
+      tv_woonkamer_watts:
+        friendly_name: "Huidig verbruik TV kast"
+        value_template: '{{ states.switch.tv_woonkamer.attributes["current_power_w"] | replace(" W", "") | float }}'
+        unit_of_measurement: 'W'
+      tv_woonkamer_kw:
+        friendly_name: "Current KiloWatts"
+        value_template: '{{ states.switch.tv_woonkamer.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      tv_woonkamer_amps:
+        friendly_name: "Amps"
+        value_template: '{{ states.switch.tv_woonkamer.attributes["current_a"] | replace(" A", "") | float }}'
+        unit_of_measurement: 'A'
+      tv_woonkamer_kw_today:
+        friendly_name: "Today's KiloWatts"
+        value_template: '{{ states.switch.tv_woonkamer.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        unit_of_measurement: 'kWh'
+      tv_woonkamer_volts:
+        friendly_name: "Current Voltage"
+        value_template: '{{ states.switch.tv_woonkamer.attributes["voltage"] | replace(" V", "") | float }}'
+        unit_of_measurement: 'V'
+
+  - platform: statistics
+    name: TV kast statistics
+    entity_id: sensor.tv_woonkamer_watts
 
 # WASMACHINE
   - platform: template

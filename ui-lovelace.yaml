@@ -110,25 +110,48 @@ views:
             - sensor.woonkamer_temperature
             - sensor.slaapkamer_boris_temperature
 
-      - type: vertical-stack
-        cards:
-        - type: horizontal-stack
-          cards:
-          - type: sensor
-            entity: sensor.electricity_currently_delivered
-        - type: horizontal-stack
-          cards:
-          - type: sensor
-            entity: sensor.wasmachine_watts
-            name: Wasmachine
-          - type: sensor
-            entity: sensor.droger_watts
-            name: Droger
+      # - type: vertical-stack
+      #   cards:
+      #   - type: horizontal-stack
+      #     cards:
+      #     - type: sensor
+      #       entity: sensor.electricity_currently_delivered
+      #   - type: horizontal-stack
+      #     cards:
+      #     - type: sensor
+      #       entity: sensor.wasmachine_watts
+      #       name: Wasmachine
+      #     - type: sensor
+      #       entity: sensor.droger_watts
+      #       name: Droger
+
         - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
           type: entities
           show_header_toggle: false
           entities:
+            - sensor.electricity_currently_delivered
+            - type: divider
+              style:
+                height: 1px
+                margin-left: auto
+                margin-right: auto
+                background: '#62717b'
+            - sensor.wasmachine_watts
+            - sensor.droger_watts
+            - type: divider
+              style:
+                height: 1px
+                margin-left: auto
+                margin-right: auto
+                background: '#62717b'
             - sensor.tuin_watts
+            - type: divider
+              style:
+                height: 1px
+                margin-left: auto
+                margin-right: auto
+                background: '#62717b'
+            - sensor.tv_woonkamer_watts
             - type: divider
               style:
                 height: 1px
