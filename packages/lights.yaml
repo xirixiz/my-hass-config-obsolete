@@ -19,8 +19,12 @@ homeassistant:
       icon: mdi:flashlight-off
     group.buiten:
       friendly_name: Buiten
-    group.buiten_lights:
-      friendly_name: Buiten Lights
+    group.buiten_switches:
+      friendly_name: Buiten Switches
+    group.all_switches:
+      friendly_name: Alle Switches
+    light.buiten:
+      friendly_name: Buiten
     script.buiten_off:
       friendly_name: Buiten
       icon: mdi:flashlight-off
@@ -41,9 +45,6 @@ homeassistant:
       icon: mdi:flashlight
     script.keuken:
       friendly_name: Keuken
-      icon: mdi:flashlight
-    script.buiten_switches:
-      friendly_name: Buiten Switches
       icon: mdi:flashlight
     sensor.woonkamer_motion:
       friendly_name: Woonkamer Motion
@@ -105,10 +106,6 @@ input_boolean:
 ## Sensor
 ################################################
 sensor:
-  - platform: hue
-#    ip_address: !secret philips_hue_host
-#    token: !secret philips_hue_token
-
   - platform: rest
     resource: !secret hue_woonkamer_temperature_sensor
     value_template: '{{ value_json.state.temperature | float / 100 }}'
@@ -158,27 +155,6 @@ sensor:
     scan_interval: 30
     unit_of_measurement: 'Lux'
     name: 'hal_lux'
-
-
-  # - platform: template
-  #   sensors:
-  #     woonkamer_temperature:
-  #       friendly_name: 'Woonkamer temperatuur'
-  #       value_template: '{{states.sensor.woonkamer_motion.attributes.temperature}}'
-  #       unit_of_measurement: °C
-  #     woonkamer_lux:
-  #       friendly_name: 'Woonkamer Lux'
-  #       value_template: '{{states.sensor.woonkamer_motion.attributes.light_level}}'
-  #       unit_of_measurement: lux
-  #     hal_temperature:
-  #       friendly_name: 'Hal temperatuur'
-  #       value_template: '{{states.sensor.hal_motion.attributes.temperature}}'
-  #       unit_of_measurement: °C
-  #     hal_lux:
-  #       friendly_name: 'Hal Lux'
-  #       value_template: '{{states.sensor.hal_motion.attributes.light_level}}'
-  #       unit_of_measurement: lux
-
 
   - platform: template
     sensors:
@@ -292,17 +268,14 @@ automation:
         entity_id: >-
           {%- if (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['daytime'] -%}
             script.woonkamer, script.keuken, script.buiten
-          {%- elif (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
+          {%- endif -%}
+          {%- if (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
             script.woonkamer, script.keuken, script.buiten
-          #{%- elif (is_state('sensor.woonkamer_motion', 'True') or is_state('sensor.hal_motion', 'True')) and states('sensor.time_of_day_short') in ['night'] -%}
-            #script.woonkamer, script.keuken
-          {%- elif is_state('sensor.woonkamer_motion', 'True') and is_state('switch.tv_woonkamer', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening','evening'] -%}
-            script.woonkamer_switch_on
-          {%- elif is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening', 'night'] -%}
-            script.woonkamer_switch_off
-          {%- elif is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
+          {%- endif -%}
+          {%- if is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
             script.all_off
-          {%- elif is_state('sensor.switch_woonkamer_lux', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
+          {%- endif -%}
+          {%- if is_state('sensor.switch_woonkamer_lux', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
             script.all_off
           {%- endif -%}
 
@@ -350,11 +323,8 @@ automation:
 ################################################
 group:
   buiten:
-    - group.buiten_lights
+    - light.buiten
     - group.buiten_switches
-  buiten_lights:
-    - light.buitenachter
-    - light.buitenvoor
   buiten_switches:
     - switch.tuin
   beneden:
@@ -379,6 +349,8 @@ script:
       entity_id: scene.keuken_general
     - service: scene.turn_on
       entity_id: scene.buiten_general
+    - service: homeassistant.turn_on
+      entity_id: group.buiten_switches
 
   all_on_bright:
     sequence:
@@ -402,6 +374,8 @@ script:
     sequence:
     - service: scene.turn_on
       entity_id: scene.all_off
+    - service: homeassistant.turn_off
+      entity_id: group.buiten_switches
 
 # WOONKAMER
   woonkamer:
@@ -418,23 +392,6 @@ script:
     sequence:
     - service: light.turn_off
       entity_id: light.woonkamer
-
-  # woonkamer_switch:
-  #   sequence:
-  #   - service_template: >-
-  #         {%- if states('sensor.time_of_day_short') in ['daytime','evening','night'] -%}switch.turn_on
-  #         {%- elif states('sensor.time_of_day_short') in ['evening','night'] -%}switch.turn_off
-  #     entity_id: switch.tv_woonkamer
-
-  woonkamer_switch_on:
-    sequence:
-    - service: switch.turn_on
-      entity_id: switch.tv_woonkamer
-
-  woonkamer_switch_off:
-    sequence:
-    - service: switch.turn_off
-      entity_id: switch.tv_woonkamer
 
 # KEUKEN
   keuken:
@@ -481,14 +438,12 @@ script:
           {%- else -%}general
           {%- endif -%}
     - service_template: >-
-        {%- if states('sensor.time_of_day_short') in ['early evening','evening'] -%}
-          switch.turn_on
-        {%- else -%}
-          switch.turn_off
+        {%- if states('sensor.time_of_day_short') in ['early evening','evening'] -%}homeassistant.turn_on
+        {%- else -%}homeassistant.turn_off
         {%- endif -%}
       entity_id: group.buiten_switches
 
   buiten_off:
     sequence:
     - service: homeassistant.turn_off
-      entity_id: group.buiten_lights, group.buiten_switches
+      entity_id: light.buiten, group.buiten_switches

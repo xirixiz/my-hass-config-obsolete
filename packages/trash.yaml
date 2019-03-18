@@ -49,7 +49,7 @@ input_boolean:
 ## Sensor
 ################################################
 sensor:
-  - platform: mijnafvalwijzer
+  - platform: afvalwijzer
     postcode: !secret afvalwijzer_postcode
     huisnummer: !secret afvalwijzer_huisnummer
     #postcode: 4707PB

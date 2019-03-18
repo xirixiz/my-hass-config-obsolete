@@ -28,8 +28,7 @@ scene:
     entities:
       light.woonkamer: off
       light.keuken: off
-      group.buiten_lights: off
-      group.buiten_switches: off      
+      light.buiten: off
 
 # SLAAPKAMER
   - name: slaapkamer_general
@@ -148,33 +147,33 @@ scene:
 # BUITEN
   - name: buiten_general
     entities:
-      group.buiten_lights:
+      light.buiten:
         state: true
         color_temp: 451
         transition: 3
         brightness_pct: 30
   - name: buiten_evening
     entities:
-      group.buiten_lights:
+      light.buiten:
         state: true
         color_temp: 451
         brightness_pct: 40
   - name: buiten_night
     entities:
-      group.buiten_lights:
+      light.buiten:
         state: true
         color_temp: 451
         brightness_pct: 100
   - name: buiten_bright
     entities:
-      group.buiten_lights:
+      light.buiten:
         state: true
         color_temp: 451
         transition: 3
         brightness_pct: 40
   - name: buiten_super_bright
     entities:
-      group.buiten_lights:
+      light.buiten:
         state: true
         color_temp: 451
         transition: 3

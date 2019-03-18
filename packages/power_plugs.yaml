@@ -63,27 +63,20 @@ homeassistant:
       icon: mdi:tumble-dryer
 
 ################################################
-## Switch
+## TP-Link
 ################################################
-switch:
-  - platform: tplink
-    host: 192.168.1.171
-  - platform: tplink
-    host: 192.168.1.172
-  - platform: tplink
-    host: 192.168.1.173
-  - platform: tplink
-    host: 192.168.1.174
-  - platform: tplink
-    host: 192.168.1.175
-  - platform: tplink
-    host: 192.168.1.176
-  - platform: tplink
-    host: 192.168.1.177
-  - platform: tplink
-    host: 192.168.1.178
-  - platform: tplink
-    host: 192.168.1.179
+tplink:
+  discovery: false
+  switch:
+    - host: 192.168.1.171
+    - host: 192.168.1.172
+    - host: 192.168.1.173
+    - host: 192.168.1.174
+    - host: 192.168.1.175
+    - host: 192.168.1.176
+    - host: 192.168.1.177
+    - host: 192.168.1.178
+    - host: 192.168.1.179
 
 ################################################
 ## Group
@@ -95,12 +88,6 @@ group:
     entities:
       - device_tracker.taipan5g
       - device_tracker.lieke_iphone
-  powerplugs:
-     name: PowerPlugs
-     entities:
-      - group.kerstmis
-      - switch.wasmachine
-      - switch.droger
 
 ################################################
 ## Inputs
@@ -385,43 +372,6 @@ sensor:
 ## Automation
 ################################################
 automation:
-# KERSTMIS
-  # - alias: "Kerst Ritual"
-  #   trigger:
-  #   - platform: state
-  #     entity_id: sensor.hal_motion
-  #     to: 'True'
-  #   - platform: state
-  #     entity_id: sensor.woonkamer_motion
-  #     to: 'True'
-  #   condition:
-  #   - condition: state
-  #     entity_id: input_boolean.automation_mode
-  #     state: 'off'
-  #   action:
-  #   - service: homeassistant.turn_on
-  #     data_template:
-  #       entity_id: >-
-  #         {%- if states('sensor.time_of_day_short') in ['daytime'] -%}
-  #         group.kerstmis
-  #         {%- endif -%}
-
-  # - alias: 'Kerst Ritual 2'
-  #   trigger:
-  #   - platform: time
-  #     at: '09:30:00'
-  #   condition:
-  #   - condition: time
-  #     weekday:
-  #       - mon
-  #       - tue
-  #       - wed
-  #       - thu
-  #       - fri
-  #   action:
-  #   - service: homeassistant.turn_off
-  #     entity_id: group.kerstmis
-
 
 # WASMACHINE
   - alias: Action - Set wasmachine to running
@@ -443,14 +393,6 @@ automation:
       data_template:
         title: 'Wasmachine:'
         message: "Wasprogramma gestart."
-    # - service: media_player.volume_set
-    #   data:
-    #     entity_id: media_player.living_room
-    #     volume_level: '0.50'
-    # - service: tts.google_say
-    #   entity_id: media_player.living_room
-    #   data_template:
-    #     message: 'De wasmachine is gestart!'
 
   - alias: Action - Set wasmachine as finished
     trigger:
@@ -474,15 +416,6 @@ automation:
         message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh."
     - service: homeassistant.turn_off
       entity_id: input_boolean.wasmachine
-    # - service: media_player.volume_set
-    #   data:
-    #     entity_id: media_player.living_room
-    #     volume_level: '0.50'
-    # - service: tts.google_say
-    #   entity_id: media_player.living_room
-    #   data_template:
-    #     message: 'De wasmachine is klaar!'
-
 
 # DROGER
   - alias: Action - Set droger to running
@@ -504,14 +437,6 @@ automation:
       data_template:
         title: 'Droger:'
         message: "Droger gestart."
-    # - service: media_player.volume_set
-    #   data:
-    #     entity_id: media_player.living_room
-    #     volume_level: '0.50'
-    # - service: tts.google_say
-    #   entity_id: media_player.living_room
-    #   data_template:
-    #     message: 'De droger is gestart!'
 
   - alias: Action - Set droger as finished
     trigger:
@@ -535,38 +460,69 @@ automation:
         message: "Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh."
     - service: homeassistant.turn_off
       entity_id: input_boolean.droger
-    # - service: media_player.volume_set
-    #   data:
-    #     entity_id: media_player.living_room
-    #     volume_level: '0.50'
-    # - service: tts.google_say
-    #   entity_id: media_player.living_room
-    #   data_template:
-    #     message: 'De droger is klaar!'
 
+# GENERAL
+  - alias: "General lights On/Off"
+    trigger:
+    - platform: time_pattern
+      minutes: '/5'
+      seconds: 00
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
+    condition:
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: script.turn_on
+      data_template:
+        entity_id: >-
+          {%- if is_state('sensor.woonkamer_motion', 'True') and is_state('switch.tv_woonkamer', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening','evening'] -%}
+            script.woonkamer_switch_on
+          {%- endif -%}
+          {%- if is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening', 'night'] -%}
+            script.woonkamer_switch_off
+          {%- endif -%}
+          {%- if is_state('media_player.bedroom_tv', 'off') and is_state('switch.tv_slaapkamer', 'on') -%}
+            script.slaapkamer_switch_off
+          {%- endif -%}
 
-  # - alias: "TTS test"
-  #   initial_state: 'on'
+  # - alias: "TV Kast switch Off"
   #   trigger:
-  #   - platform: time_pattern
-  #     minutes: '/1'
-  #     seconds: 00
-  #   - platform: homeassistant
-  #     event: start
-  #   action:
-  #   - service: media_player.turn_on
-  #     entity_id: media_player.shield
-  #   # - service: media_player.select_source
-  #   #   entity_id: media_player.living_room
-  #   - service: media_player.volume_set
-  #     data:
-  #       entity_id: media_player.living_room
-  #       volume_level: '0.50'
-  #   - delay:
-  #       seconds: 10
-  #   - service: tts.google_say
-  #     entity_id: media_player.shield
-  #     data_template:
-  #       message: 'Bram is de beste en Floris en Lex hebben dikke billen!'
-  #   # - service: media_player.turn_off
-  #   #   entity_id: media_player.shield
+  #     platform: time
+  #     at: '10:00:00'
+
+################################################
+## Script
+################################################
+script:
+  # woonkamer_switch:
+  #   sequence:
+  #   - service_template: >-
+  #         {%- if states('sensor.time_of_day_short') in ['daytime','evening','night'] -%}homeassistant.turn_on
+  #         {%- elif states('sensor.time_of_day_short') in ['evening','night'] -%}homeassistant.turn_off
+  #     entity_id: switch.tv_woonkamer
+
+  woonkamer_switch_on:
+    sequence:
+    - service: homeassistant.turn_on
+      entity_id: switch.tv_woonkamer
+
+  woonkamer_switch_off:
+    sequence:
+    - service: homeassistant.turn_off
+      entity_id: switch.tv_woonkamer
+
+  slaapkamer_switch_on:
+    sequence:
+    - service: homeassistant.turn_on
+      entity_id: switch.tv_slaapkamer
+
+  slaapkamer_switch_off:
+    sequence:
+    - service: homeassistant.turn_off
+      entity_id: switch.tv_slaapkamer

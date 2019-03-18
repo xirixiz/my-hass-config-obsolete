@@ -87,27 +87,33 @@ views:
           #- group.kerstmis
           - group.buiten
           #- switch.tuin
+          - group.all_switches
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
           - switch.lex
           - switch.boris
 
       - type: vertical-stack
         cards:
-        - type: horizontal-stack
-          cards:
-          - type: sensor
-            entity: sensor.living_room_thermostat_temperature
-            name: Temperatuur
-          - type: sensor
-            entity: sensor.living_room_thermostat_humidity
-            name: Luchtvochtigheid
         - id: dcb17306a9af4348ac01a6969ccb5ebe  # Automatically created id
           type: entities
           show_header_toggle: false
           entities:
             - input_number.woonkamer_nest_thermostat_temperature
             - climate.living_room
+            # - sensor.woonkamer_temperature
+            - sensor.living_room_thermostat_humidity
+            - type: divider
+              style:
+                height: 1px
+                margin-left: auto
+                margin-right: auto
+                background: '#62717b'
             - sensor.hal_temperature
-            - sensor.woonkamer_temperature
             - sensor.slaapkamer_boris_temperature
 
       # - type: vertical-stack
@@ -130,6 +136,8 @@ views:
           show_header_toggle: false
           entities:
             - sensor.electricity_currently_delivered
+            - sensor.electricity1
+            - sensor.gas
             - type: divider
               style:
                 height: 1px
@@ -179,36 +187,36 @@ views:
             - sensor.droger_status_time
             - sensor.droger_status_value
 
-        - type: vertical-stack
-          cards:
-            - type: horizontal-stack
-              cards:
-                - type: picture-entity
-                  entity: sensor.trash_today
-                  name: Vandaag
-                  <<: *afval-images
-                - type: picture-entity
-                  entity: sensor.trash_tomorrow
-                  name: Morgen
-                  <<: *afval-images
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: picture-entity
+                entity: sensor.trash_today
+                name: Vandaag
+                <<: *afval-images
+              - type: picture-entity
+                entity: sensor.trash_tomorrow
+                name: Morgen
+                <<: *afval-images
 
-            - type: glance
-              entities:
-               - entity: sensor.trash_gft_formatted
-                 name: GFT
-               - entity: sensor.trash_papier_formatted
-                 name: Papier
-               - entity: sensor.trash_pmd_formatted
-                 name: Plastic
-               - entity: sensor.trash_restafval_formatted
-                 name: Restafval
+          - type: glance
+            entities:
+             - entity: sensor.trash_gft_formatted
+               name: GFT
+             - entity: sensor.trash_papier_formatted
+               name: Papier
+             - entity: sensor.trash_pmd_formatted
+               name: Plastic
+             - entity: sensor.trash_restafval_formatted
+               name: Restafval
 
-            - type: entities
-              show_header_toggle: false
-              entities:
-                - sensor.trash_next
-                - input_boolean.trash_moved
-                - input_boolean.trash_reminder
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - sensor.trash_next
+              - input_boolean.trash_moved
+              - input_boolean.trash_reminder
 
       - id: 274799b9eb634da6985a9cedd0d83017  # Automatically created id
         type: entities
@@ -238,11 +246,11 @@ views:
             entity: camera.boriscam
             show_name: false
             show_state: false
-          - id: f57bc50ad329439790f9ff6550f9a298  # Automatically created id
-            type: picture-entity
-            entity: camera.lexcam
-            show_name: false
-            show_state: false
+          # - id: f57bc50ad329439790f9ff6550f9a298  # Automatically created id
+          #   type: picture-entity
+          #   entity: camera.lexcam
+          #   show_name: false
+          #   show_state: false
 
   ################################################
   ## MEDIA
@@ -255,26 +263,26 @@ views:
 
       - type: vertical-stack
         cards:
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - sensor.livingroom_tv_this_week
-              - sensor.percent_livingroom_tv_weekly
-              - sensor.livingroom_tv_this_month
-              - sensor.percent_livingroom_tv_monthly
+          #- type: entities
+          #  show_header_toggle: false
+          #  entities:
+          #    - sensor.livingroom_tv_this_week
+          #    - sensor.percent_livingroom_tv_weekly
+          #    - sensor.livingroom_tv_this_month
+          #    - sensor.percent_livingroom_tv_monthly
           - id: dc8acb366fa24c06914feb5d1018e7b5  # Automatically created id
             type: media-control
             entity: media_player.livingroom_tv
 
       - type: vertical-stack
         cards:
-          - type: entities
-            show_header_toggle: false
-            entities:
-              - sensor.bedroom_tv_this_week
-              - sensor.percent_bedroom_tv_weekly
-              - sensor.bedroom_tv_this_month
-              - sensor.percent_bedroom_tv_monthly
+          #- type: entities
+          #  show_header_toggle: false
+          #  entities:
+          #    - sensor.bedroom_tv_this_week
+          #    - sensor.percent_bedroom_tv_weekly
+          #    - sensor.bedroom_tv_this_month
+          #    - sensor.percent_bedroom_tv_monthly
           - id: e3df08f0e7dd44d3b2df12172ee60305  # Automatically created id
             type: media-control
             entity: media_player.bedroom_tv
@@ -295,17 +303,32 @@ views:
     cards:
       #- <<: *compact-header
 
-      - type: sensor
-        entity: sensor.electricity_currently_delivered
-        name: DSMR - Huidig
+      - id: 52332e8847ee451e82d59429353094df  # Automatically created id
+        type: entities
+        show_header_toggle: false
+        title: Energy / Gas consumption
+        entities:
+          - sensor.electricity_currently_delivered
+          - sensor.electricity1
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
+          - sensor.gas
 
-      - type: sensor
-        entity: sensor.electricity1
-        name: DSMR - Totaal Energie
+      # - type: sensor
+      #   entity: sensor.electricity_currently_delivered
+      #   name: DSMR - Huidig
 
-      - type: sensor
-        entity: sensor.gas
-        name: DSMR - Totaal Gas
+      # - type: sensor
+      #   entity: sensor.electricity1
+      #   name: DSMR - Totaal Energie
+
+      # - type: sensor
+      #   entity: sensor.gas
+      #   name: DSMR - Totaal Gas
 
       - id: c941976202ab41f8a9d3772ca5008dc7  # Automatically created id
         type: custom:monster-card
@@ -326,6 +349,12 @@ views:
           - sensor.woonkamer_motion
           - sensor.switch_woonkamer_lux
           - sensor.woonkamer_lux
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
           - sensor.hal_motion
           - sensor.switch_hal_lux
           - sensor.hal_lux
@@ -338,9 +367,21 @@ views:
           - sensor.living_room_nest_protect_co_status
           - sensor.living_room_nest_protect_smoke_status
           - sensor.living_room_nest_protect_battery_health
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
           - sensor.entryway_nest_protect_co_status
           - sensor.entryway_nest_protect_smoke_status
           - sensor.entryway_nest_protect_battery_health
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
           - sensor.hallway_nest_protect_co_status
           - sensor.hallway_nest_protect_smoke_status
           - sensor.hallway_nest_protect_battery_health
@@ -426,7 +467,7 @@ views:
         show_header_toggle: false
         title: Printer
         entities:
-          - sensor.samsung_printer
+          - sensor.samsung_printer_2
           - sensor.samsung_printer_toner_black
           - sensor.samsung_printer_tray_1
           - sensor.samsung_printer_output_tray_0

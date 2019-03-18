@@ -102,7 +102,7 @@ automation:
         entity_id: climate.living_room
         temperature: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
 
-  - alias: "Swtich - Woonkamer - Nest thermostat - Weekdays on"
+  - alias: "Switch - Woonkamer - Nest thermostat - Weekdays on"
     trigger:
     - platform: time
       at: '5:00:00'
@@ -128,7 +128,7 @@ automation:
         temperature: 21
 
 
-  - alias: "Swtich - Woonkamer - Nest thermostat - Weekdays off"
+  - alias: "Switch - Woonkamer - Nest thermostat - Weekdays off"
     trigger:
     - platform: state
       entity_id: input_boolean.vacation_mode

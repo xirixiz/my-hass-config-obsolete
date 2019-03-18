@@ -39,14 +39,6 @@ map:
 zeroconf:
 system_health:
 
-speedtestdotnet:
-  scan_interval:
-    hours: 1
-  monitored_conditions:
-    - ping
-    - download
-    - upload
-
 tts:
   - platform: google
     cache: true
@@ -70,4 +62,4 @@ custom_updater:  # https://github.com/custom-components/custom_updater/wiki/Inst
     - https://raw.githubusercontent.com/kuuji/button-card/master/tracker.json
   component_urls:
     - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json
-    - https://raw.githubusercontent.com/robmarkcole/Hue-sensors-HASS/master/custom_updater.json
+    # - https://raw.githubusercontent.com/robmarkcole/Hue-sensors-HASS/master/custom_updater.json
