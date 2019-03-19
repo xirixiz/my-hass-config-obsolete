@@ -133,7 +133,6 @@ automation:
     - platform: state
       entity_id: input_boolean.vacation_mode
       to: 'on'
-
     - platform: time
       at: '00:00:00'
     condition:
@@ -148,10 +147,10 @@ automation:
           entity_id: 'input_boolean.vacation_mode'
           state: 'on'
     action:
-    - service: climate.set_operation_mode
-      data:
-        entity_id: climate.living_room
-        operation_mode: eco
+    # - service: climate.set_operation_mode
+    #   data:
+    #     entity_id: climate.living_room
+    #     operation_mode: eco
     - service: climate.set_temperature
       data:
         entity_id: climate.living_room

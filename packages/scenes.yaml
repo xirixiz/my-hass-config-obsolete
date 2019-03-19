@@ -83,6 +83,9 @@ scene:
         transition: 3
         color_temp: 451
         brightness_pct: 90
+  - name: woonkamer_off
+    entities:
+      light.woonkamer: off
 
 # KEUKEN
   - name: keuken_general
@@ -111,6 +114,9 @@ scene:
         transition: 3
         color_temp: 451
         brightness_pct: 90
+  - name: keuken_off
+    entities:
+      light.keuken: off
 
 # HAL EN OVERLOPEN
   - name: hal_en_overlopen_general
@@ -178,3 +184,7 @@ scene:
         color_temp: 451
         transition: 3
         brightness_pct: 90
+  - name: buiten_off
+    entities:
+      light.buiten: off
+

@@ -53,9 +53,9 @@ homeassistant:
       friendly_name: Hal Motion
       icon: mdi:run-fast
     sensor.woonkamer_temperature:
-      friendly_name: Woonkamer Temperature
+      friendly_name: Woonkamer Temperatuur
     sensor.hal_temperature:
-      friendly_name: Hal Temperature
+      friendly_name: Hal Temperatuur
     sensor.woonkamer_lux:
       friendly_name: Woonkamer Lux
     sensor.hal_lux:
@@ -266,18 +266,28 @@ automation:
     - service: script.turn_on
       data_template:
         entity_id: >-
-          {%- if (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['daytime'] -%}
+          {%- if is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on') -%}
             script.woonkamer, script.keuken, script.buiten
+          {%- else -%}
+            script.noop
           {%- endif -%}
-          {%- if (is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on')) and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
-            script.woonkamer, script.keuken, script.buiten
-          {%- endif -%}
+    - service: script.turn_on
+      data_template:
+        entity_id: >-
           {%- if is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening','night'] -%}
             script.all_off
+          {%- else -%}
+            script.noop
           {%- endif -%}
+    - service: script.turn_on
+      data_template:
+        entity_id: >-
           {%- if is_state('sensor.switch_woonkamer_lux', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
             script.all_off
+          {%- else -%}
+            script.noop
           {%- endif -%}
+
 
   # HAL & OVERLOPEN
   - alias: "Hal en overlopen On/Off"
@@ -340,6 +350,12 @@ group:
 ## Script
 ################################################
 script:
+
+  lights_dummy:
+    sequence:
+    - service: homeassistant.turn_on
+      entity_id: input_boolean.lights_dummy
+
 # ALL
   all_on:
     sequence:
@@ -385,7 +401,8 @@ script:
         entity_id: >-
           scene.woonkamer_
           {%- if states('sensor.time_of_day_short') in ['daytime'] -%}bright
-          {%- else -%}general
+          {%- elif states('sensor.time_of_day_short') in ['early evening','evening'] -%}general
+          {%- else -%}off
           {%- endif -%}
 
   woonkamer_off:
@@ -401,7 +418,8 @@ script:
         entity_id: >-
           scene.keuken_
           {%- if states('sensor.time_of_day_short') in ['daytime'] -%}bright
-          {%- else -%}general
+          {%- elif states('sensor.time_of_day_short') in ['early evening','evening'] -%}general
+          {%- else -%}off
           {%- endif -%}
 
   keuken_off:

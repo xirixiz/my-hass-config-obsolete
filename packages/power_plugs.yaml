@@ -12,7 +12,9 @@ homeassistant:
     switch.lex:
       friendly_name: Verlichting Lex
     switch.tv_woonkamer:
-      friendly_name: TV Kast
+      friendly_name: TV Woonkamer
+    switch.tv_slaapkamer:
+      friendly_name: TV Slaapkamer
     switch.boris:
       friendly_name: Verlichting Boris
 
@@ -73,10 +75,11 @@ tplink:
     - host: 192.168.1.173
     - host: 192.168.1.174
     - host: 192.168.1.175
-    - host: 192.168.1.176
+    #- host: 192.168.1.176
     - host: 192.168.1.177
     - host: 192.168.1.178
-    - host: 192.168.1.179
+    #- host: 192.168.1.179
+
 
 ################################################
 ## Group
@@ -462,10 +465,10 @@ automation:
       entity_id: input_boolean.droger
 
 # GENERAL
-  - alias: "General lights On/Off"
+  - alias: "General powerplugs On/Off"
     trigger:
     - platform: time_pattern
-      minutes: '/5'
+      minutes: '/10'
       seconds: 00
     - platform: state
       entity_id: sensor.hal_motion
@@ -483,18 +486,41 @@ automation:
         entity_id: >-
           {%- if is_state('sensor.woonkamer_motion', 'True') and is_state('switch.tv_woonkamer', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening','evening'] -%}
             script.woonkamer_switch_on
+          {%- else -%}
+            script.noop
           {%- endif -%}
+    - service: script.turn_on
+      data_template:
+        entity_id: >-
           {%- if is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening', 'night'] -%}
             script.woonkamer_switch_off
+          {%- else -%}
+            script.noop
           {%- endif -%}
+    - service: script.turn_on
+      data_template:
+        entity_id: >-
           {%- if is_state('media_player.bedroom_tv', 'off') and is_state('switch.tv_slaapkamer', 'on') -%}
             script.slaapkamer_switch_off
+          {%- else -%}
+            script.noop
           {%- endif -%}
 
-  # - alias: "TV Kast switch Off"
-  #   trigger:
-  #     platform: time
-  #     at: '10:00:00'
+  - alias: "TV Kast switch Off"
+    trigger:
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'False'
+      for:
+        hours: 1
+        minutes: 30
+    condition:
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    action:
+    - service: script.turn_on
+      entity_id: script.woonkamer_switch_off
 
 ################################################
 ## Script
@@ -506,6 +532,10 @@ script:
   #         {%- if states('sensor.time_of_day_short') in ['daytime','evening','night'] -%}homeassistant.turn_on
   #         {%- elif states('sensor.time_of_day_short') in ['evening','night'] -%}homeassistant.turn_off
   #     entity_id: switch.tv_woonkamer
+
+  noop:
+    sequence:
+    - delay: 00:00:00
 
   woonkamer_switch_on:
     sequence:

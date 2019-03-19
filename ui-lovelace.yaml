@@ -144,14 +144,6 @@ views:
                 margin-left: auto
                 margin-right: auto
                 background: '#62717b'
-            - sensor.wasmachine_watts
-            - sensor.droger_watts
-            - type: divider
-              style:
-                height: 1px
-                margin-left: auto
-                margin-right: auto
-                background: '#62717b'
             - sensor.tuin_watts
             - type: divider
               style:
@@ -171,6 +163,7 @@ views:
             #- sensor.percent_wasmachine_weekly
             #- sensor.wasmachine_this_month
             #- sensor.percent_wasmachine_monthly
+            - sensor.wasmachine_watts
             - sensor.wasmachine_status_time
             - sensor.wasmachine_status_value
             - type: divider
@@ -184,6 +177,7 @@ views:
             #- sensor.percent_droger_weekly
             #- sensor.droger_this_month
             #- sensor.percent_droger_monthly
+            - sensor.droger_watts
             - sensor.droger_status_time
             - sensor.droger_status_value
 
@@ -467,7 +461,7 @@ views:
         show_header_toggle: false
         title: Printer
         entities:
-          - sensor.samsung_printer_2
+          - sensor.samsung_printer
           - sensor.samsung_printer_toner_black
           - sensor.samsung_printer_tray_1
           - sensor.samsung_printer_output_tray_0
