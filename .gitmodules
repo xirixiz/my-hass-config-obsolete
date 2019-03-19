@@ -1,3 +1,15 @@
 [submodule "www/custom-lovelace"]
 	path = www/custom-lovelace
 	url = https://github.com/ciotlosm/custom-lovelace.git
+[submodule "www/lovelace/custom-lovelace"]
+	path = www/lovelace/custom-lovelace
+	url = https://github.com/ciotlosm/custom-lovelace.git
+[submodule "www/lovelace/tracker-card"]
+	path = www/lovelace/tracker-card
+	url = https://github.com/custom-cards/tracker-card.git
+[submodule "www/lovelace/compact-custom-header"]
+	path = www/lovelace/compact-custom-header
+	url = https://github.com/maykar/compact-custom-header.git
+[submodule "www/lovelace/button-card"]
+	path = www/lovelace/button-card
+	url = https://github.com/custom-cards/button-card.git

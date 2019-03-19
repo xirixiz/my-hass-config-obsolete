@@ -1,11 +1,11 @@
 resources:
-  - url: /local/custom-lovelace/monster-card/monster-card.js?v=0.2.3
+  - url: /local/lovelace/custom-lovelace/monster-card/monster-card.js?v=0.2.3
     type: js
-  - url: /local/custom-lovelace/tracker-card/tracker-card.js?v=0.3.2
+  - url: /local/lovelace/tracker-card/tracker-card.js?v=0.3.2
     type: js
-  - url: /local/custom-lovelace/button-card/button-card.js?v=0.0.5
+  - url: /local/lovelace/button-card/button-card.js?v=0.0.5
     type: module
-  #- url: /local/custom-lovelace/compact-custom-header/compact-custom-header.js?v=1.0.0b6
+  #- url: /local/lovelace/compact-custom-header/compact-custom-header.js?v=1.0.0b6
     #type: js
 
 #x-compact-header: &compact-header
