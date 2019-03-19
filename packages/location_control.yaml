@@ -5,8 +5,10 @@ homeassistant:
   customize:
     device_tracker.taipan5g:
       friendly_name: Bram
+      entity_picture: /local/faces/bram.jpg
     device_tracker.lieke_iphone:
       friendly_name: Lieke
+      entity_picture: /local/faces/lieke.jpg
     zone.home:
       friendly_name: "Home"
     zone.work_lieke:
