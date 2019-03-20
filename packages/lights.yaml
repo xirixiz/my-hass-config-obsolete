@@ -64,6 +64,8 @@ homeassistant:
       friendly_name: Woonkamer Lux Switch
     sensor.switch_hal_lux:
       friendly_name: Hal Lux Switch
+    input_number.keuken_hanglamp_brightness:
+      friendly_name: Keuken Hanglamp
 
 ################################################
 ## Hue
@@ -81,8 +83,8 @@ input_number:
   keuken_hanglamp_brightness:
     initial: 127
     min: 0
-    max: 255
-    step: 1
+    max: 254
+    step: 10
 
 input_boolean:
   automation_mode:
@@ -158,14 +160,6 @@ sensor:
 
   - platform: template
     sensors:
-      keuken_hanglamp_brightness:
-        friendly_name: 'Keuken Hanglamp'
-        value_template: >-
-          {%- if is_state('light.keuken_hanglamp', 'on') -%}
-            {{ states.light.keuken_hanglamp.attributes.brightness | int }}
-          {%- else -%}
-            127
-          {%- endif -%}
       switch_hal_lux:
         value_template: >-
           {%- if states('sensor.hal_lux') | int < 6000 -%} on
@@ -181,25 +175,7 @@ sensor:
 ## Automation
 ################################################
 automation:
-
   # KEUKEN
-  - alias: "Slider - Keuken - Hanglamp - Set value"
-    initial_state: on
-    trigger:
-    - platform: state
-      entity_id: sensor.keuken_hanglamp_brightness
-    - platform: state
-      entity_id: light.keuken_hanglamp
-      from: 'off'
-      to: 'on'
-    - platform: homeassistant
-      event: start
-    action:
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.keuken_hanglamp_brightness
-        value: "{{ states.light.keuken_hanglamp.attributes.brightness | int }}"
-
   - alias: "Switch - Keuken - Hanglamp - On"
     trigger:
     - platform: state
@@ -287,7 +263,6 @@ automation:
           {%- else -%}
             script.noop
           {%- endif -%}
-
 
   # HAL & OVERLOPEN
   - alias: "Hal en overlopen On/Off"
@@ -401,8 +376,7 @@ script:
         entity_id: >-
           scene.woonkamer_
           {%- if states('sensor.time_of_day_short') in ['daytime'] -%}bright
-          {%- elif states('sensor.time_of_day_short') in ['early evening','evening'] -%}general
-          {%- else -%}off
+          {%- else -%}general
           {%- endif -%}
 
   woonkamer_off:
@@ -418,8 +392,7 @@ script:
         entity_id: >-
           scene.keuken_
           {%- if states('sensor.time_of_day_short') in ['daytime'] -%}bright
-          {%- elif states('sensor.time_of_day_short') in ['early evening','evening'] -%}general
-          {%- else -%}off
+          {%- else -%}general
           {%- endif -%}
 
   keuken_off:

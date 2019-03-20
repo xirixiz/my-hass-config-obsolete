@@ -35,21 +35,32 @@ device_tracker:
     host: !secret ap1_host
     username: !secret ap_username
     password: !secret ap_password
+    interval_seconds: 10
+    consider_home: 180
+    new_device_defaults:
+      track_new_devices: true
+      hide_if_away: false
 
   - platform: unifi_direct
     host: !secret ap2_host
     username: !secret ap_username
     password: !secret ap_password
+    interval_seconds: 10
+    consider_home: 180
+    new_device_defaults:
+      track_new_devices: true
+      hide_if_away: false
 
   - platform: nmap_tracker
+    home_interval: 10
     hosts:
       - !secret nmap_hosts
 
-  - platform: luci
-    host: !secret openwrt_tracker_boven_host
-    username: !secret openwrt_tracker_boven_username
-    password: !secret openwrt_tracker_boven_password
-    ssl: false
+  # - platform: luci
+  #   host: !secret openwrt_tracker_boven_host
+  #   username: !secret openwrt_tracker_boven_username
+  #   password: !secret openwrt_tracker_boven_password
+  #   ssl: false
 
 ################################################
 ## Zone
@@ -58,7 +69,12 @@ zone:
   - name: work lieke
     latitude: !secret lieke_work_latitude
     longitude: !secret lieke_work_longtitude
-    radius: 250
+    radius: 150
+
+  - name: sport lieke
+    latitude: !secret lieke_sport_latitude
+    longitude: !secret lieke_sport_longtitude
+    radius: 150
 
   - name: parents lieke
     latitude: !secret lieke_parents_home_latitude
@@ -86,11 +102,11 @@ sensor:
     origin: device_tracker.lieke_iphone
     destination: zone.home
 
-  - platform: google_travel_time
-    name: Lieke Distance To Home
-    api_key: !secret google_travel_time_key_lieke
-    origin: zone.work_lieke
-    destination: zone.home
+  # - platform: google_travel_time
+  #   name: Lieke Distance To Work
+  #   api_key: !secret google_travel_time_key_lieke
+  #   origin: zone.work_lieke
+  #   destination: zone.home
 
 ################################################
 ## Automation
@@ -105,6 +121,10 @@ automation:
     - platform: zone
       entity_id: device_tracker.lieke_iphone
       zone: zone.work_lieke
+      event: enter
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
+      zone: zone.sport_lieke
       event: enter
     - platform: zone
       entity_id: device_tracker.lieke_iphone
@@ -131,6 +151,10 @@ automation:
       event: leave
     - platform: zone
       entity_id: device_tracker.lieke_iphone
+      zone: zone.sport_lieke
+      event: leave
+    - platform: zone
+      entity_id: device_tracker.lieke_iphone
       zone: zone.parents_lieke
       event: leave
     - platform: zone
@@ -147,6 +171,12 @@ automation:
     - platform: numeric_state
       entity_id: sensor.lieke_distance_to_home
       value_template: '{{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}'
+      # value_template: >-
+      #   {%- if not is_state('sensor.lieke_distance_to_home', 'unknown') -%}
+      #     {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}
+      #   {%- else -%}
+      #      {{ 0 | int }}
+      #   {%- endif -%}
       below: 600
     condition:
     - condition: state
@@ -178,9 +208,3 @@ automation:
     - service: homeassistant.update_entity
       entity_id: sensor.lieke_distance_to_home
 
-#        value_template: >-
-#          {%- if is_state('states.sensor.lieke_distance_to_home', 'unknown') -%}
-#            0
-#          {%- else -%}
-#            {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}
-#          {%- endif -%}

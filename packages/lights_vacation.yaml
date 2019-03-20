@@ -12,13 +12,7 @@ script:
     - alias: 'flash rgb lights on'
       service: light.turn_on
       entity_id:
-      - light.buiten_achter_links
-      - light.buiten_achter_rechts
-      - light.buiten_voordeur
-      - light.buiten_garage
-      - light.keuken_hanglamp
-      - light.hal_bg
-      - light.slaapkamer_hanglamp
+      - group.all_lights
       data:
         rgb_color: [98,19,0]
         brightness: 255
@@ -27,13 +21,7 @@ script:
     - alias: 'flash rgb lights off'
       service: light.turn_off
       entity_id:
-      - light.buiten_achter_links
-      - light.buiten_achter_rechts
-      - light.buiten_voordeur
-      - light.buiten_garage
-      - light.keuken_hanglamp
-      - light.hal_bg
-      - light.slaapkamer_hanglamp
+      - group.all_lights
     - delay:
         seconds: 1
     - alias: 'loop flash rgb lights'

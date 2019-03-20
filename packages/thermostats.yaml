@@ -102,21 +102,19 @@ automation:
         entity_id: climate.living_room
         temperature: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
 
-  - alias: "Switch - Woonkamer - Nest thermostat - Weekdays on"
+  - alias: "Switch - Woonkamer - Nest thermostat - On"
     trigger:
     - platform: time
       at: '5:00:00'
     condition:
-    - condition: and
+    - condition: or
       conditions:
       - condition: state
         entity_id: input_boolean.automation_mode
         state: 'off'
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: 'input_boolean.vacation_mode'
-          state: 'off'
+      - condition: state
+        entity_id: 'input_boolean.vacation_mode'
+        state: 'off'
     action:
     - service: climate.set_operation_mode
       data:
@@ -127,8 +125,7 @@ automation:
         entity_id: climate.living_room
         temperature: 21
 
-
-  - alias: "Switch - Woonkamer - Nest thermostat - Weekdays off"
+  - alias: "Switch - Woonkamer - Nest thermostat - Off"
     trigger:
     - platform: state
       entity_id: input_boolean.vacation_mode
@@ -141,16 +138,7 @@ automation:
       - condition: state
         entity_id: input_boolean.automation_mode
         state: 'off'
-      - condition: or
-        conditions:
-        - condition: state
-          entity_id: 'input_boolean.vacation_mode'
-          state: 'on'
     action:
-    # - service: climate.set_operation_mode
-    #   data:
-    #     entity_id: climate.living_room
-    #     operation_mode: eco
     - service: climate.set_temperature
       data:
         entity_id: climate.living_room
