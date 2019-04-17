@@ -62,9 +62,17 @@ views:
         type: entities
         show_header_toggle: false
         entities:
+          - input_number.woonkamer_brightness
+          - input_number.hal_brightness
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'          
           - script.all_on
-          - script.all_on_bright
-          - script.all_on_super_bright
+          # - script.all_on_bright
+          # - script.all_on_super_bright
           - script.all_off
           - type: divider
             style:
@@ -72,11 +80,8 @@ views:
               margin-left: auto
               margin-right: auto
               background: '#62717b'
-          - scene.slaapkamer_general
-          - scene.slaapkamer_bright
-          - scene.slaapkamer_night
-          - scene.slaapkamer_wakeup
-          - scene.slaapkamer_off
+          - input_number.slaapkamer_hanglamp_brightness
+          #- scene.slaapkamer_off
           - type: divider
             style:
               height: 1px
@@ -84,6 +89,12 @@ views:
               margin-right: auto
               background: '#62717b'
           - input_number.keuken_hanglamp_brightness
+          - type: divider
+            style:
+              height: 1px
+              margin-left: auto
+              margin-right: auto
+              background: '#62717b'
           #- group.kerstmis
           - group.buiten
           #- switch.tuin
@@ -105,6 +116,7 @@ views:
           entities:
             - input_number.woonkamer_nest_thermostat_temperature
             - climate.living_room
+            - sensor.living_room_thermostat_target
             # - sensor.woonkamer_temperature
             - sensor.living_room_thermostat_humidity
             - type: divider

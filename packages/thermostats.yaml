@@ -102,44 +102,112 @@ automation:
         entity_id: climate.living_room
         temperature: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
 
-  - alias: "Switch - Woonkamer - Nest thermostat - On"
+  - alias: "Set Thermostat Away Mode When Leaving"
     trigger:
-    - platform: time
-      at: '5:00:00'
+      - platform: template
+        value_template: "{{ states('group.hometracking') != 'home' }}"
     condition:
-    - condition: or
+      condition: and
       conditions:
-      - condition: state
-        entity_id: input_boolean.automation_mode
-        state: 'off'
-      - condition: state
-        entity_id: 'input_boolean.vacation_mode'
-        state: 'off'
+        - condition: template
+          value_template: "{{ states('device_tracker.taipan5g') != 'home' }}"
+        - condition: template
+          value_template: "{{ states('device_tracker.lieke_iphone') != 'home' }}"
+        - condition: time
+          before: '12:00:00'
+          weekday:
+            - mon
+            - tue
+            - wed
+            - thu
+            - fri
     action:
-    - service: climate.set_operation_mode
-      data:
-        entity_id: climate.living_room
-        operation_mode: heat
-    - service: climate.set_temperature
-      data:
-        entity_id: climate.living_room
-        temperature: 21
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: eco
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.living_room
+          temperature: 17
 
-  - alias: "Switch - Woonkamer - Nest thermostat - Off"
+  - alias: "Turn Off Away When Home"
     trigger:
-    - platform: state
-      entity_id: input_boolean.vacation_mode
-      to: 'on'
-    - platform: time
+      - platform: state
+        entity_id: sensor.woonkamer_motion
+        to: 'True'
+      - platform: state
+        entity_id: device_tracker.taipan5g
+        to: 'home'
+      - platform: state
+        entity_id: device_tracker.lieke_iphone
+        to: 'home'
+    condition:
+      - condition: and
+        conditions:
+          - condition: time
+            before: '00:00:00'
+            after: '05:00:00'
+    action:
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: heat
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.living_room
+          temperature: 21
+
+  - alias: "Set Thermostat Temperature - 0000"
+    trigger:
+      platform: time
       at: '00:00:00'
+    action:
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: eco
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.living_room
+          temperature: 17
+
+  - alias: "Set Thermostat Temperature - 1500"
+    trigger:
+      platform: time
+      at: '15:00:00'
     condition:
     - condition: and
       conditions:
-      - condition: state
-        entity_id: input_boolean.automation_mode
-        state: 'off'
+        - condition: state
+          entity_id: input_boolean.vacation_mode
+          state: 'off'
     action:
-    - service: climate.set_temperature
-      data:
-        entity_id: climate.living_room
-        temperature: 17
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: heat
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.living_room
+          temperature: 21
+
+  - alias: "Set Thermostat Temperature - 0500"
+    trigger:
+      platform: time
+      at: '05:00:00'
+    condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.vacation_mode
+          state: 'off'
+    action:
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: heat
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.living_room
+          temperature: 21

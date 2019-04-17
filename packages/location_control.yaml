@@ -31,36 +31,43 @@ homeassistant:
 ## Device Tracker
 ################################################
 device_tracker:
-  - platform: unifi_direct
-    host: !secret ap1_host
-    username: !secret ap_username
-    password: !secret ap_password
-    interval_seconds: 10
-    consider_home: 180
+  - platform: unifi
+    host: !secret nas_host_ip
+    port: !secret unifi_port
+    username: !secret unifi_username
+    password: !secret unifi_password
+    verify_ssl: false
+    #interval_seconds: 120
+    #consider_home: 240
+    detection_time: 60
     new_device_defaults:
       track_new_devices: true
       hide_if_away: false
 
-  - platform: unifi_direct
-    host: !secret ap2_host
-    username: !secret ap_username
-    password: !secret ap_password
-    interval_seconds: 10
-    consider_home: 180
-    new_device_defaults:
-      track_new_devices: true
-      hide_if_away: false
+  # - platform: unifi_direct
+  #   host: !secret ap1_host
+  #   username: !secret ap_username
+  #   password: !secret ap_password
+  #   interval_seconds: 120
+  #   consider_home: 240
+  #   new_device_defaults:
+  #     track_new_devices: true
+  #     hide_if_away: false
+
+  # - platform: unifi_direct
+  #   host: !secret ap2_host
+  #   username: !secret ap_username
+  #   password: !secret ap_password
+  #   interval_seconds: 120
+  #   consider_home: 240
+  #   new_device_defaults:
+  #     track_new_devices: true
+  #     hide_if_away: false
 
   - platform: nmap_tracker
-    home_interval: 10
+    home_interval: 120
     hosts:
       - !secret nmap_hosts
-
-  # - platform: luci
-  #   host: !secret openwrt_tracker_boven_host
-  #   username: !secret openwrt_tracker_boven_username
-  #   password: !secret openwrt_tracker_boven_password
-  #   ssl: false
 
 ################################################
 ## Zone
@@ -69,22 +76,22 @@ zone:
   - name: work lieke
     latitude: !secret lieke_work_latitude
     longitude: !secret lieke_work_longtitude
-    radius: 150
+    radius: 300
 
   - name: sport lieke
     latitude: !secret lieke_sport_latitude
     longitude: !secret lieke_sport_longtitude
-    radius: 150
+    radius: 300
 
   - name: parents lieke
     latitude: !secret lieke_parents_home_latitude
     longitude: !secret lieke_parents_home_longtitude
-    radius: 150
+    radius: 300
 
   - name: zus lieke
     latitude: !secret lieke_daan_en_jels_latitude
     longitude: !secret lieke_daan_en_jels_longtitude
-    radius: 150
+    radius: 300
 
 ################################################
 ## Sensor
@@ -101,12 +108,6 @@ sensor:
     api_key: !secret google_travel_time_key_lieke
     origin: device_tracker.lieke_iphone
     destination: zone.home
-
-  # - platform: google_travel_time
-  #   name: Lieke Distance To Work
-  #   api_key: !secret google_travel_time_key_lieke
-  #   origin: zone.work_lieke
-  #   destination: zone.home
 
 ################################################
 ## Automation
@@ -138,6 +139,13 @@ automation:
     - service: notify.bram
       data_template:
         message: '{{ trigger.to_state.attributes.friendly_name }} entered {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
+        data:
+          push:
+            category: map
+          action_data:
+            shows_user_location: true
+            latitude: "{{ trigger.to_state.attributes.latitude }}"
+            longitude: "{{ trigger.to_state.attributes.longitude }}"
 
   - alias: Alert zone change - Leave
     trigger:
@@ -165,27 +173,6 @@ automation:
     - service: notify.bram
       data_template:
         message: '{{ trigger.to_state.attributes.friendly_name }} left {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
-
-  - alias: Lieke is 10 minutes from home
-    trigger:
-    - platform: numeric_state
-      entity_id: sensor.lieke_distance_to_home
-      value_template: '{{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}'
-      # value_template: >-
-      #   {%- if not is_state('sensor.lieke_distance_to_home', 'unknown') -%}
-      #     {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}
-      #   {%- else -%}
-      #      {{ 0 | int }}
-      #   {%- endif -%}
-      below: 600
-    condition:
-    - condition: state
-      entity_id: 'device_tracker.lieke_iphone'
-      state: 'not_home'
-    action:
-    - service: notify.bram
-      data:
-        message: 'Lieke is {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] }} minutes from home'
         data:
           push:
             category: map
@@ -194,11 +181,27 @@ automation:
             latitude: "{{ trigger.to_state.attributes.latitude }}"
             longitude: "{{ trigger.to_state.attributes.longitude }}"
 
+  - alias: Lieke is 10 minutes from home
+    trigger:
+    - platform: numeric_state
+      entity_id: sensor.lieke_distance_to_home
+      value_template: '{{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}'
+      below: 600
+    condition:
+      condition: and
+      conditions:
+        - condition: template
+          value_template: "{{ states('device_tracker.lieke_iphone') != 'home' }}"
+    action:
+    - service: notify.bram
+      data_template:
+        message: 'Lieke is {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] }} minutes from home'
+
   - alias: "Commute - Update sensor"
     initial_state: 'on'
     trigger:
     - platform: time_pattern
-      minutes: '/1'
+      minutes: '/5'
       seconds: 00
     condition:
     - condition: state
@@ -208,3 +211,29 @@ automation:
     - service: homeassistant.update_entity
       entity_id: sensor.lieke_distance_to_home
 
+
+  # - alias: LocateAidan
+  #   trigger:
+  #     platform: state
+  #     entity_id: device_tracker.lieke_iphone
+  #   action:
+  #     service: notify.ios_my_iphone
+  #     data_template:
+  #       title: Location Alert
+  #       message: >
+  #         Aidan: '{{ states("sensor.time") }} Location has changed from {{ trigger.from_state.state }} to {{ trigger.to_state.state }}'
+  #       data:
+  #         attachment:
+  #           content-type: jpeg
+  #         push:
+  #           category: camera
+  #         entity_id: camera.location_aidan
+      # service: notify.ios_<your_device_id_here>
+      # data:
+      #   message: Motion detected in the Living Room
+      #   data:
+      #     attachment:
+      #       content-type: jpeg
+      #     push:
+      #       category: camera
+      #     entity_id: camera.demo_camera

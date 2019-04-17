@@ -63,11 +63,11 @@ notify:
 automation:
   - alias: Living Room Lamps on at Bedtime
     trigger:
-      platform: state
+    - platform: state
       entity_id: media_player.livingroom_tv
       to: 'off'
       for:
-        minutes: 5
+        minutes: 2
     condition:
       condition: and
       conditions:
@@ -87,10 +87,10 @@ automation:
 
   - alias: Lamps on bedtime notification
     trigger:
-      platform: event
+    - platform: event
       event_type: ios.notification_action_fired
       event_data:
-        actionName: LAMPS_OFF
+        actionName: LAMPEN_UIT
     action:
       - service: script.turn_on
         entity_id: script.all_off
