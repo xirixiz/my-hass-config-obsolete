@@ -41,7 +41,9 @@ zeroconf:
 system_health:
 
 tts:
-  - platform: google
+  - platform: google_translate
+    language: 'nl'
+    service_name: google_say
     cache: true
     cache_dir: /tmp/tts
     time_memory: 300

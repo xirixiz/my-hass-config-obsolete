@@ -122,14 +122,14 @@ automation:
             - thu
             - fri
     action:
-      - service: climate.set_operation_mode
-        data:
-          entity_id: climate.living_room
-          operation_mode: eco
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
           temperature: 17
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: eco
 
   - alias: "Turn Off Away When Home"
     trigger:
@@ -158,19 +158,47 @@ automation:
           entity_id: climate.living_room
           temperature: 21
 
-  - alias: "Set Thermostat Temperature - 0000"
+  - alias: "Stop Thermostat if current temperature higher than wanted temperature"
     trigger:
-      platform: time
-      at: '00:00:00'
+      - platform: state
+        entity_id: climate.living_room
+    condition:
+      - condition: and
+        conditions:
+          - condition: template
+            value_template: '{{ states.climate.living_room.attributes.temperature < states.climate.living_room.attributes.current_temperature }}'
+          - condition: template
+            value_template: '{{ states.climate.living_room.attributes.operation_mode != "eco" }}'
     action:
-      - service: climate.set_operation_mode
-        data:
-          entity_id: climate.living_room
-          operation_mode: eco
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
           temperature: 17
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: eco
+
+
+  - alias: "Set Thermostat Temperature - 0000"
+    trigger:
+      platform: time
+      at: '00:00:00'
+    condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.vacation_mode
+          state: 'off'
+    action:
+      - service: climate.set_temperature
+        data:
+          entity_id: climate.living_room
+          temperature: 17 
+      - service: climate.set_operation_mode
+        data:
+          entity_id: climate.living_room
+          operation_mode: eco
 
   - alias: "Set Thermostat Temperature - 1500"
     trigger:

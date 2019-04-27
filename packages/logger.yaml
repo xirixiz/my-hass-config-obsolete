@@ -10,18 +10,16 @@ logger:
   default: warn
   logs:
     requests.packages.urllib3.connectionpool: critical
+    urllib3.connectionpool: critical
     py.warnings: critical
-    homeassistant.components.device_tracker: critical
+    #homeassistant.components.device_tracker: critical
     #homeassistant.components.automation: debug
     #homeassistant.components.light: info
     #homeassistant.components.sensor: info
     #homeassistant.components.switch: info
     #homeassistant.components.device_tracker.unifi: critical
     #homeassistant.components.device_tracker.unifi_direct: critical
-    #custom_components.sensor.mijnafvalwijzer: debug
-    #requests.packages.urllib3.connectionpool: critical
-    #urllib3.connectionpool: critical
-    #py.warnings: critical
+    custom_components.sensor.mijnafvalwijzer: debug
 
 # system_log:
 #   max_entries: 0
