@@ -102,7 +102,7 @@ automation:
         entity_id: climate.living_room
         temperature: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
 
-  - alias: "Set Thermostat Away Mode When Leaving"
+  - alias: "Turn off thermostat when leaving"
     trigger:
       - platform: template
         value_template: "{{ states('group.hometracking') != 'home' }}"
@@ -131,7 +131,7 @@ automation:
           entity_id: climate.living_room
           operation_mode: eco
 
-  - alias: "Turn Off Away When Home"
+  - alias: "Turn On Thermostat when home"
     trigger:
       - platform: state
         entity_id: sensor.woonkamer_motion
