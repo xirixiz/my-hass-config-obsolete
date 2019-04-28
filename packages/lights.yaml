@@ -83,7 +83,7 @@ hue:
       allow_hue_groups: true
 
 ################################################
-## Input Number
+## Inputs
 ################################################
 input_number:
   woonkamer_brightness:
@@ -114,10 +114,6 @@ input_boolean:
     icon: mdi:human-male-female
   light_automation_override:
     name: "Light Automation Override"
-    initial: off
-    icon: mdi:human-male-female
-  vacation_mode:
-    name: "Vacation Mode"
     initial: off
     icon: mdi:human-male-female
   woonkamer_motion:
@@ -369,6 +365,9 @@ automation:
           entity_id: input_boolean.automation_mode
           state: 'off'
         - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+        - condition: state
           entity_id: input_boolean.light_automation_override
           state: 'off'
         - condition: template
@@ -394,9 +393,9 @@ automation:
       data_template:
         entity_id: >-
           {%- if is_state('sensor.hue_switch_woonkamer', '1002') -%}
-            script.woonkamer, script.keuken, script.buiten
+            script.woonkamer, script.keuken, script.buiten, script.hal_en_overlopen
           {%- elif is_state('sensor.hue_switch_woonkamer', '4002') -%}
-            script.all_off
+            script.all_off, script.hal_en_overlopen_off
           {%- endif -%}
     - service_template: >-
         {%- if is_state('sensor.hue_switch_woonkamer', '1002') -%}
@@ -432,55 +431,6 @@ automation:
     - service: script.turn_on
       entity_id: script.all_off
 
-  # - alias: "General lights On/Off"
-  #   trigger:
-  #   - platform: time_pattern
-  #     minutes: '/15'
-  #     seconds: 00
-  #   - platform: state
-  #     entity_id: sensor.hal_motion
-  #     to: 'True'
-  #   - platform: state
-  #     entity_id: sensor.woonkamer_motion
-  #     to: 'True'
-  #   - platform: state
-  #     entity_id: sensor.woonkamer_motion
-  #     to: 'False'
-  #     for:
-  #       minutes: 10
-  #   condition:
-  #   - condition: state
-  #     entity_id: input_boolean.automation_mode
-  #     state: 'off'
-  #   - condition: state
-  #     entity_id: input_boolean.night_mode
-  #     state: 'off'
-  #   action:
-  #   - service: script.turn_on
-  #     data_template:
-  #       entity_id: >-
-  #         {%- if is_state('media_player.livingroom_tv', 'off') and is_state('sensor.woonkamer_motion', 'False') and states('sensor.time_of_day_short') in ['evening','night'] -%}
-  #           script.all_off
-  #         {%- else -%}
-  #           script.noop
-  #         {%- endif -%}
-  #   - service: script.turn_on
-  #     data_template:
-  #       entity_id: >-
-  #         {%- if is_state('sensor.switch_woonkamer_lux', 'off') and states('sensor.time_of_day_short') in ['daytime','early evening'] -%}
-  #           script.all_off
-  #         {%- else -%}
-  #           script.noop
-  #         {%- endif -%}
-  #   - service: script.turn_on
-  #     data_template:
-  #       entity_id: >-
-  #         {%- if is_state('sensor.switch_woonkamer_lux', 'on') and is_state('sensor.switch_hal_lux', 'on') and states('sensor.time_of_day_short') in ['daytime','early evening','evening'] -%}
-  #           script.woonkamer, script.keuken, script.buiten
-  #         {%- else -%}
-  #           script.noop
-  #         {%- endif -%}
-
   # HAL & OVERLOPEN
   - alias: "Hal en overlopen On/Off"
     trigger:
@@ -491,7 +441,19 @@ automation:
       entity_id: sensor.hal_motion
       to: 'False'
       for:
-        minutes: 10
+        minutes: 5
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.automation_mode
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.light_automation_override
+          state: 'off'
     action:
     - service: script.turn_on
       data_template:
@@ -502,20 +464,25 @@ automation:
             script.hal_en_overlopen_off
           {%- endif -%}
 
-# KIDS NACHTLAMP
+  # KIDS NACHTLAMP
   - alias: 'Lights Lex On/Off'
     trigger:
-    - platform: sun
-      event: sunset
-      offset: "-00:15:00"
-    - platform: sun
-      event: sunrise
-      offset: '+00:00:00'
+    - platform: state
+      entity_id: sensor.time_of_day_short
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.automation_mode
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'off'
     action:
     - service_template: >-
-        {%- if trigger.event == "sunset" -%}
+        {%- if not is_state('sensor.time_of_day_short', 'daytime') -%}
           switch.turn_on
-        {%- elif trigger.event == "sunrise" -%}
+        {%- elif is_state('sensor.time_of_day_short', 'daytime') -%}
           switch.turn_off
         {%- endif -%}
       entity_id: group.kinderen
@@ -549,7 +516,7 @@ script:
     - service: homeassistant.turn_on
       entity_id: input_boolean.lights_dummy
 
-# ALL
+ # ALL
   all_on:
     sequence:
     - service: scene.turn_on

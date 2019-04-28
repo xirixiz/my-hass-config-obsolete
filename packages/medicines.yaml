@@ -4,7 +4,7 @@
 homeassistant:
 
 ################################################
-## Input Boolean
+## Inputs
 ################################################
 input_boolean:
   meds_taken:

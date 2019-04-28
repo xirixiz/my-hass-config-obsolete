@@ -22,7 +22,7 @@ climate:
   platform: nest
 
 ################################################
-## Input Number
+## Inputs
 ################################################
 input_number:
   woonkamer_nest_thermostat_temperature:
@@ -188,7 +188,7 @@ automation:
     - condition: and
       conditions:
         - condition: state
-          entity_id: input_boolean.vacation_mode
+          entity_id: input_boolean.holiday_mode
           state: 'off'
     action:
       - service: climate.set_temperature
@@ -208,7 +208,7 @@ automation:
     - condition: and
       conditions:
         - condition: state
-          entity_id: input_boolean.vacation_mode
+          entity_id: input_boolean.holiday_mode
           state: 'off'
     action:
       - service: climate.set_operation_mode
@@ -228,7 +228,7 @@ automation:
     - condition: and
       conditions:
         - condition: state
-          entity_id: input_boolean.vacation_mode
+          entity_id: input_boolean.holiday_mode
           state: 'off'
     action:
       - service: climate.set_operation_mode

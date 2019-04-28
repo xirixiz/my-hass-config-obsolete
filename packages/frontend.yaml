@@ -271,7 +271,7 @@ frontend:
       paper-slider-secondary-color: "#FFE0B2"
 
 ################################################
-## Input Select
+## Inputs
 ################################################
 input_select:
   current_theme:

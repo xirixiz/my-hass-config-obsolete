@@ -1,7 +1,16 @@
 ################################################
-## Packages / Lights Vacation
+## Packages / Lights Holiday
 ################################################
 homeassistant:
+
+################################################
+## Inputs
+################################################
+input_boolean:
+  holiday_mode:
+    name: "Holiday Mode"
+    initial: off
+    icon: mdi:human-male-female
 
 ################################################
 ## Script
@@ -35,29 +44,53 @@ script:
 ## Automation
 ################################################
 automation:
-  - alias: 'Notify Vacation Mode'
+  - alias: 'Turn Holiday Mode On'
     trigger:
     - platform: state
-      entity_id: input_boolean.vacation_mode
+      entity_id: input_boolean.holiday_mode
       from: 'off'
       to: 'on'
     action:
     - service: notify.bram
       data:
-        message: "Vacation Mode is now {{ states('input_boolean.vacation_mode') }}!"
+        message: "Holiday Mode is now {{ states('input_boolean.holiday_mode') }}!"
+    - service: script.turn_off
+      entity_id: script.flash_rgb_lights
+    - service: homeassistant.turn_off
+      entity_id: group.all_switches
 
-  - alias: 'Turn Vacation Mode Off'
+  - alias: 'Turn Holiday Mode Off'
     trigger:
     - platform: state
-      entity_id: input_boolean.vacation_mode
+      entity_id: input_boolean.holiday_mode
       from: 'on'
       to: 'off'
     action:
     - service: notify.bram
       data:
-        message: "Vacation Mode is now {{ states('input_boolean.vacation_mode') }}!"
+        message: "Holiday Mode is now {{ states('input_boolean.holiday_mode') }}!"
     - service: script.turn_off
       entity_id: script.flash_rgb_lights
+
+  - alias: "Lights On/Off - Holiday"
+    trigger:
+    - platform: state
+      entity_id: sensor.time_of_day_short
+    condition:
+    - condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.holiday_mode
+          state: 'on'
+    action:
+    - service: script.turn_on
+      data_template:
+        entity_id: >-
+          {%- if is_state('sensor.switch_woonkamer_lux', 'on') and states('sensor.time_of_day_short') in ['early evening','evening'] -%}
+            script.woonkamer, script.keuken, script.buiten
+          {%- else -%}
+            script.all_off
+          {%- endif -%}
 
   - alias: 'Motion Detection - Alert Start'
     trigger:
@@ -69,7 +102,7 @@ automation:
       to: 'True'
     condition:
     - condition: state
-      entity_id: input_boolean.vacation_mode
+      entity_id: input_boolean.holiday_mode
       state: 'on'
     action:
     - service: notify.bram
@@ -92,7 +125,7 @@ automation:
         minutes: 1
     condition:
     - condition: state
-      entity_id: input_boolean.vacation_mode
+      entity_id: input_boolean.holiday_mode
       state: 'on'
     action:
     - service: notify.bram

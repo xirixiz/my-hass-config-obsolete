@@ -34,7 +34,7 @@ homeassistant:
     
 
 ################################################
-## Input Boolean
+## Inputs
 ################################################
 input_boolean:
   trash_moved:

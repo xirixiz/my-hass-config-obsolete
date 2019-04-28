@@ -7,7 +7,7 @@ homeassistant:
        friendly_name: Pi-Hole Status
 
 ################################################
-## Input Select
+## Inputs
 ################################################
 input_select:
   pihole_time:
