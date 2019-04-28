@@ -13,7 +13,7 @@ input_boolean:
     icon: mdi:pill
   meds_reminder:
     name: Bram Medicijnen Reminder
-    initial: 'on'
+    initial: 'off'
 
 ################################################
 ## Automation
