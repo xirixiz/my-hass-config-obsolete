@@ -37,8 +37,8 @@ device_tracker:
     username: !secret unifi_username
     password: !secret unifi_password
     verify_ssl: false
-    #interval_seconds: 120
-    #consider_home: 240
+    interval_seconds: 120
+    consider_home: 120
     detection_time: 60
     new_device_defaults:
       track_new_devices: true
@@ -64,6 +64,10 @@ device_tracker:
   #     track_new_devices: true
   #     hide_if_away: false
 
+  - platform: google_maps
+    username: liekesmidspad@gmail.com
+    max_gps_accuracy: 200
+
   - platform: nmap_tracker
     home_interval: 120
     hosts:
@@ -76,22 +80,22 @@ zone:
   - name: work lieke
     latitude: !secret lieke_work_latitude
     longitude: !secret lieke_work_longtitude
-    radius: 300
+    radius: 100
 
   - name: sport lieke
     latitude: !secret lieke_sport_latitude
     longitude: !secret lieke_sport_longtitude
-    radius: 300
+    radius: 100
 
   - name: parents lieke
     latitude: !secret lieke_parents_home_latitude
     longitude: !secret lieke_parents_home_longtitude
-    radius: 300
+    radius: 100
 
   - name: zus lieke
     latitude: !secret lieke_daan_en_jels_latitude
     longitude: !secret lieke_daan_en_jels_longtitude
-    radius: 300
+    radius: 100
 
 ################################################
 ## Sensor
@@ -113,100 +117,96 @@ sensor:
 ## Automation
 ################################################
 automation:
-  - alias: Alert zone change - Enter
-    trigger:
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.home
-      event: enter
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.work_lieke
-      event: enter
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.sport_lieke
-      event: enter
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.parents_lieke
-      event: enter
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.zus_lieke
-      event: enter
-    action:
-    - service: notify.bram
-      data_template:
-        message: '{{ trigger.to_state.attributes.friendly_name }} entered {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
-        data:
-          push:
-            category: map
-          action_data:
-            shows_user_location: true
-            latitude: "{{ trigger.to_state.attributes.latitude }}"
-            longitude: "{{ trigger.to_state.attributes.longitude }}"
+#  - alias: Alert zone change - Enter
+  #   trigger:
+  #   - platform: zone
+  #     event: enter
+  #     zone: zone.home
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: enter
+  #     zone: zone.work_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: enter
+  #     zone: zone.sport_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: enter
+  #     zone: zone.parents_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: enter
+  #     zone: zone.zus_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   action:
+  #   - service: notify.bram
+  #     data_template:
+  #       message: '{{ trigger.to_state.attributes.friendly_name }} entered {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
+  #       data:
+  #         push:
+  #           category: map
+  #         action_data:
+  #           shows_user_location: true
+  #           latitude: "{{ trigger.to_state.attributes.latitude }}"
+  #           longitude: "{{ trigger.to_state.attributes.longitude }}"
 
-  - alias: Alert zone change - Leave
-    trigger:
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.home
-      event: leave
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.work_lieke
-      event: leave
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.sport_lieke
-      event: leave
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.parents_lieke
-      event: leave
-    - platform: zone
-      entity_id: device_tracker.lieke_iphone
-      zone: zone.zus_lieke
-      event: leave
-    action:
-    - service: notify.bram
-      data_template:
-        message: '{{ trigger.to_state.attributes.friendly_name }} left {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
-        data:
-          push:
-            category: map
-          action_data:
-            shows_user_location: true
-            latitude: "{{ trigger.to_state.attributes.latitude }}"
-            longitude: "{{ trigger.to_state.attributes.longitude }}"
+  # - alias: Alert zone change - Leave
+  #   trigger:
+  #   - platform: zone
+  #     event: leave
+  #     zone: zone.home
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: leave
+  #     zone: zone.work_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: leave
+  #     zone: zone.sport_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: leave
+  #     zone: zone.parents_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   - platform: zone
+  #     event: leave
+  #     zone: zone.zus_lieke
+  #     entity_id: device_tracker.lieke_iphone
+  #   action:
+  #   - service: notify.bram
+  #     data_template:
+  #       message: '{{ trigger.to_state.attributes.friendly_name }} left {{ trigger.zone.attributes.friendly_name }} at {{ states("sensor.time") }}!'
+  #       data:
+  #         push:
+  #           category: map
+  #         action_data:
+  #           shows_user_location: true
+  #           latitude: "{{ trigger.to_state.attributes.latitude }}"
+  #           longitude: "{{ trigger.to_state.attributes.longitude }}"
 
-  - alias: Lieke is 10 minutes from home
-    trigger:
-    - platform: numeric_state
-      entity_id: sensor.lieke_distance_to_home
-      value_template: '{{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}'
-      below: 600
-    condition:
-      condition: and
-      conditions:
-        - condition: template
-          value_template: "{{ states('device_tracker.lieke_iphone') != 'home' }}"
-    action:
-    - service: notify.bram
-      data_template:
-        message: 'Lieke is {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] }} minutes from home'
+  # - alias: Lieke is 10 minutes from home
+  #   trigger:
+  #   - platform: numeric_state
+  #     entity_id: sensor.lieke_distance_to_home
+  #     value_template: '{{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] | int *60 }}'
+  #     below: 600
+  #   condition:
+  #     condition: and
+  #     conditions:
+  #       - condition: template
+  #         value_template: "{{ states('device_tracker.lieke_iphone') != 'home' }}"
+  #   action:
+  #   - service: notify.bram
+  #     data_template:
+  #       message: 'Lieke is {{ states.sensor.lieke_distance_to_home.attributes.duration.split(" ")[0] }} minutes from home'
 
   - alias: "Commute - Update sensor"
     initial_state: 'on'
     trigger:
     - platform: time_pattern
-      minutes: '/5'
+      minutes: '/2'
       seconds: 00
-    condition:
-    - condition: state
-      entity_id: 'device_tracker.lieke_iphone'
-      state: 'not_home'
     action:
     - service: homeassistant.update_entity
       entity_id: sensor.lieke_distance_to_home

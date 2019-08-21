@@ -68,6 +68,13 @@ sensor:
             false
           {%- endif -%}
 
+binary_sensor:
+  - platform: template
+    sensors:
+      temp_diff_nest:
+        friendly_name: Temperature difference Nest
+        value_template: "{{ (states.climate.living_room.attributes.temperature) | float < (states.climate.living_room.attributes.current_temperature) | float }}"
+
 ################################################
 ## Automation
 ################################################
@@ -93,55 +100,20 @@ automation:
     - platform: state
       entity_id: input_number.woonkamer_nest_thermostat_temperature
     action:
-    - service: climate.set_operation_mode
+    - service: climate.set_preset_mode
       data:
         entity_id: climate.living_room
-        operation_mode: heat
+        preset_mode: 'none'
     - service: climate.set_temperature
       data_template:
         entity_id: climate.living_room
         temperature: "{{ states('input_number.woonkamer_nest_thermostat_temperature') | float }}"
+        hvac_mode: heat
 
   - alias: "Turn off thermostat when leaving"
     trigger:
       - platform: template
         value_template: "{{ states('group.hometracking') != 'home' }}"
-    condition:
-      condition: and
-      conditions:
-        - condition: template
-          value_template: "{{ states('device_tracker.taipan5g') != 'home' }}"
-        - condition: template
-          value_template: "{{ states('device_tracker.lieke_iphone') != 'home' }}"
-        - condition: time
-          before: '12:00:00'
-          weekday:
-            - mon
-            - tue
-            - wed
-            - thu
-            - fri
-    action:
-      - service: climate.set_temperature
-        data:
-          entity_id: climate.living_room
-          temperature: 17
-      - service: climate.set_operation_mode
-        data:
-          entity_id: climate.living_room
-          operation_mode: eco
-
-  - alias: "Turn On Thermostat when home"
-    trigger:
-      - platform: state
-        entity_id: sensor.woonkamer_motion
-        to: 'True'
-      - platform: state
-        entity_id: device_tracker.taipan5g
-        to: 'home'
-      - platform: state
-        entity_id: device_tracker.lieke_iphone
-        to: 'home'
     condition:
       - condition: and
         conditions:
@@ -149,35 +121,34 @@ automation:
             before: '00:00:00'
             after: '05:00:00'
     action:
-      - service: climate.set_operation_mode
-        data:
-          entity_id: climate.living_room
-          operation_mode: heat
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
-          temperature: 21
+          temperature: 17
+      - service: climate.set_preset_mode
+        data:
+          entity_id: climate.living_room
+          preset_mode: 'eco'
 
   - alias: "Stop Thermostat if current temperature higher than wanted temperature"
     trigger:
       - platform: state
-        entity_id: climate.living_room
+        entity_id: binary_sensor.temp_diff_nest
+        to: 'on'
     condition:
       - condition: and
         conditions:
           - condition: template
-            value_template: '{{ states.climate.living_room.attributes.temperature < states.climate.living_room.attributes.current_temperature }}'
-          - condition: template
-            value_template: '{{ states.climate.living_room.attributes.operation_mode != "eco" }}'
+            value_template: '{{ states.climate.living_room.attributes.preset_mode != "eco" }}'
     action:
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
           temperature: 17
-      - service: climate.set_operation_mode
+      - service: climate.set_preset_mode
         data:
           entity_id: climate.living_room
-          operation_mode: eco
+          preset_mode: 'eco'
 
 
   - alias: "Set Thermostat Temperature - 0000"
@@ -195,10 +166,10 @@ automation:
         data:
           entity_id: climate.living_room
           temperature: 17 
-      - service: climate.set_operation_mode
+      - service: climate.set_preset_mode
         data:
           entity_id: climate.living_room
-          operation_mode: eco
+          preset_mode: 'eco'
 
   - alias: "Set Thermostat Temperature - 1500"
     trigger:
@@ -211,14 +182,15 @@ automation:
           entity_id: input_boolean.holiday_mode
           state: 'off'
     action:
-      - service: climate.set_operation_mode
+      - service: climate.set_preset_mode
         data:
           entity_id: climate.living_room
-          operation_mode: heat
+          preset_mode: 'none'
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
           temperature: 21
+          hvac_mode: heat
 
   - alias: "Set Thermostat Temperature - 0500"
     trigger:
@@ -231,11 +203,12 @@ automation:
           entity_id: input_boolean.holiday_mode
           state: 'off'
     action:
-      - service: climate.set_operation_mode
+      - service: climate.set_preset_mode
         data:
           entity_id: climate.living_room
-          operation_mode: heat
+          preset_mode: 'none'
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
           temperature: 21
+          hvac_mode: heat

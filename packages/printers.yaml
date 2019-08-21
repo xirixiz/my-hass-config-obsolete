@@ -10,7 +10,7 @@ sensor:
 - platform: syncthru
   resource: !secret printer
   name: Samsung Printer
-  monitored_conditions:
-    - toner_black
-    - tray_1
-    - output_tray_0
+#  monitored_conditions:
+#    - toner_black
+#    - tray_1
+#    - output_tray_0

@@ -38,6 +38,7 @@ conversation:
 history:
 map:
 zeroconf:
+ssdp:
 system_health:
 
 tts:
@@ -47,7 +48,11 @@ tts:
     cache: true
     cache_dir: /tmp/tts
     time_memory: 300
-    base_url: !secret base_url
+    base_url: !secret http_url
+
+cast:
+  media_player:
+    - host: !secret google_home_mini
 
 lovelace:
   mode: yaml
@@ -62,6 +67,7 @@ custom_updater:  # https://github.com/custom-components/custom_updater/wiki/Inst
   card_urls:
     # - https://raw.githubusercontent.com/maykar/custom-lovelace/master/tracker.json
     - https://raw.githubusercontent.com/custom-cards/information/master/repos.json
+    - https://raw.githubusercontent.com/kalkih/mini-graph-card/master/tracker.json
     # - https://raw.githubusercontent.com/kuuji/button-card/master/tracker.json
   component_urls:
     - https://raw.githubusercontent.com/xirixiz/home-assistant-config/master/custom_updater.json

@@ -9,10 +9,12 @@ homeassistant:
       friendly_name: Tuinverlichting
     switch.droger:
       friendly_name: Droger
-    switch.lex:
-      friendly_name: Verlichting Lex
+    switch.meterkast:
+      friendly_name: Meterkast
     switch.tv_woonkamer:
       friendly_name: TV Woonkamer
+    switch.tv_woonkamer_verlichting:
+      friendly_name: TV Woonkamer Verlichting
     switch.tv_slaapkamer:
       friendly_name: TV Slaapkamer
     switch.boris:
@@ -75,10 +77,10 @@ tplink:
     - host: 192.168.1.173
     - host: 192.168.1.174
     - host: 192.168.1.175
-    #- host: 192.168.1.176
+    - host: 192.168.1.176
     - host: 192.168.1.177
     - host: 192.168.1.178
-    #- host: 192.168.1.179
+    - host: 192.168.1.179
 
 
 ################################################
@@ -126,30 +128,47 @@ input_number:
 ################################################
 ## Sensor
 ################################################
+binary_sensor:
+  - platform: ping
+    host: !secret lgwebostv_host_1
+    name: TV Ping Woonkamer
+    scan_interval: 10
+    count: 3
+
+  - platform: ping
+    host: !secret lgwebostv_host_2
+    name: TV Ping Slaapkamer
+    scan_interval: 10
+    count: 3
+
 sensor:
-# SLAAPKAMER LEX
+# VAATWASSER
   - platform: template
     sensors:
-      lex_watts:
-        friendly_name: "Huidig verbruik Lex"
-        value_template: '{{ states.switch.lex.attributes["current_power_w"] | replace(" W", "") | float }}'
+      meterkast_watts:
+        friendly_name: "Huidig verbruik Meterkast"
+        value_template: '{{ states.switch.meterkast.attributes["current_power_w"] | replace(" W", "") | float }}'
         unit_of_measurement: 'W'
-      lex_kw:
+      meterkast_kw:
         friendly_name: "Current KiloWatts"
-        value_template: '{{ states.switch.lex.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.meterkast.attributes["total_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      lex_amps:
+      meterkast_amps:
         friendly_name: "Amps"
-        value_template: '{{ states.switch.lex.attributes["current_a"] | replace(" A", "") | float }}'
+        value_template: '{{ states.switch.meterkast.attributes["current_a"] | replace(" A", "") | float }}'
         unit_of_measurement: 'A'
-      lex_kw_today:
+      meterkast_kw_today:
         friendly_name: "Today's KiloWatts"
-        value_template: '{{ states.switch.lex.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
+        value_template: '{{ states.switch.meterkast.attributes["today_energy_kwh"] | replace(" kW", "") | float }}'
         unit_of_measurement: 'kWh'
-      lex_volts:
+      meterkast_volts:
         friendly_name: "Current Voltage"
-        value_template: '{{ states.switch.lex.attributes["voltage"] | replace(" V", "") | float }}'
+        value_template: '{{ states.switch.meterkast.attributes["voltage"] | replace(" V", "") | float }}'
         unit_of_measurement: 'V'
+
+  - platform: statistics
+    name: Meterkast statistics
+    entity_id: sensor.meterkast_watts
 
 # TUIN
   - platform: template
@@ -174,6 +193,11 @@ sensor:
         friendly_name: "Current Voltage"
         value_template: '{{ states.switch.tuin.attributes["voltage"] | replace(" V", "") | float }}'
         unit_of_measurement: 'V'
+
+  - platform: statistics
+    name: Tuin statistics
+    entity_id: sensor.tuin_watts
+
 
 # TV
   - platform: template
@@ -396,6 +420,14 @@ automation:
       data_template:
         title: 'Wasmachine:'
         message: "Wasprogramma gestart."
+    - service: media_player.turn_on
+      data:
+        entity_id: media_player.living_room_google_mini
+    - delay: '00:00:03'
+    - service: tts.google_say
+      entity_id: media_player.living_room_google_mini
+      data:
+        message: 'De wasmachine is gestart!'
 
   - alias: Action - Set wasmachine as finished
     trigger:
@@ -417,6 +449,14 @@ automation:
       data_template:
         title: 'Wasmachine:'
         message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh."
+    - service: media_player.turn_on
+      data:
+        entity_id: media_player.living_room_google_mini
+    - delay: '00:00:03'
+    - service: tts.google_say
+      entity_id: media_player.living_room_google_mini
+      data:
+        message: 'De wasmachine is klaar!'
     - service: homeassistant.turn_off
       entity_id: input_boolean.wasmachine
 
@@ -440,6 +480,14 @@ automation:
       data_template:
         title: 'Droger:'
         message: "Droger gestart."
+    - delay: '00:00:03'
+    - service: media_player.turn_on
+      data:
+        entity_id: media_player.living_room_google_mini
+    - service: tts.google_say
+      entity_id: media_player.living_room_google_mini
+      data:
+        message: 'De droger is gestart!'
 
   - alias: Action - Set droger as finished
     trigger:
@@ -461,6 +509,14 @@ automation:
       data_template:
         title: 'Droger:'
         message: "Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh."
+    - service: media_player.turn_on
+      data:
+        entity_id: media_player.living_room_google_mini
+    - delay: '00:00:03'
+    - service: tts.google_say
+      entity_id: media_player.living_room_google_mini
+      data:
+        message: 'De droger is klaar!'
     - service: homeassistant.turn_off
       entity_id: input_boolean.droger
 
@@ -492,7 +548,7 @@ automation:
     - service: script.turn_on
       data_template:
         entity_id: >-
-          {%- if is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['evening', 'night'] -%}
+          {%- if is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('binary_sensor.tv_ping_woonkamer', 'off') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['night'] -%}
             script.woonkamer_switch_off
           {%- else -%}
             script.noop
@@ -500,7 +556,7 @@ automation:
     - service: script.turn_on
       data_template:
         entity_id: >-
-          {%- if is_state('media_player.bedroom_tv', 'off') and is_state('switch.tv_slaapkamer', 'on') -%}
+          {%- if is_state('media_player.bedroom_tv', 'off') and is_state('switch.tv_slaapkamer', 'on') and is_state('binary_sensor.tv_ping_slaapkamer', 'off') -%}
             script.slaapkamer_switch_off
           {%- else -%}
             script.noop

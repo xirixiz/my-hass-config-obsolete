@@ -13,3 +13,9 @@
 [submodule "www/lovelace/button-card"]
 	path = www/lovelace/button-card
 	url = https://github.com/custom-cards/button-card.git
+[submodule "www/lovelace/mini-graph-card"]
+	path = www/lovelace/mini-graph-card
+	url = https://github.com/kalkih/mini-graph-card.git
+[submodule "www/lovelace/bar-card"]
+	path = www/lovelace/bar-card
+	url = https://github.com/custom-cards/bar-card.git

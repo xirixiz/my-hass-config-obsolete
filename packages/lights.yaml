@@ -23,8 +23,17 @@ homeassistant:
       friendly_name: Buiten Switches
     group.all_switches:
       friendly_name: Alle Switches
+    light.slaapkamer_lex:
+      friendly_name: Verlichting Lex
     light.buiten:
       friendly_name: Buiten
+      icon: mdi:pine-tree
+    light.woonkamer:
+      icon: mdi:sofa
+    light.keuken:
+      icon: mdi:stove
+    light.slaapkamer:
+        icon: mdi:hotel
     script.buiten_off:
       friendly_name: Buiten
       icon: mdi:flashlight-off
@@ -255,25 +264,25 @@ automation:
         entity_id: light.keuken
 
   # HAL
-  - alias: "Switch - Hal - On"
-    trigger:
-    - platform: state
-      entity_id: input_number.hal_brightness
-    action:
-    - service: light.turn_on
-      data_template:
-        entity_id: light.hal_bg
-        brightness: "{{ trigger.to_state.state | int }}"
+  # - alias: "Switch - Hal - On"
+  #   trigger:
+  #   - platform: state
+  #     entity_id: input_number.hal_brightness
+  #   action:
+  #   - service: light.turn_on
+  #     data_template:
+  #       entity_id: light.hal_bg
+  #       brightness: "{{ trigger.to_state.state | int }}"
 
-  - alias: "Switch - hal - Hanglamp - Off"
-    trigger:
-    - platform: numeric_state
-      entity_id: input_number.hal_brightness
-      below: 1
-    action:
-    - service: light.turn_off
-      data_template:
-        entity_id: light.hal_bg
+  # - alias: "Switch - hal - Hanglamp - Off"
+  #   trigger:
+  #   - platform: numeric_state
+  #     entity_id: input_number.hal_brightness
+  #     below: 1
+  #   action:
+  #   - service: light.turn_off
+  #     data_template:
+  #       entity_id: light.hal_bg
 
   # KEUKEN
   - alias: "Switch - Keuken - Hanglamp - On"
@@ -467,8 +476,9 @@ automation:
   # KIDS NACHTLAMP
   - alias: 'Lights Lex On/Off'
     trigger:
-    - platform: state
-      entity_id: sensor.time_of_day_short
+    - platform: time_pattern
+      minutes: '/30'
+      seconds: 00      
     condition:
       condition: and
       conditions:
@@ -481,9 +491,9 @@ automation:
     action:
     - service_template: >-
         {%- if not is_state('sensor.time_of_day_short', 'daytime') -%}
-          switch.turn_on
+          homeassistant.turn_on
         {%- elif is_state('sensor.time_of_day_short', 'daytime') -%}
-          switch.turn_off
+          homeassistant.turn_off
         {%- endif -%}
       entity_id: group.kinderen
 
@@ -501,7 +511,8 @@ group:
     - light.woonkamer
     - light.keuken
   kinderen:
-    - switch.lex
+    # - switch.lex
+    - light.slaapkamer_lex
     - switch.boris
   hal_en_overlopen:
     - light.hal_en_overlopen
@@ -527,6 +538,8 @@ script:
       entity_id: scene.buiten_general
     - service: homeassistant.turn_on
       entity_id: group.buiten_switches
+    - service: homeassistant.turn_on
+      entity_id: switch.tv_woonkamer_verlichting
 
   all_on_bright:
     sequence:
@@ -552,6 +565,8 @@ script:
       entity_id: scene.all_off
     - service: homeassistant.turn_off
       entity_id: group.buiten_switches
+    - service: homeassistant.turn_off
+      entity_id: switch.tv_woonkamer_verlichting
 
 # WOONKAMER
   woonkamer:
@@ -563,11 +578,15 @@ script:
           {%- if states('sensor.time_of_day_short') in ['daytime'] -%}bright
           {%- else -%}general
           {%- endif -%}
+    - service: homeassistant.turn_on
+      entity_id: switch.tv_woonkamer_verlichting
 
   woonkamer_off:
     sequence:
     - service: light.turn_off
       entity_id: light.woonkamer
+    - service: homeassistant.turn_off
+      entity_id: light.buiten, group.buiten_switches, switch.tv_woonkamer_verlichting
 
 # KEUKEN
   keuken:

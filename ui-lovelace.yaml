@@ -5,6 +5,10 @@ resources:
     type: js
   - url: /local/lovelace/button-card/button-card.js?v=0.0.5
     type: module
+  - url: /local/lovelace/mini-graph-card/mini-graph-card-bundle.js?v=0.4.3
+    type: module
+  - url: /local/lovelace/bar-card/bar-card.js?v=1.0.0
+    type: js
   #- url: /local/lovelace/compact-custom-header/compact-custom-header.js?v=1.0.0b6
     #type: js
 
@@ -58,12 +62,31 @@ views:
           - input_boolean.holiday_mode
           - input_boolean.automation_mode
 
+#      - type: vertical-stack
+#        cards:
+#          - type: horizontal-stack
+#            cards:
+#              - type: light
+#                entity: light.woonkamer
+#                name: Living Room Lights
+#              - type: light
+#                entity: light.keuken
+#                name: Kitchen Lights
+#          - type: horizontal-stack
+#            cards:
+#              - type: light
+#                entity: light.slaapkamer
+#                name: Bedroom Lights
+#              - type: light
+#                entity: light.buiten
+#                name: Outside Lights
+
       - id: 831a7ae69913420388b01fa8b4b3a77f  # Automatically created id
         type: entities
         show_header_toggle: false
         entities:
           - input_number.woonkamer_brightness
-          - input_number.hal_brightness
+          # - input_number.hal_brightness
           - type: divider
             style:
               height: 1px
@@ -105,7 +128,8 @@ views:
               margin-left: auto
               margin-right: auto
               background: '#62717b'
-          - switch.lex
+          #- switch.lex
+          - light.slaapkamer_lex
           - switch.boris
 
       - type: vertical-stack
@@ -126,7 +150,7 @@ views:
                 margin-right: auto
                 background: '#62717b'
             - sensor.hal_temperature
-            - sensor.slaapkamer_boris_temperature
+            #- sensor.slaapkamer_boris_temperature
 
       # - type: vertical-stack
       #   cards:
@@ -142,6 +166,15 @@ views:
       #     - type: sensor
       #       entity: sensor.droger_watts
       #       name: Droger
+
+        # - type: custom:mini-graph-card
+        #   name: DSMR
+        #   icon: mdi:server
+        #   entities:
+        #     - sensor.wasmachine_watts
+        #     - sensor.droger_watts
+        #     - sensor.tuin_watts
+        #     - sensor.tv_woonkamer_watts
 
         - id: 4ec3917eb0bb4154a6bc45c1ea3f7feb  # Automatically created id
           type: entities
@@ -164,6 +197,13 @@ views:
                 margin-right: auto
                 background: '#62717b'
             - sensor.tv_woonkamer_watts
+            - type: divider
+              style:
+                height: 1px
+                margin-left: auto
+                margin-right: auto
+                background: '#62717b'
+            - sensor.meterkast_watts
             - type: divider
               style:
                 height: 1px
@@ -244,14 +284,19 @@ views:
         cards:
           - id: d8ccc6c98f794edab22d64dff6c78522  # Automatically created id
             type: picture-entity
-            entity: camera.front_door_voordeur
+            entity: camera.front_door
             show_name: false
             show_state: false
-          - id: fb7710eeba984a5b8d026b8e2347ef83  # Automatically created id
-            type: picture-entity
-            entity: camera.boriscam
-            show_name: false
-            show_state: false
+          # - type: conditional
+          #   conditions:
+          #     - entity: camera.boriscam
+          #       state_not: ["off","unavailable"]
+          #       #state_not: "unavailable"
+          #   card:
+          #     type: picture-entity
+          #     entity: camera.boriscam
+          #     show_name: false
+          #     show_state: false
           # - id: f57bc50ad329439790f9ff6550f9a298  # Automatically created id
           #   type: picture-entity
           #   entity: camera.lexcam
@@ -279,6 +324,14 @@ views:
           - id: dc8acb366fa24c06914feb5d1018e7b5  # Automatically created id
             type: media-control
             entity: media_player.livingroom_tv
+
+      - type: vertical-stack
+        cards:
+          - type: media-control
+            entity: media_player.living_room_google_mini
+            icon: mdi:google-home
+            artwork: cover
+            show_tts: google
 
       - type: vertical-stack
         cards:
@@ -397,10 +450,10 @@ views:
         show_header_toggle: false
         title: Nest Hello
         entities:
-          - binary_sensor.front_door_camera_voordeur_online
-          - binary_sensor.front_door_camera_voordeur_motion_detected
-          - binary_sensor.front_door_camera_voordeur_person_detected
-          - binary_sensor.front_door_camera_voordeur_sound_detected
+          - binary_sensor.front_door_camera_online
+          - binary_sensor.front_door_camera_motion_detected
+          - binary_sensor.front_door_camera_person_detected
+          - binary_sensor.front_door_camera_sound_detected
 
   ################################################
   ## NETWORK/INTERNET
@@ -410,24 +463,52 @@ views:
     title: Network
     cards:
       #- <<: *compact-header
-
-      - id: 3fe5628fb1af4581ac183ca52e110db9  # Automatically created id
-        type: entities
-        show_header_toggle: false
-        title: Pi-Hole
-        entities:
-          - sensor.pihole_status
-          - script.enable_pihole
-          - input_select.pihole_time
-          - sensor.pi_hole_ads_blocked_today
-          - sensor.pi_hole_ads_percentage_blocked_today
-          - sensor.pi_hole_dns_queries_cached
-          - sensor.pi_hole_dns_queries_forwarded
-          - sensor.pi_hole_dns_queries_today
-          - sensor.pi_hole_dns_unique_clients
-          - sensor.pi_hole_dns_unique_domains
-          - sensor.pi_hole_domains_blocked
-          - sensor.pi_hole_seen_clients
+      - type: vertical-stack
+        cards:
+        - type: horizontal-stack
+          cards:
+            - id: 3fe5628fb1af4581ac183ca52e110db9  # Automatically created id
+              type: entities
+              show_header_toggle: false
+              title: Pi-Hole
+              entities:
+                - sensor.pihole_status
+                - script.enable_pihole
+                - input_select.pihole_time
+        - type: horizontal-stack
+          cards:
+            - type: custom:mini-graph-card
+              entities:
+                - sensor.pi_hole_ads_blocked_today
+              name: Ads Blocked Today
+              line_color: '#2980b9'
+              line_width: 4
+              hours_to_show: 24
+            - type: custom:mini-graph-card
+              entities:
+                - sensor.pi_hole_ads_percentage_blocked_today
+              name: Percentage Blocked
+              line_color: '#2980b9'
+              line_width: 4
+              hours_to_show: 24
+        - type: vertical-stack
+          cards:
+            - type: custom:bar-card
+              entity: sensor.pi_hole_dns_queries_today
+              title: DNS Queries Today
+              title_position: inside
+              align: split
+              show_icon: true
+              color: '#00ba6a'
+              max: '30000'
+            - type: custom:bar-card
+              entity: sensor.pi_hole_domains_blocked
+              title: Domains Blocked
+              title_position: inside
+              align: split
+              show_icon: true
+              max: '1000000'
+              icon: mdi:cancel
 
       - type: custom:tracker-card
         title: Custom Card Updates
@@ -447,16 +528,24 @@ views:
         show_header_toggle: false
         title: Synology
         entities:
-          - sensor.cpu_load_total
-          - sensor.memory_usage_real
-          - sensor.status_smart_sda
-          - sensor.status_smart_sdb
-          - sensor.status_smart_sdc
-          - sensor.temperature_sda
-          - sensor.temperature_sdb
-          - sensor.temperature_sdc
-          - sensor.volume_used_volume_1
-          - sensor.total_size_volume_1
+          - sensor.synology_dsm_cpu_load_total
+          - sensor.synology_dsm_memory_usage_real
+          - sensor.synology_dsm_status_smart_sda
+          - sensor.synology_dsm_status_smart_sdb
+          - sensor.synology_dsm_status_smart_sdc
+          - sensor.synology_dsm_temperature_sda
+          - sensor.synology_dsm_temperature_sdb
+          - sensor.synology_dsm_temperature_sdc
+          - sensor.synology_dsm_volume_used_volume_1
+          - sensor.synology_dsm_total_size_volume_1
+
+      # - type: custom:mini-graph-card
+      #   name: SERVER
+      #   icon: mdi:server
+      #   entities:
+      #     - sensor.temperature_sda
+      #     - sensor.temperature_sdb
+      #     - sensor.temperature_sdc
 
       - id: 46c741ff7cfc4491a6b3712909c80469  # Automatically created id
         type: entities
@@ -475,8 +564,8 @@ views:
         entities:
           - sensor.samsung_printer
           - sensor.samsung_printer_toner_black
-          - sensor.samsung_printer_tray_1
-          - sensor.samsung_printer_output_tray_0
+#          - sensor.samsung_printer_tray_1
+#          - sensor.samsung_printer_output_tray_0
 
   ################################################
   ## SETTINGS/TESTING

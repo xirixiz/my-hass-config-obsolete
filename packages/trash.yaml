@@ -115,7 +115,7 @@ automation:
   - alias: Trash has not been moved
     trigger:
       platform: time_pattern
-      minutes: '/30'
+      minutes: '/60'
       seconds: 00
     condition:
       condition: and
@@ -140,3 +140,8 @@ automation:
             push:
               badge: 0
               category: 'afval'
+      - service: tts.google_translate_say
+        entity_id: media_player.living_room_google_mini
+        data_template:
+          message: 'Vergeet het afval niet buiten te zetten. Afval type is {{ states.sensor.trash_tomorrow.state }}!'
+          cache: false
