@@ -545,14 +545,14 @@ automation:
           {%- else -%}
             script.noop
           {%- endif -%}
-    - service: script.turn_on
-      data_template:
-        entity_id: >-
-          {%- if is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('binary_sensor.tv_ping_woonkamer', 'off') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['night'] -%}
-            script.woonkamer_switch_off
-          {%- else -%}
-            script.noop
-          {%- endif -%}
+#    - service: script.turn_on
+#      data_template:
+#        entity_id: >-
+#          {%- if is_state('sensor.woonkamer_motion', 'False') and is_state('switch.tv_woonkamer', 'on') and is_state('binary_sensor.tv_ping_woonkamer', 'off') and is_state('media_player.livingroom_tv', 'off') and states('sensor.time_of_day_short') in ['night'] -%}
+#            script.woonkamer_switch_off
+#          {%- else -%}
+#            script.noop
+#          {%- endif -%}
     - service: script.turn_on
       data_template:
         entity_id: >-
@@ -568,8 +568,8 @@ automation:
       entity_id: sensor.woonkamer_motion
       to: 'False'
       for:
-        hours: 1
-        minutes: 30
+        hours: 4
+        minutes: 00
     condition:
     - condition: state
       entity_id: input_boolean.automation_mode
