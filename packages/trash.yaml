@@ -140,8 +140,7 @@ automation:
             push:
               badge: 0
               category: 'afval'
-      - service: tts.google_translate_say
-        entity_id: media_player.living_room_google_mini
+      - service: tts.google_say
+        entity_id: media_player.living_room
         data_template:
           message: 'Vergeet het afval niet buiten te zetten. Afval type is {{ states.sensor.trash_tomorrow.state }}!'
-          cache: false

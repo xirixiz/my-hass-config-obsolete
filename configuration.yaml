@@ -41,6 +41,10 @@ zeroconf:
 ssdp:
 system_health:
 
+sonos:
+  media_player:
+    hosts: !secret sonos_ip
+
 tts:
   - platform: google_translate
     language: 'nl'

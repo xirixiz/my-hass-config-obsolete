@@ -328,7 +328,7 @@ views:
       - type: vertical-stack
         cards:
           - type: media-control
-            entity: media_player.living_room_google_mini
+            entity: media_player.living_room
             icon: mdi:google-home
             artwork: cover
             show_tts: google

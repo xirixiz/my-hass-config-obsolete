@@ -422,10 +422,10 @@ automation:
         message: "Wasprogramma gestart."
     - service: media_player.turn_on
       data:
-        entity_id: media_player.living_room_google_mini
+        entity_id: media_player.living_room
     - delay: '00:00:03'
     - service: tts.google_say
-      entity_id: media_player.living_room_google_mini
+      entity_id: media_player.living_room
       data:
         message: 'De wasmachine is gestart!'
 
@@ -451,10 +451,10 @@ automation:
         message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh."
     - service: media_player.turn_on
       data:
-        entity_id: media_player.living_room_google_mini
+        entity_id: media_player.living_room
     - delay: '00:00:03'
     - service: tts.google_say
-      entity_id: media_player.living_room_google_mini
+      entity_id: media_player.living_room
       data:
         message: 'De wasmachine is klaar!'
     - service: homeassistant.turn_off
@@ -483,9 +483,9 @@ automation:
     - delay: '00:00:03'
     - service: media_player.turn_on
       data:
-        entity_id: media_player.living_room_google_mini
+        entity_id: media_player.living_room
     - service: tts.google_say
-      entity_id: media_player.living_room_google_mini
+      entity_id: media_player.living_room
       data:
         message: 'De droger is gestart!'
 
@@ -511,10 +511,10 @@ automation:
         message: "Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh."
     - service: media_player.turn_on
       data:
-        entity_id: media_player.living_room_google_mini
+        entity_id: media_player.living_room
     - delay: '00:00:03'
     - service: tts.google_say
-      entity_id: media_player.living_room_google_mini
+      entity_id: media_player.living_room
       data:
         message: 'De droger is klaar!'
     - service: homeassistant.turn_off
