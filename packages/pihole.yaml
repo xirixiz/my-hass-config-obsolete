@@ -27,22 +27,12 @@ input_select:
 ################################################
 ## Sensor
 ################################################
-sensor:
-  - platform: pi_hole
-    host: !secret pi_hole_host
-    ssl: false
-    verify_ssl: false
-    monitored_conditions:
-      - ads_blocked_today
-      - ads_percentage_today
-      - dns_queries_today
-      - domains_being_blocked
-      - queries_cached
-      - queries_forwarded
-      - unique_clients
-      - unique_domains
-      - clients_ever_seen
+pi_hole:
+  host: !secret pi_hole_host
+  ssl: false
+  verify_ssl: false
 
+sensor:
   - platform: command_line
     command: !secret pi_hole_status
     name: 'pihole_status'

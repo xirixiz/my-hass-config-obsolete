@@ -362,6 +362,46 @@ automation:
             script.buiten_off
           {%- endif -%}
 
+  # GENERAL
+  - alias: "General lights On/Off"
+    trigger:
+    - platform: state
+      entity_id: sensor.hal_motion
+      to: 'True'
+    - platform: state
+      entity_id: sensor.woonkamer_motion
+      to: 'True'
+    condition:
+    - condition: state
+      entity_id: input_boolean.automation_mode
+      state: 'off'
+    - condition: state
+      entity_id: input_boolean.light_automation_override
+      state: 'off'
+    - condition: template
+      value_template: "{{ states('sensor.time_of_day') in ['early morning'] }}"
+    action:
+    - service: script.turn_on
+      entity_id: script.woonkamer, script.keuken
+
+  # - alias: "General lights off - 1000"
+  #   trigger:
+  #     platform: time
+  #     at: '10:00:00'
+  #   condition:
+  #   - condition: state
+  #     entity_id: input_boolean.automation_mode
+  #     state: 'off'
+  #   - condition: state
+  #     entity_id: input_boolean.holiday_mode
+  #     state: 'off'
+  #   - condition: state
+  #     entity_id: input_boolean.light_automation_override
+  #     state: 'off'
+  #   action:
+  #   - service: script.turn_on
+  #     entity_id: script.all_off
+
   # GENERAL - 1002 aan / 2002 + / 3002 - / 4002 off
   - alias: "Woonkamer On/Off - Lux trigger"
     trigger:

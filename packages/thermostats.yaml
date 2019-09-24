@@ -189,7 +189,7 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
-          temperature: 21
+          temperature: 22
           hvac_mode: heat
 
   - alias: "Set Thermostat Temperature - 0500"
@@ -210,5 +210,5 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
-          temperature: 21
+          temperature: 22
           hvac_mode: heat

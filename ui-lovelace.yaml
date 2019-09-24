@@ -351,7 +351,7 @@ views:
         show_header_toggle: false
         title: Plex Activity
         entities:
-          - sensor.plex_activity
+          - sensor.plex
 
   ################################################
   ## POWER

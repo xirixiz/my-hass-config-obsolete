@@ -1,47 +1,47 @@
 ################################################
 ## Packages / Cameras
 ################################################
-homeassistant:
-  customize:
-    sensor.slaapkamer_boris_temperature:
-      friendly_name: Temperatuur Slaapkamer Boris
-    binary_sensor.front_door_camera_voordeur_online:
-      friendly_name: Nest Hello Online
-    binary_sensor.front_door_camera_voordeur_motion_detected:
-      friendly_name: Nest Hello Motion
-    binary_sensor.front_door_camera_voordeur_person_detected:
-      friendly_name: Nest Hello Person
-    binary_sensor.front_door_camera_voordeur_sound_detected:
-      friendly_name: Nest Hello Sound
+# homeassistant:
+#   customize:
+#     sensor.slaapkamer_boris_temperature:
+#       friendly_name: Temperatuur Slaapkamer Boris
+#     binary_sensor.front_door_camera_voordeur_online:
+#       friendly_name: Nest Hello Online
+#     binary_sensor.front_door_camera_voordeur_motion_detected:
+#       friendly_name: Nest Hello Motion
+#     binary_sensor.front_door_camera_voordeur_person_detected:
+#       friendly_name: Nest Hello Person
+#     binary_sensor.front_door_camera_voordeur_sound_detected:
+#       friendly_name: Nest Hello Sound
 
 ################################################
 ## Camera
 ################################################
-camera:
-  - platform: mjpeg
-    name: Boris
-    still_image_url: !secret camera_boris_image_url
-    mjpeg_url: !secret camera_boris_mjpeg_url
-    username: !secret camera_boris_username
-    password: !secret camera_boris_password
+# camera:
+#   - platform: mjpeg
+#     name: Boris
+#     still_image_url: !secret camera_boris_image_url
+#     mjpeg_url: !secret camera_boris_mjpeg_url
+#     username: !secret camera_boris_username
+#     password: !secret camera_boris_password
   # - platform: foscam
   #   ip: !secret foscam_camera
   #   username: !secret foscam_username
   #   password: !secret foscam_password
-  - platform: synology
-    url: !secret synology_surveillance_url
-    username: !secret synology_surveillance_username
-    password: !secret synology_surveillance_password
-    timeout: 60
-    verify_ssl: false
+  # - platform: synology
+  #   url: !secret synology_surveillance_url
+  #   username: !secret synology_surveillance_username
+  #   password: !secret synology_surveillance_password
+  #   timeout: 60
+  #   verify_ssl: false
 
 ################################################
 ## Sensor
 ################################################
-sensor:
-  - platform: command_line
-    command: !secret camera_boris_temperature
-    scan_interval: 300
-    unit_of_measurement: '°C'
-    name: 'slaapkamer_boris_temperature'
+# sensor:
+#   - platform: command_line
+#     command: !secret camera_boris_temperature
+#     scan_interval: 300
+#     unit_of_measurement: '°C'
+#     name: 'slaapkamer_boris_temperature'
 
