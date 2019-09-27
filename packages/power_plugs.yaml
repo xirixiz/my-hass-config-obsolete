@@ -281,35 +281,11 @@ sensor:
     name: Wasmachine statistics
     entity_id: sensor.wasmachine_watts
 
-  # HISTORY WASMACHINE
-  - platform: history_stats
-    name: Wasmachine this week
-    entity_id: input_boolean.wasmachine
-    state: 'on'
-    type: time
-    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
-    end: '{{ now() }}'
-
-  - platform: history_stats
-    name: Wasmachine this month
-    entity_id:  input_boolean.wasmachine
-    state: 'on'
-    type: time
-    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-    duration:
-      days: 30
-
   - platform: template
     sensors:
-      percent_wasmachine_weekly:
-        unit_of_measurement: "%"
-        value_template: "{{ '%.1f'|format(states('sensor.wasmachine_this_week')|float * 100 / 168) }}"
-
-  - platform: template
-    sensors:
-      percent_wasmachine_monthly:
-        unit_of_measurement: "%"
-        value_template: "{{ '%.1f'|format(states('sensor.wasmachine_this_month')|float * 100 / 720) }}"
+      wasmachine_statistics_mean:
+        friendly_name: Wasmachine statistics Mean
+        value_template: "{{ state_attr('sensor.wasmachine_statistics','mean') }}"
 
 # DROGER
   - platform: template
@@ -365,35 +341,11 @@ sensor:
     name: Droger statistics
     entity_id: sensor.droger_watts
 
-  # HISTORY DROGER
-  - platform: history_stats
-    name: Droger this week
-    entity_id: input_boolean.droger
-    state: 'on'
-    type: time
-    start: '{{ as_timestamp( now().replace(hour=0).replace(minute=0).replace(second=0) ) - now().weekday() * 86400 }}'
-    end: '{{ now() }}'
-
-  - platform: history_stats
-    name: Droger this month
-    entity_id:  input_boolean.droger
-    state: 'on'
-    type: time
-    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
-    duration:
-      days: 30
-
   - platform: template
     sensors:
-      percent_droger_weekly:
-        unit_of_measurement: "%"
-        value_template: "{{ '%.1f'|format(states('sensor.droger_this_week')|float * 100 / 168) }}"
-
-  - platform: template
-    sensors:
-      percent_droger_monthly:
-        unit_of_measurement: "%"
-        value_template: "{{ '%.1f'|format(states('sensor.droger_this_month')|float * 100 / 720) }}"
+      droger_statistics_mean:
+        friendly_name: Droger statistics Mean
+        value_template: "{{ state_attr('sensor.droger_statistics','mean') }}"
 
 ################################################
 ## Automation
@@ -615,3 +567,4 @@ script:
     sequence:
     - service: homeassistant.turn_off
       entity_id: switch.tv_slaapkamer
+
