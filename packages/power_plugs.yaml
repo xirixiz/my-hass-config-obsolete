@@ -353,68 +353,13 @@ sensor:
 automation:
 
 # WASMACHINE
-  - alias: Action - Set wasmachine to running
+  - alias: Action - Set wasmachine/droger to running
     trigger:
     - platform: numeric_state
       entity_id: sensor.wasmachine_statistics_mean
       above: 5
       for:
         minutes: 5
-    condition: []
-    action:
-    - service: homeassistant.turn_on
-      entity_id: input_boolean.wasmachine
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.wasmachine_start
-        value: "{{ states.sensor.wasmachine_kw_today.state }}"
-    - service: notify.family
-      data_template:
-        title: 'Wasmachine:'
-        message: "Wasprogramma gestart."
-    - service: media_player.turn_on
-      data:
-        entity_id: media_player.living_room
-    - delay: '00:00:03'
-    - service: tts.google_say
-      entity_id: media_player.living_room
-      data:
-        message: 'De wasmachine is gestart!'
-
-  - alias: Action - Set wasmachine as finished
-    trigger:
-    - platform: numeric_state
-      entity_id: sensor.wasmachine_statistics_mean
-      below: 5
-      for:
-        minutes: 5
-    condition:
-    - condition: state
-      entity_id: input_boolean.wasmachine
-      state: 'on'
-    action:
-    - service: input_number.set_value
-      data_template:
-        entity_id: input_number.wasmachine_stop
-        value: "{{ states.sensor.wasmachine_kw_today.state }}"
-    - service: notify.family
-      data_template:
-        title: 'Wasmachine:'
-        message: "Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh."
-    - service: media_player.turn_on
-      data:
-        entity_id: media_player.living_room
-    - delay: '00:00:03'
-    - service: tts.google_say
-      entity_id: media_player.living_room
-      data:
-        message: 'De wasmachine is klaar!'
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.wasmachine
-
-# DROGER
-  - alias: Action - Set droger to running
-    trigger:
     - platform: numeric_state
       entity_id: sensor.droger_statistics_mean
       above: 5
@@ -423,54 +368,78 @@ automation:
     condition: []
     action:
     - service: homeassistant.turn_on
-      entity_id: input_boolean.droger
+      data_template:
+        entity_id: >-
+          input_boolean.
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%}wasmachine
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}droger
+          {%- endif -%}
     - service: input_number.set_value
       data_template:
-        entity_id: input_number.wasmachine_start
-        value: "{{ states.sensor.droger_kw_today.state }}"
+        entity_id: >-
+          input_number.
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%}wasmachine_start
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}droger_start
+          {%- endif -%}
+        value: >- 
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%}
+            {{ states.sensor.wasmachine_kw_today.state }}
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}
+            {{ states.sensor.droger_kw_today.state }}
+          {%- endif -%}          
     - service: notify.family
       data_template:
-        title: 'Droger:'
-        message: "Droger gestart."
-    - delay: '00:00:03'
-    - service: media_player.turn_on
-      data:
-        entity_id: media_player.living_room
-    - service: tts.google_say
-      entity_id: media_player.living_room
-      data:
-        message: 'De droger is gestart!'
+        title: "Waskamer:"
+        message: >-
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%} 
+            Wasprogramma gestart.
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%} 
+            Droger gestart.
+          {%- endif -%}
 
-  - alias: Action - Set droger as finished
+  - alias: Action - Set wasmachine/droger as finished
     trigger:
+    - platform: numeric_state
+      entity_id: sensor.wasmachine_statistics_mean
+      below: 5
+      for:
+        minutes: 1
     - platform: numeric_state
       entity_id: sensor.droger_statistics_mean
       below: 5
       for:
-        minutes: 5
+        minutes: 1
     condition:
     - condition: state
-      entity_id: input_boolean.droger
+      entity_id: input_boolean.wasmachine
       state: 'on'
+    - condition: state
+      entity_id: input_boolean.droger
+      state: 'on'      
     action:
     - service: input_number.set_value
       data_template:
-        entity_id: input_number.wasmachine_stop
-        value: "{{ states.sensor.droger_kw_today.state }}"
+        entity_id: >-
+          input_number.
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%}wasmachine_stop
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}droger_stop
+          {%- endif -%}
+        value: >- 
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%}
+            {{ states.sensor.wasmachine_kw_today.state }}
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}
+            {{ states.sensor.droger_kw_today.state }}
+          {%- endif -%}
     - service: notify.family
       data_template:
-        title: 'Droger:'
-        message: "Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh."
-    - service: media_player.turn_on
-      data:
-        entity_id: media_player.living_room
-    - delay: '00:00:03'
-    - service: tts.google_say
-      entity_id: media_player.living_room
-      data:
-        message: 'De droger is klaar!'
-    - service: homeassistant.turn_off
-      entity_id: input_boolean.droger
+        title: "Waskamer:"
+        message: >-
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%}
+            Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh.
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}
+            Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh.
+          {%- endif -%}        
+
 
 # GENERAL
   - alias: "General powerplugs On/Off"
