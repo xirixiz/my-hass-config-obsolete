@@ -4,10 +4,13 @@
 homeassistant:
   customize:
     device_tracker.taipan5g:
-      friendly_name: Bram
+      friendly_name: "Bram"
       entity_picture: /local/faces/bram.jpg
     device_tracker.lieke_iphone:
-      friendly_name: Lieke
+      friendly_name: "Lieke"
+      entity_picture: /local/faces/lieke.jpg
+    device_tracker.google_maps_liekesmidspad_gmail_com:
+      friendly_name: "Lieke Google Maps"
       entity_picture: /local/faces/lieke.jpg
     zone.home:
       friendly_name: "Home"
@@ -21,28 +24,36 @@ homeassistant:
       friendly_name: "Zus"
       icon: mdi:cow
     sensor.bram_distance_to_home:
-      friendly_name: Bram - Distance to home
+      friendly_name: "Bram - Distance to home"
       icon: mdi:car
     sensor.lieke_distance_to_home:
-      friendly_name: Lieke - Distance to home
+      friendly_name: "Lieke - Distance to home"
       icon: mdi:car
+
+################################################
+## Unifi
+################################################
+unifi:
+  controllers:
+    - host: !secret nas_host_ip
+      site: !secret unifi_site
 
 ################################################
 ## Device Tracker
 ################################################
 device_tracker:
-  - platform: unifi
-    host: !secret nas_host_ip
-    port: !secret unifi_port
-    username: !secret unifi_username
-    password: !secret unifi_password
-    verify_ssl: false
-    interval_seconds: 120
-    consider_home: 120
-    detection_time: 60
-    new_device_defaults:
-      track_new_devices: true
-      hide_if_away: false
+#   - platform: unifi
+#     host: !secret nas_host_ip
+#     port: !secret unifi_port
+#     username: !secret unifi_username
+#     password: !secret unifi_password
+#     verify_ssl: false
+#     interval_seconds: 120
+#     consider_home: 120
+#     detection_time: 60
+#     new_device_defaults:
+#       track_new_devices: true
+#       hide_if_away: false
 
   # - platform: unifi_direct
   #   host: !secret ap1_host
@@ -65,7 +76,7 @@ device_tracker:
   #     hide_if_away: false
 
   - platform: google_maps
-    username: liekesmidspad@gmail.com
+    username: !secret lieke_gmail 
     max_gps_accuracy: 200
 
   - platform: nmap_tracker

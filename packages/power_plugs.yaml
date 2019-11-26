@@ -403,12 +403,12 @@ automation:
       entity_id: sensor.wasmachine_statistics_mean
       below: 5
       for:
-        minutes: 1
+        minutes: 5
     - platform: numeric_state
       entity_id: sensor.droger_statistics_mean
       below: 5
       for:
-        minutes: 1
+        minutes: 5
     condition:
     - condition: state
       entity_id: input_boolean.wasmachine
@@ -438,7 +438,14 @@ automation:
             Wasprogramma gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.wasmachine.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.wasmachine_verbruik') }} kWh.
           {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}
             Droger gereed. Doorlooptijd: {{ ((as_timestamp(now())-as_timestamp(states.input_boolean.droger.last_changed))/60) | round | int }} minuten. Verbruik: {{ states('sensor.droger_verbruik') }} kWh.
-          {%- endif -%}        
+          {%- endif -%}
+    - service: homeassistant.turn_off
+      data_template:
+        entity_id: >-
+          input_boolean.
+          {%- if trigger.entity_id == 'sensor.wasmachine_statistics_mean' -%}wasmachine
+          {%- elif trigger.entity_id == 'sensor.droger_statistics_mean' -%}droger
+          {%- endif -%} 
 
 
 # GENERAL

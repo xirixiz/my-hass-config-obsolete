@@ -81,6 +81,7 @@ views:
 #                entity: light.buiten
 #                name: Outside Lights
 
+
       - id: 831a7ae69913420388b01fa8b4b3a77f  # Automatically created id
         type: entities
         show_header_toggle: false
@@ -197,13 +198,6 @@ views:
                 margin-right: auto
                 background: '#62717b'
             - sensor.tv_woonkamer_watts
-            - type: divider
-              style:
-                height: 1px
-                margin-left: auto
-                margin-right: auto
-                background: '#62717b'
-            - sensor.meterkast_watts
             - type: divider
               style:
                 height: 1px
@@ -351,7 +345,7 @@ views:
         show_header_toggle: false
         title: Plex Activity
         entities:
-          - sensor.plex
+          - sensor.plex_nas
 
   ################################################
   ## POWER

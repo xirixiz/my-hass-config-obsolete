@@ -4,12 +4,11 @@
 homeassistant:
 
 speedtestdotnet:
-  scan_interval:
-    hours: 1
   monitored_conditions:
     - ping
     - download
     - upload
+
 ################################################
 ## Sensor
 ################################################
@@ -19,3 +18,16 @@ sensor:
     name: external_ip
     value_template: '{{ value }}'
     scan_interval: 14400
+
+################################################
+## Automation
+################################################
+automation:
+  - alias: "Speedtest - Update sensor"
+    initial_state: 'on'
+    trigger:
+    - platform: time_pattern
+      minutes: '/15'
+      seconds: 00
+    action:
+    - service: speedtestdotnet.speedtest

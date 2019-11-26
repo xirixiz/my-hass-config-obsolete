@@ -530,13 +530,12 @@ automation:
           state: 'off'
     action:
     - service_template: >-
-        {%- if not is_state('sensor.time_of_day_short', 'daytime') -%}
-          homeassistant.turn_on
-        {%- elif is_state('sensor.time_of_day_short', 'daytime') -%}
+        {%- if states('sensor.time_of_day_short') in ['daytime'] -%}
           homeassistant.turn_off
+        {%- else -%}
+          homeassistant.turn_on
         {%- endif -%}
       entity_id: group.kinderen
-
 
 ################################################
 ## Group

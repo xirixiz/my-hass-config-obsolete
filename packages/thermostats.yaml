@@ -124,31 +124,31 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
-          temperature: 17
+          temperature: 20
       - service: climate.set_preset_mode
         data:
           entity_id: climate.living_room
-          preset_mode: 'eco'
+          preset_mode: heat
 
-  - alias: "Stop Thermostat if current temperature higher than wanted temperature"
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.temp_diff_nest
-        to: 'on'
-    condition:
-      - condition: and
-        conditions:
-          - condition: template
-            value_template: '{{ states.climate.living_room.attributes.preset_mode != "eco" }}'
-    action:
-      - service: climate.set_temperature
-        data:
-          entity_id: climate.living_room
-          temperature: 17
-      - service: climate.set_preset_mode
-        data:
-          entity_id: climate.living_room
-          preset_mode: 'eco'
+  # - alias: "Stop Thermostat if current temperature higher than wanted temperature"
+  #   trigger:
+  #     - platform: state
+  #       entity_id: binary_sensor.temp_diff_nest
+  #       to: 'on'
+  #   condition:
+  #     - condition: and
+  #       conditions:
+  #         - condition: template
+  #           value_template: '{{ states.climate.living_room.attributes.preset_mode != "eco" }}'
+  #   action:
+  #     - service: climate.set_temperature
+  #       data:
+  #         entity_id: climate.living_room
+  #         temperature: 20
+  #     - service: climate.set_preset_mode
+  #       data:
+  #         entity_id: climate.living_room
+  #         preset_mode: heat
 
 
   - alias: "Set Thermostat Temperature - 0000"
@@ -165,11 +165,11 @@ automation:
       - service: climate.set_temperature
         data:
           entity_id: climate.living_room
-          temperature: 17 
+          temperature: 20
       - service: climate.set_preset_mode
         data:
           entity_id: climate.living_room
-          preset_mode: 'eco'
+          preset_mode: heat
 
   - alias: "Set Thermostat Temperature - 1500"
     trigger:

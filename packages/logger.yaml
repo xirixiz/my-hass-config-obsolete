@@ -7,19 +7,23 @@ homeassistant:
 ## Logger
 ################################################
 logger:
-  default: warn
+  default: info
   logs:
+    # aiounifi: debug
+    # homeassistant.components.unifi: debug
+    # homeassistant.components.device_tracker.unifi: debug
+    # homeassistant.components.switch.unifi: debug
     requests.packages.urllib3.connectionpool: critical
     urllib3.connectionpool: critical
     py.warnings: critical
-    #homeassistant.components.device_tracker: critical
-    #homeassistant.components.automation: debug
-    #homeassistant.components.light: info
-    #homeassistant.components.sensor: info
-    #homeassistant.components.switch: info
-    #homeassistant.components.device_tracker.unifi: critical
-    #homeassistant.components.device_tracker.unifi_direct: critical
-    custom_components.sensor.mijnafvalwijzer: debug
+    # homeassistant.components.device_tracker: critical
+    # homeassistant.components.automation: debug
+    # homeassistant.components.light: info
+    # homeassistant.components.sensor: info
+    # homeassistant.components.switch: info
+    # homeassistant.components.device_tracker.unifi: critical
+    # homeassistant.components.device_tracker.unifi_direct: critical
+    # custom_components.sensor.mijnafvalwijzer: debug
 
 # system_log:
 #   max_entries: 0
@@ -39,7 +43,7 @@ input_select:
       - info
       - debug
       - notset
-    initial: warn
+    initial: info
 
 ################################################
 ## Automation
